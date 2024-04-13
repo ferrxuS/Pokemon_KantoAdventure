@@ -1,0 +1,10 @@
+  +---------------------------------------------------------------------+
+    You are currently in Pewter City:
+  +---------------------------------------------------------------------+
+    [1] Move to:
+	a. Viridian City	b. Cerulean City
+    [2] Challenge Gym Leader [Brock - Rock Type]
+    [3] Fight Wild Pokémon
+    [4] Player Options
+	a.Show Map  b.Show My Pokémon  c.Show My Badges  d.Save and Exit	
+  +---------------------------------------------------------------------+

@@ -1,0 +1,12 @@
+  +---------------------------------------------------------------------+
+    You are currently in Saffron City:
+  +---------------------------------------------------------------------+
+    [1] Move to:
+	a. Cerulean City 	b. Vermillion City
+	c. Celadon City		d. Lavender Town
+    [2] Challenge Gym Leader [Sabrina - Psychic Type]
+    [3] Fight Wild Pokémon
+    [4] Player Options
+	a.Show Map  b.Show My Pokémon  c.Show My Badges  d.Save and Exit
+    [5] Rival’s Race
+  +---------------------------------------------------------------------+
