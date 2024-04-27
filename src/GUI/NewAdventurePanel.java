@@ -11,7 +11,7 @@ import java.io.*;
 import javax.swing.*;
 
 public class NewAdventurePanel extends JPanel {
-
+    
     private JLabel advLabel;
     private JTextArea advConsole;
     private JTextField inputField;
@@ -19,7 +19,8 @@ public class NewAdventurePanel extends JPanel {
     private String currentState;
     private PalletTown palletTown;
     private Container container;
-
+    public static Trainer a = new Trainer(); //I do a object to store the name because for the future saving progress
+    
     public NewAdventurePanel(Container container) throws FileNotFoundException {
         this.container = container;
         setBackground(Color.black);
@@ -42,11 +43,11 @@ public class NewAdventurePanel extends JPanel {
         // Matching the Font with the ASCII Text Files
         Font consoleFont = new Font("Monospaced", Font.PLAIN, 14);
         advConsole.setFont(consoleFont);
-
+        
         advScroll = new JScrollPane(advConsole);
         advScroll.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(advScroll, BorderLayout.CENTER);
-
+        
         palletTown = new PalletTown(container);
 
         // Input Field
@@ -59,6 +60,7 @@ public class NewAdventurePanel extends JPanel {
             }
             advConsole.append("> " + input + "\n");
             if (currentState.equals("name")) {
+                a.setTrainerName(currentState);
                 advConsole.append("  +---------------------------------------------------------------------+  \n"
                         + "    OAK:     Right! So your name is " + input + "! Welcome to the world of Pokémon. "
                         + "\n    It's time to choose your starting Pokémon. \n"
@@ -72,12 +74,15 @@ public class NewAdventurePanel extends JPanel {
                 if (input.equals("1")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Bulbasaur, an amazing choice. Best of luck!\n");
+                    a.addPokemon("001", 5);
                 } else if (input.equals("2")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Squirtle, an amazing choice. Best of luck!\n");
+                    a.addPokemon("007", 5);
                 } else if (input.equals("3")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Charmander, an amazing choice. Best of luck!\n");
+                    a.addPokemon("004", 5);
                 } else {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     Please enter a valid input.\n"
@@ -95,17 +100,16 @@ public class NewAdventurePanel extends JPanel {
             }
             inputField.setText("");
         });
-
+        
         add(inputField, BorderLayout.SOUTH);
     }
-
+    
     private void updateAdvToPalletTown() {
         // Remove current panel (NewAdventurePanel)
         container.remove(this);
-
         // Add the new menuPanel
         container.add(palletTown, BorderLayout.CENTER);
-
+        a.setCurrentLocation(palletTown);
         // Revalidate and repaint container
         container.revalidate();
         container.repaint();

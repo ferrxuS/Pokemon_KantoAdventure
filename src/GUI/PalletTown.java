@@ -21,6 +21,7 @@ public class PalletTown extends JPanel {
     private Graph graph;
     private Container container;
     private ViridianCity viridianCity;
+    private Trainer a = NewAdventurePanel.a;
 
     public PalletTown(Container container) throws FileNotFoundException {
         this.container = container;
@@ -61,13 +62,10 @@ public class PalletTown extends JPanel {
 
         graph.addEdge(v1, v2);
         graph.addEdge(v1, v3);
-
         // Moving to Viridian City
         viridianCity = new ViridianCity();
 
         // Moving to Cinnabar Island
-        
-         
         // Input Field
         inputField = new JTextField();
         inputField.setBackground(Color.LIGHT_GRAY);
@@ -90,12 +88,16 @@ public class PalletTown extends JPanel {
             console.append("> " + input + "\n");
             currentState = "MoveTo";
             if (currentState.equals("MoveTo")) {
+                console.append("    Your choice: " + input
+                        + "\n  +---------------------------------------------------------------------+  \n");
                 if (input.equals("1a")) {
-                    console.append("    Your choice: " + input + 
-                            "\n  +---------------------------------------------------------------------+  \n");
                     moveToViridianCity();
+                } else if (input.equals("4b")) {
+                    console.append(a.showPokemon());
+                } else if (input.equals("4c")) {
+                    console.append(a.showBadges());
                 }
-            } 
+            }
             inputField.setText(""); // Clear the input field
         });
 
@@ -105,7 +107,7 @@ public class PalletTown extends JPanel {
     private void moveToViridianCity() {
         container.remove(this);
         container.add(viridianCity, BorderLayout.CENTER);
-
+        a.setCurrentLocation(viridianCity);
         // Revalidate and repaint container
         container.revalidate();
         container.repaint();

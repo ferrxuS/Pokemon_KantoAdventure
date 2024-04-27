@@ -125,7 +125,7 @@ public class GamePanel {
         container.repaint();
         userInput.setText(""); //clear the input field
     }
-    
+
     // Get User Input
     private void handleUserInput(String input) {
         input = input.trim();
@@ -141,4 +141,3 @@ public class GamePanel {
         }
     }
 }
-

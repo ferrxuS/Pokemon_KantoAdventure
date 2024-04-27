@@ -41,6 +41,15 @@ public class Graph {
     List<Vertex> getAdjVertices(Vertex vertex) {
         return adjVertices.get(vertex);
     }
+    
+    public String getVertexName(int vertexId) {
+    for (Vertex vertex : adjVertices.keySet()) {
+        if (vertex.getId() == vertexId) {
+            return vertex.getName();
+        }
+    }
+    return null; // Return null if vertex with given ID is not found
+    }
 }
 
 class Vertex {
