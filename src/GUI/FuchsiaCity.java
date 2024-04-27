@@ -4,44 +4,46 @@
  */
 package GUI;
 
-import static GUI.GamePanel.*;
-import static GUI.Graph.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
-
 /**
  *
  * @author raishahaque
  */
-public class CinnabarIsland extends JPanel {
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import static GUI.GamePanel.*;
+import static GUI.Graph.*;
+import java.io.FileNotFoundException;
+
+public class FuchsiaCity extends JPanel {
 
     private JLabel label;
     private JTextArea console;
     private JTextField inputField;
     private JScrollPane scroll;
     private Container container;
-    private PalletTown palletTown;
-    private FuchsiaCity fuchsiaCity;
+    private CinnabarIsland cinnabarIsland;
+    private VermillionCity vermillionCity;
+    private CeladonCity celadonCity;
+    private LavenderTown lavenderTown;
 
-    public CinnabarIsland(Container container) throws FileNotFoundException {
+    public FuchsiaCity(Container container) throws FileNotFoundException {
         this.container = container;
-        this.palletTown = palletTown;
-        this.fuchsiaCity = fuchsiaCity;
-        setBackground(Color.black);
-        setLayout(new BorderLayout());
+        this.cinnabarIsland = cinnabarIsland;
+        this.vermillionCity = vermillionCity;
+        this.celadonCity = celadonCity;
+        this.lavenderTown = lavenderTown;
         setBackground(Color.black);
         setLayout(new BorderLayout());
 
-        // Adv Label
+        // Label
         label = new JLabel();
         label.setForeground(Color.CYAN);
-        String advText = getASCII("CinnabarIsland.txt");
+        String advText = getASCII("FuchsiaCity.txt");
         label.setText("<html><pre>" + advText + "</pre></html>");
         add(label, BorderLayout.NORTH);
 
-        // Adv Console
+        // Console
         console = new JTextArea();
         console.setEditable(false);
         console.setBackground(Color.BLACK);
@@ -54,30 +56,35 @@ public class CinnabarIsland extends JPanel {
         scroll = new JScrollPane(console);
         scroll.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(scroll, BorderLayout.CENTER);
-        
+
         // Graph
         Graph graph = new Graph();
         char list = 'a';
 
-        graph.addVertex(v3);
-        graph.addVertex(v1);
         graph.addVertex(v9);
+        graph.addVertex(v3);
+        graph.addVertex(v7);
+        graph.addVertex(v8);
+        graph.addVertex(v4);
 
-        graph.addEdge(v3, v1);
-        graph.addEdge(v3, v9);
+        graph.addEdge(v9, v3);
+        graph.addEdge(v9, v7);
+        graph.addEdge(v9, v8);
+        graph.addEdge(v9, v4);
 
         // Input Field
         inputField = new JTextField();
         inputField.setBackground(Color.LIGHT_GRAY);
         console.append("    [1] Move to: \n");
-        for (Vertex vertex : graph.getAdjVertices(v3)) {
+        for (Vertex vertex : graph.getAdjVertices(v9)) {
             console.append("        " + list++ + ". " + vertex.getName() + "\n");
         }
-        console.append("    [2] Challenge Gym Leader [Blaine - Fire Type] \n"
-                +"    [3] Fight Wild Pokemon \n"
+        console.append("    [2] Challenge Gym Leader [Koga - Poison Type] \n"
+                + "    [3] Fight Wild Pokemon \n"
                 + "    [4] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
+                + "    [5] Safari Zone \n"
                 + "  +---------------------------------------------------------------------+  \n"
         );
 
@@ -91,12 +98,22 @@ public class CinnabarIsland extends JPanel {
                 case "1a":
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToPalletTown();
+                    moveToCinnabarIsland();
                     break;
                 case "1b":
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToFuchsiaCity();
+                    moveToVermillionCity();
+                    break;
+                case "1c":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    moveToCeladonCity();
+                    break;
+                case "1d":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    moveToLavenderTown();
                     break;
                 case "4a":
                     console.append("  +---------------------------------------------------------------------+  \n"
@@ -114,10 +131,10 @@ public class CinnabarIsland extends JPanel {
                             + "     |                      |                                     |\n"
                             + " [Pallet Town]              |                                     |\n"
                             + "     |                      |                                     |\n"
-                            + "     |            [Fuchsia City]----------------------------------|\n"
+                            + "     |            [**Fuchsia City**]------------------------------|\n"
                             + "     |                      |\n"
                             + "     |                      |\n"
-                            + "  [**Cinnabar Island**]-----|\n"
+                            + "  [Cinnabar Island]---------|\n"
                             + "  +---------------------------------------------------------------------+  \n"
                     );
                     break;
@@ -131,40 +148,72 @@ public class CinnabarIsland extends JPanel {
 
         add(inputField, BorderLayout.SOUTH);
     }
-
-    private void moveToPalletTown() {
-        // Create a new instance of the ViridianCity panel
-        PalletTown palletTownPanel;
+    private void moveToCinnabarIsland() {
+        
+        CinnabarIsland cinnabarIslandPanel;
         try {
-            palletTownPanel = new PalletTown(container);
+            cinnabarIslandPanel = new CinnabarIsland(container);
         } catch (FileNotFoundException e) {
-            e.printStackTrace(); // Handle file not found exception
+            e.printStackTrace();
             return;
         }
-
-        // Remove the current PalletTown panel from the container
+        
         container.remove(this);
+        container.add(cinnabarIslandPanel, BorderLayout.CENTER);
 
-        // Add the ViridianCity panel to the container
-        container.add(palletTownPanel, BorderLayout.CENTER);
-
-        // Revalidate and repaint the container
+        // Revalidate and repaint container
         container.revalidate();
         container.repaint();
     }
 
-    private void moveToFuchsiaCity() {
+    private void moveToVermillionCity() {
 
-        FuchsiaCity fuchsiaCityPanel;
+        VermillionCity vermillionCityPanel;
         try {
-            fuchsiaCityPanel = new FuchsiaCity(container);
+            vermillionCityPanel = new VermillionCity(container);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
         }
 
         container.remove(this);
-        container.add(fuchsiaCityPanel, BorderLayout.CENTER);
+        container.add(vermillionCityPanel, BorderLayout.CENTER);
+
+        // Revalidate and repaint container
+        container.revalidate();
+        container.repaint();
+    }
+    
+    private void moveToCeladonCity() {
+
+        CeladonCity celadonCityPanel;
+        try {
+            celadonCityPanel = new CeladonCity(container);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        container.remove(this);
+        container.add(celadonCityPanel, BorderLayout.CENTER);
+
+        // Revalidate and repaint container
+        container.revalidate();
+        container.repaint();
+    }
+    
+    private void moveToLavenderTown() {
+
+        LavenderTown lavenderTownPanel;
+        try {
+            lavenderTownPanel = new LavenderTown(container);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        container.remove(this);
+        container.add(lavenderTownPanel, BorderLayout.CENTER);
 
         // Revalidate and repaint container
         container.revalidate();
@@ -172,3 +221,4 @@ public class CinnabarIsland extends JPanel {
     }
 
 }
+

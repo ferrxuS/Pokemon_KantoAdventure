@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class GamePanel {
 
     JFrame screen;
-    JPanel currentPanel, titlePanel, menuPanel;
+    JPanel currentPanel, titlePanel, menuPanel; //,startButtonPanel
     JLabel titleLabel, menuLabel;
     JTextField userInput;
     Container container;
@@ -25,6 +25,7 @@ public class GamePanel {
 
     public static void main(String[] args) throws FileNotFoundException {
         GamePanel gp = new GamePanel();
+        
     }
 
     public GamePanel() throws FileNotFoundException {
@@ -126,19 +127,27 @@ public class GamePanel {
         userInput.setText(""); //clear the input field
     }
     
-    // Get User Input
     private void handleUserInput(String input) {
         input = input.trim();
 
         if (input.equalsIgnoreCase("enter")) {
-            updateTitleToMenu(); // to Enter MENU
-        } else if (input.equals("1")) {
-            startAdventure();
-        } else if (input.equals("3")) {
-            exitMenu(); // to Exit MENU
+            updateTitleToMenu(); // Move to menu
+        } else if (currentPanel == menuPanel) { // Check if current panel is menu
+            switch (input) {
+                case "1" :
+                    startAdventure();
+                    break;
+                case "3" : 
+                    exitMenu();
+                    break;
+                default : 
+                    JOptionPane.showMessageDialog(screen, "Invalid command!");
+                    userInput.setText("");
+                    break;
+            }
         } else {
             JOptionPane.showMessageDialog(screen, "Invalid command!");
+            userInput.setText("");
         }
     }
 }
-

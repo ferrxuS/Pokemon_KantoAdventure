@@ -1,11 +1,3 @@
   +---------------------------------------------------------------------+
     You are currently in Lavender Town:
   +---------------------------------------------------------------------+
-    [1] Move to:
-	a. Cerulean City	b. Saffron City
-	c. Vermillion City	d. Fuchsia City
-    [2] Pokémaze
-    [3] Fight Wild Pokémon
-    [4] Player Options
-	a.Show Map  b.Show My Pokémon  c.Show My Badges  d.Save and Exit	
-  +---------------------------------------------------------------------+

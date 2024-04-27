@@ -90,7 +90,9 @@ public class NewAdventurePanel extends JPanel {
                         + "  Type NEXT to continue\n");
             } else if (currentState.equals("palletTown")) {
                 if (input.equalsIgnoreCase("next")) {
-                    updateAdvToPalletTown(); // to Enter MENU
+                    updateAdvToPalletTown();
+                } else if (!input.equalsIgnoreCase("next")) {
+                    JOptionPane.showMessageDialog(this, "Invalid command!");
                 }
             }
             inputField.setText("");
@@ -105,7 +107,7 @@ public class NewAdventurePanel extends JPanel {
 
         // Add the new menuPanel
         container.add(palletTown, BorderLayout.CENTER);
-
+        
         // Revalidate and repaint container
         container.revalidate();
         container.repaint();

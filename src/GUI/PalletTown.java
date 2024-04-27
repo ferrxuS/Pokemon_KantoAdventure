@@ -17,18 +17,18 @@ public class PalletTown extends JPanel {
     private JTextArea console;
     private JTextField inputField;
     private JScrollPane scroll;
-    private String currentState;
-    private Graph graph;
     private Container container;
     private ViridianCity viridianCity;
+    private CinnabarIsland cinnabarIsland;
 
     public PalletTown(Container container) throws FileNotFoundException {
         this.container = container;
+        this.viridianCity = viridianCity;
+        this.cinnabarIsland = cinnabarIsland;
         setBackground(Color.black);
         setLayout(new BorderLayout());
         setBackground(Color.black);
         setLayout(new BorderLayout());
-        currentState = "name";
 
         // Adv Label
         label = new JLabel();
@@ -62,12 +62,7 @@ public class PalletTown extends JPanel {
         graph.addEdge(v1, v2);
         graph.addEdge(v1, v3);
 
-        // Moving to Viridian City
-        viridianCity = new ViridianCity();
-
-        // Moving to Cinnabar Island
         
-         
         // Input Field
         inputField = new JTextField();
         inputField.setBackground(Color.LIGHT_GRAY);
@@ -76,7 +71,7 @@ public class PalletTown extends JPanel {
             console.append("        " + list++ + ". " + vertex.getName() + "\n");
         }
         console.append("    [2] Talk to Mom [Your Hometown has no Gym] \n"
-                + "    [3] Fight Wild Pokémon \n" + "    [4] Player Options \n"
+                + "    [3] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
                 + "  +---------------------------------------------------------------------+  \n"
@@ -88,14 +83,50 @@ public class PalletTown extends JPanel {
                 return;
             }
             console.append("> " + input + "\n");
-            currentState = "MoveTo";
-            if (currentState.equals("MoveTo")) {
-                if (input.equals("1a")) {
-                    console.append("    Your choice: " + input + 
-                            "\n  +---------------------------------------------------------------------+  \n");
+            switch (input) {
+                case "1a":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
                     moveToViridianCity();
-                }
-            } 
+                    break;
+                case "1b":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    moveToCinnabarIsland();
+                    break;
+                case "2":
+                    console.append("  +---------------------------------------------------------------------+  \n"
+                            + "    Mom: amamamamam \n" //finish the dialogue
+                            + "  +---------------------------------------------------------------------+  \n"
+                    );
+                    break;
+                case "4a":
+                    console.append("  +---------------------------------------------------------------------+  \n"
+                            + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
+                            + "     |                                     |                      |\n"
+                            + "     |                                     |                      |\n"
+                            + "     |                                     |                      |\n"
+                            + "     |                                     |                      |\n"
+                            + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
+                            + "     |                      |              |                      |\n"
+                            + "  [Viridian City]           |              |                      |\n"
+                            + "     |                      |              |                      |\n"
+                            + "     |                      |              |                      |\n"
+                            + "     |                      |        [Vermillion City]------------|\n"
+                            + "     |                      |                                     |\n"
+                            + " [**Pallet Town**]          |                                     |\n"
+                            + "     |                      |                                     |\n"
+                            + "     |            [Fuchsia City]----------------------------------|\n"
+                            + "     |                      |\n"
+                            + "     |                      |\n"
+                            + "  [Cinnabar Island]---------|\n"
+                            + "  +---------------------------------------------------------------------+  \n"
+                    );
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Invalid command!");
+            }
+
             inputField.setText(""); // Clear the input field
         });
 
@@ -103,8 +134,38 @@ public class PalletTown extends JPanel {
     }
 
     private void moveToViridianCity() {
+        // Create a new instance of the ViridianCity panel
+        ViridianCity viridianCityPanel;
+        try {
+            viridianCityPanel = new ViridianCity(container);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace(); // Handle file not found exception
+            return;
+        }
+
+        // Remove the current PalletTown panel from the container
         container.remove(this);
-        container.add(viridianCity, BorderLayout.CENTER);
+
+        // Add the ViridianCity panel to the container
+        container.add(viridianCityPanel, BorderLayout.CENTER);
+
+        // Revalidate and repaint the container to reflect the changes
+        container.revalidate();
+        container.repaint();
+    }
+
+    private void moveToCinnabarIsland() {
+        
+        CinnabarIsland cinnabarIslandPanel;
+        try {
+            cinnabarIslandPanel = new CinnabarIsland(container);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        
+        container.remove(this);
+        container.add(cinnabarIslandPanel, BorderLayout.CENTER);
 
         // Revalidate and repaint container
         container.revalidate();
