@@ -4,60 +4,58 @@
  */
 package pokemons;
 
+import java.util.ArrayList;
+
 /**
  *
- * @author ilsat
+ * @author ilsat (Noob)
  */
 public class pokemon {
+    
     String name;
-    String type;
+    ArrayList<String> types = new ArrayList<>(); 
     int level;
     int HP;
     int XP;
-    String move1;
-    String move2;
-    String strong1;
-    String strong2;
-    String strong3;
-    String weak1;
-    String weak2;
-    String weak3;
-    
-    public pokemon(String name, String type, int level, int HP, int XP,
-                   String move1, String move2, String strong1, String strong2, String strong3,
-                   String weak1, String weak2, String weak3) {
+    ArrayList<String> moves = new ArrayList<>();
+    ArrayList<String> strengths = new ArrayList<>();
+    ArrayList<String> weaknesses = new ArrayList<>();
+
+    public pokemon(String name, ArrayList<String> types, int level, ArrayList<String> moves, ArrayList<String> strengths, ArrayList<String> weaknesses
+    ) {
         this.name = name;
-        this.type = type;
+        this.types = types;
         this.level = level;
-        this.HP = HP;
-        this.XP = XP;
-        this.move1 = move1;
-        this.move2 = move2;
-        this.strong1 = strong1;
-        this.strong2 = strong2;
-        this.strong3 = strong3;
-        this.weak1 = weak1;
-        this.weak2 = weak2;
-        this.weak3 = weak3;
+        this.HP = 45 + (7 * (level / 10)) + (5 * (level - 5 - (level / 10)));
+        this.XP = 0;
+        this.moves = moves;
+        this.strengths = strengths;
+        this.weaknesses = weaknesses;
     }
-    
+
     @Override
     public String toString() {
-        return "Your Pokemon: \n" + 
-               name + " - Level: " + level +
-               "\nType: " + type + "\n" +
-               "HP: " + HP + "\n" +
-               "XP: " + XP + "\n" +
-               "Moves: \n" +
-               "- " + move1 + "\n" +
-               "- " + move2 + "\n" +
-               "Strong against: \n" +
-               "- " + strong1 + "\n" +
-               "- " + strong2 + "\n" +
-               "- " + strong3 + "\n" +
-               "Weak against: \n" +
-               "- " + weak1 + "\n" +
-               "- " + weak2 + "\n" +
-               "- " + weak3;
+        String ret = "Your Pokémon: \n" +
+        name + " - Level: " + level +
+        "\nType: ";
+        for (String type : types) {
+            ret += type + "/";
+        }
+        ret = ret.substring(0, ret.length() - 1);
+        ret += "\nHP: " + HP + "\n" +
+        "XP: " + XP + "/100\n" +
+        "Moves: \n";
+        for (String move : moves) {
+            ret += "- " + move + "\n";
+        }
+        ret += "Strong against: \n";
+        for (String strength : strengths) {
+            ret += "- " + strength + "\n";
+        }
+        ret += "Weak against: \n";
+        for (String weakness : weaknesses) {
+            ret += "- " + weakness + "\n";
+        }
+        return ret;
     }
 }

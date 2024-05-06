@@ -10,9 +10,9 @@ package pokemons;
  */
 public class Test {
     public static void main(String[] args) {
-        Bulbasaur bulbasaur = new Bulbasaur();
-        System.out.println(bulbasaur.toString());
-        Squirtle s = new Squirtle();
-        System.out.println(s);
+        Starmie myPokemon = new Starmie();
+        System.out.println(myPokemon.toString());
+        // Squirtle s = new Squirtle();
+        // System.out.println(s);
     }
 }
