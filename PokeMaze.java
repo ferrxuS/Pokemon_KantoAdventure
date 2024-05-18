@@ -164,7 +164,11 @@ public class PokeMaze extends JPanel implements KeyListener {
                 move(1, 0);
                 break;
             case KeyEvent.VK_LEFT:
-                move(0, -1);
+                if (playerPosition[1] > 0) {
+                    move(0, -1);
+                } else {
+                    System.out.println("Invalid move. Try again.");
+                }
                 break;
             case KeyEvent.VK_RIGHT:
                 move(0, 1);
