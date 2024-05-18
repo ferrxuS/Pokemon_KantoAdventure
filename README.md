@@ -1,2 +1,2 @@
 # Pokemon_KantoAdventure
-DS MewFive Group Project
+DS MewFive Group Project.
