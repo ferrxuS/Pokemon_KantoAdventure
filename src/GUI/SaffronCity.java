@@ -26,6 +26,7 @@ public class SaffronCity extends JPanel {
     private VermillionCity vermillionCity;
     private CeladonCity celadonCity;
     private LavenderTown lavenderTown;
+    private Race race;
 
     public SaffronCity(Container container) throws FileNotFoundException {
         this.container = container;
@@ -137,6 +138,11 @@ public class SaffronCity extends JPanel {
                             + "  [Cinnabar Island]---------|\n"
                             + "  +---------------------------------------------------------------------+  \n"
                     );
+                    break;
+                case "5":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    console.append(Race.ShortestDistance());
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");

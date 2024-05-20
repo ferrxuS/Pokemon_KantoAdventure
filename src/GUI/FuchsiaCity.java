@@ -26,6 +26,7 @@ public class FuchsiaCity extends JPanel {
     private VermillionCity vermillionCity;
     private CeladonCity celadonCity;
     private LavenderTown lavenderTown;
+    private SafariZone safarizone;
 
     public FuchsiaCity(Container container) throws FileNotFoundException {
         this.container = container;
@@ -93,29 +94,33 @@ public class FuchsiaCity extends JPanel {
             if (input.isEmpty()) {
                 return;
             }
-            console.append("> " + input + "\n");
             switch (input) {
                 case "1a":
+                    console.append("> " + input + "\n");
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToCinnabarIsland();
                     break;
                 case "1b":
+                    console.append("> " + input + "\n");
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToVermillionCity();
                     break;
                 case "1c":
+                    console.append("> " + input + "\n");
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToCeladonCity();
                     break;
                 case "1d":
+                    console.append("> " + input + "\n");
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToLavenderTown();
                     break;
                 case "4a":
+                    console.append("> " + input + "\n");
                     console.append("  +---------------------------------------------------------------------+  \n"
                             + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
                             + "     |                                     |                      |\n"
@@ -138,9 +143,19 @@ public class FuchsiaCity extends JPanel {
                             + "  +---------------------------------------------------------------------+  \n"
                     );
                     break;
-                default:
-                    JOptionPane.showMessageDialog(this, "Invalid command!");
-                    break; // Add break statement here
+                case "5":
+                    console.append("> " + input + "\n");
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    inputField.setText("");
+                    console.append("    Welcome to the Safari Zone! Today's challenge: Sort the Pokemon!\n  +---------------------------------------------------------------------+  \n");
+                    console.append("    Enter the Pokemon in your party (seperated by a comma): \n");
+                    inputField.addActionListener((ActionEvent f) -> {
+                        String pokemonList = inputField.getText();
+                        console.append("\n    You entered: " + pokemonList);
+                        console.append(SafariZone.result(pokemonList));
+                    });
+                    break;
             }
 
             inputField.setText(""); // Clear the input field
@@ -148,8 +163,9 @@ public class FuchsiaCity extends JPanel {
 
         add(inputField, BorderLayout.SOUTH);
     }
+
     private void moveToCinnabarIsland() {
-        
+
         CinnabarIsland cinnabarIslandPanel;
         try {
             cinnabarIslandPanel = new CinnabarIsland(container);
@@ -157,7 +173,7 @@ public class FuchsiaCity extends JPanel {
             e.printStackTrace();
             return;
         }
-        
+
         container.remove(this);
         container.add(cinnabarIslandPanel, BorderLayout.CENTER);
 
@@ -183,7 +199,7 @@ public class FuchsiaCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
+
     private void moveToCeladonCity() {
 
         CeladonCity celadonCityPanel;
@@ -201,7 +217,7 @@ public class FuchsiaCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
+
     private void moveToLavenderTown() {
 
         LavenderTown lavenderTownPanel;
@@ -221,4 +237,3 @@ public class FuchsiaCity extends JPanel {
     }
 
 }
-
