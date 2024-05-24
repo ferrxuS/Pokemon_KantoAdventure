@@ -9,13 +9,15 @@ import java.util.Stack;
 
 public class PokeMaze extends JPanel implements KeyListener {
 
+    // Constants representing different characters in the maze
     private static final char WALL = '#';
     private static final char START = 'S';
     private static final char END = 'E';
     private static final char GHASTLY = 'G';
     private static final char PLAYER = 'Y';
-    //private static final char PATH = '.';
+    private static final char PATH = '.';
 
+    // Maze layout 2D char array
     private static final char[][] maze = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
         {'S', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '#'},
@@ -31,32 +33,20 @@ public class PokeMaze extends JPanel implements KeyListener {
         {'#', '.', '#', '.', '.', '.', '#', '.', '.', '.', 'G', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#'},
         {'#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '#', '.', '#', '#', '#', '.', '#'},
         {'#', '.', '.', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '.', '.', '.', '.', '#'},
-        {'#', '.', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '.', '#', '.', '#'},
+        {'#', '.', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '.', '#', '#', '#'},
         {'#', '.', '.', '.', '#', '.', 'G', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'G', '.', '#'},
         {'#', '#', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '#', '#', '#', '.', '#', '.', '#'},
         {'#', '.', '.', '.', '#', '.', '#', '.', '#', '.', '#', '.', 'G', '.', '.', '.', '.', '.', '#', '.', '#'},
-        {'#', '.', '#', '#', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '#', '.', '#', '.', '#'},
-        {'#', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#', '.', '#', '.', '#', '.', '.', '.', '#', '.', 'E'},
+        {'#', '.', '#', '#', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '.', '#', '#', '.', '#'},
+        {'#', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#', '.', '#', '.', '#', '.', '.', '.', '.', '.', 'E'},
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}
     };
 
-// Original map
-//    private static final char[][] maze = {
-//        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
-//        {'#', 'S', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#'},
-//        {'#', '#', '#', '#', '#', '.', '#', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#'},
-//        {'#', '.', '.', '.', '#', '.', '#', '.', '#', '.', '.', '.', '.', '.', '#', '.', '#'},
-//        {'#', '#', '#', '.', '#', '.', '#', '.', '#', 'G', '#', '.', '#', '.', '#', '#', '#'},
-//        {'#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#'},
-//        {'#', '#', '#', '#', '#', 'G', '#', '.', '#', '.', '#', '.', '#', '#', '#', '.', '#'},
-//        {'#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '#'},
-//        {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', 'E', '#'}
-//    };
-
     private JLabel[][] mazeLabels;
-    private final int[] playerPosition;
+    private final int[] playerPosition; //Player's current position
     final Stack<int[]> playerPath; //Stack to store the player's path
 
+    //Setting for panel
     public PokeMaze() {
         setLayout(new GridLayout(maze.length, maze[0].length));
         setBackground(Color.BLACK);
@@ -86,27 +76,26 @@ public class PokeMaze extends JPanel implements KeyListener {
                         label.setForeground(Color.yellow);
                         break;
                 }
-                mazeLabels[i][j] = label;
-                add(label);
+                mazeLabels[i][j] = label; // Store the label in the array
+                add(label); // Add the label to the panel
             }
         }
 
         setFocusable(true);
         addKeyListener(this);
 
-        // Find and set player's initial position
-        playerPosition = findStartPosition();
-        playerPath = new Stack<>(); //Initialize player's path stack
+        playerPosition = findStartPosition(); // Find and set player's initial position
+        playerPath = new Stack<>(); // Initialize player's path stack
         updateMaze();
     }
 
-    private void updateMaze() {
+    private void updateMaze() { // Update the maze to reflect the player's initial position
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[i].length; j++) {
                 if (i == playerPosition[0] && j == playerPosition[1]) {
-                    mazeLabels[i][j].setText(Character.toString(PLAYER));
+                    mazeLabels[i][j].setText(Character.toString(PLAYER)); // Set the label text to PLAYER character at the player's position
                 } else {
-                    mazeLabels[i][j].setText(Character.toString(maze[i][j]));
+                    mazeLabels[i][j].setText(Character.toString(maze[i][j])); // Set the label text to the corresponding maze character
                 }
             }
         }
@@ -178,11 +167,15 @@ public class PokeMaze extends JPanel implements KeyListener {
         if (maze[playerPosition[0]][playerPosition[1]] == GHASTLY) {
             System.out.println("Oh no! You encountered a Ghastly and got caught.\nGame Over.");
             showGameOverMessage();
+            // Add the final ghastly position to the path
+            playerPath.push(playerPosition.clone());
             printPlayerPath();
 
         } else if (maze[playerPosition[0]][playerPosition[1]] == END) {
             System.out.println("Congratulations! You've reached the end of the maze.");
             showCongratsMessage();
+            // Add the final end position to the path
+            playerPath.push(playerPosition.clone());
             printPlayerPath();
 
         }
@@ -225,6 +218,7 @@ public class PokeMaze extends JPanel implements KeyListener {
         textArea.setBackground(Color.BLACK);
         textArea.setEditable(false);
 
+        // Add button
         JButton tryAgainButton = new JButton("Try Again");
         tryAgainButton.addActionListener(e -> {
             System.out.println("Try Again is pressed");
@@ -319,8 +313,8 @@ public class PokeMaze extends JPanel implements KeyListener {
         }
     }
 
-    //create PokeMaze object and call this method in Lavendertown to run this class
-    public void initializeGame() {
+    // Create PokeMaze object and call this method in Lavendertown to run this class
+    private void initializeGame() {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("PokeMaze");
             PokeMaze mazeGame = new PokeMaze();
@@ -331,38 +325,10 @@ public class PokeMaze extends JPanel implements KeyListener {
             frame.setVisible(true);
         });
     }
-    
+
     //tester
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("PokeMaze");
-            PokeMaze mazeGame = new PokeMaze();
-            frame.getContentPane().add(mazeGame);
-            frame.setSize(600, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
-
-        });
+        PokeMaze maze = new PokeMaze();
+        maze.initializeGame();
     }
 }
-
-//    @Override
-//    public void move(int rowOffset, int colOffset) {
-//        int newRow = playerPosition[0] + rowOffset;
-//        int newCol = playerPosition[1] + colOffset;
-//
-//        if (maze[newRow][newCol] != WALL) {
-//            playerPath.push(playerPosition.clone()); // Push current position to player's path stack
-//            playerPosition[0] = newRow;
-//            playerPosition[1] = newCol;
-//            updateMaze();
-//        } else {
-//            System.out.println("Invalid move. Try again.");
-//        }
-//    }
-
-//    public boolean isGameFinished() {
-//        char currentCell = maze[playerPosition[0]][playerPosition[1]];
-//        return currentCell == END; //Return true if the player reaches the end point
-//    }
