@@ -4,15 +4,19 @@
  */
 package PokemonBattle_LevelUp;
 
-import static GUI.NewAdventurePanel.trainer;
-import java.util.*;
-import pokemons.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import Trainer.Trainer;
+import pokemons.Pokemon;
 
 public class Location {
 
     private String name;
-    private List<pokemon> wildPokemons;
-    private List<pokemon> gymLeaderPokemons;
+    private List<Pokemon> wildPokemons;
+    private List<Pokemon> gymLeaderPokemons;
 
     public static final String VIRIDIAN_CITY = "Viridian City";
     public static final String PEWTER_CITY = "Pewter City";
@@ -29,11 +33,10 @@ public class Location {
         this.name = name;
         this.wildPokemons = new ArrayList<>();
         this.gymLeaderPokemons = new ArrayList<>();
-        loadPokemons();
     }
 
     // Method to dynamically load Pokemon based on their location and type
-    private void loadPokemons() {
+    public void loadPokemons(Trainer trainer) {
         if (trainer.getCurrentLocation() == null) {
             System.err.println("Error: Trainer's current location is null.");
             return; // Exit method if current location is null
@@ -42,20 +45,30 @@ public class Location {
         String currentLocationName = trainer.getCurrentLocation().getName();
 
         // Iterate through all Pokemon classes
-        for (Class<?> pokemonClass : pokemon.class.getDeclaredClasses()) {
+        List<Class<?>> subclasses = new ArrayList<>();
+        Class<?> superclass = Pokemon.class;
+        String packageName = superclass.getPackage().getName();
+        for (Class<?> c : getClasses(packageName)) {
+            if (superclass.isAssignableFrom(c) && !superclass.equals(c)) {
+                subclasses.add(c);
+            }
+        }
+        for (Class<?> subclass : subclasses) {
             try {
-                // Instantiate the Pokemon class
-                pokemon pokemon = (pokemon) pokemonClass.getDeclaredConstructor().newInstance();
+                Pokemon pokemon = (Pokemon) subclass.getDeclaredConstructor().newInstance();
 
                 // Check if the Pokemon's location matches the current location
-                if (pokemon.getLocation().equalsIgnoreCase(currentLocationName)) {
-                    // Add to wildPokemons if it's a wild Pokemon
-                    if (pokemon.isWildPokemon()) {
-                        wildPokemons.add(pokemon);
-                    }
-                    // Add to gymLeaderPokemons if it's a gym leader Pokemon
-                    if (pokemon.isGymLeaderPokemon()) {
-                        gymLeaderPokemons.add(pokemon);
+                if (pokemon.getLocation() != null) { // if not trainer pokemon
+                    if (pokemon.getLocation().equalsIgnoreCase(currentLocationName)) {
+
+                        // Add to wildPokemons if it's a wild Pokemon
+                        if (pokemon.isWildPokemon()) {
+                            wildPokemons.add(pokemon);
+                        }
+                        // Add to gymLeaderPokemons if it's a gym leader Pokemon
+                        if (pokemon.isGymLeaderPokemon()) {
+                            gymLeaderPokemons.add(pokemon);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -64,20 +77,52 @@ public class Location {
         }
 
         // Check if gym leader Pokémon were found in the current location
-        if (gymLeaderPokemons.isEmpty()) {
+        if (gymLeaderPokemons.isEmpty())
+
+        {
             System.err.println("No gym leader Pokémon found in the current location: " + currentLocationName);
         }
+    }
+
+    private List<Class<?>> getClasses(String packageName) {
+        List<Class<?>> classes = new ArrayList<>();
+        try {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            String path = packageName.replace('.', '/');
+            java.net.URL resource = classLoader.getResource(path);
+            java.nio.file.Path directory = java.nio.file.Paths.get(resource.toURI());
+            java.util.stream.Stream<java.nio.file.Path> files = java.nio.file.Files.walk(directory);
+            files.forEach(file -> {
+                if (file.toString().endsWith(".class")) {
+                    String className = file.toString()
+                            .replace(directory.toString(), "")
+                            .replace(".class", "")
+                            .replace('/', '.')
+                            .replace('\\', '.')
+                            .substring(1); // Remove leading dot
+                    try {
+                        classes.add(Class.forName(packageName + "." + className));
+                    } catch (ClassNotFoundException e) {
+                        // Handle exception
+                    }
+                }
+            });
+            files.close();
+        } catch (Exception e) {
+            // Handle exception
+        }
+        return classes;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<pokemon> getWildPokemons() {
+    public List<Pokemon> getWildPokemons() {
         return wildPokemons;
     }
 
-    public List<pokemon> getGymLeaderPokemons() {
+    public List<Pokemon> getGymLeaderPokemons() {
         return gymLeaderPokemons;
     }
 }

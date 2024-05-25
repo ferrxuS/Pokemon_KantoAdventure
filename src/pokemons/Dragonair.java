@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Dragonair extends pokemon {
+public class Dragonair extends Pokemon {
 
     //Fuchsia City
     public Dragonair() {

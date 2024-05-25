@@ -29,12 +29,14 @@ public class ViridianCity extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
-        this.palletTown = new PalletTown(container, trainer, new Location(Location.PALLET_TOWN));
-        this.pewterCity = new PewterCity(container, trainer, new Location(Location.PEWTER_CITY));
-        trainer.setCurrentLocation(new Location(Location.VIRIDIAN_CITY));
+        // this.palletTown = new PalletTown(container, trainer, new Location(Location.PALLET_TOWN));
+        // this.pewterCity = new PewterCity(container, trainer, new Location(Location.PEWTER_CITY));
+
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
 
         setBackground(Color.black);
-
+        
         setLayout(
                 new BorderLayout());
 

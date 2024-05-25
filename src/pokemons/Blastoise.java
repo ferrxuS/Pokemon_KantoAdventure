@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 //Cinnabar Island
-public class Blastoise extends pokemon {
+public class Blastoise extends Pokemon {
     public Blastoise() {
             super(
                 "Blastoise", 

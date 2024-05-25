@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Squirtle extends pokemon {
+public class Squirtle extends Pokemon {
     //Pallet Town
     public Squirtle() {
         super(

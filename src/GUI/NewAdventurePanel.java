@@ -25,7 +25,7 @@ public class NewAdventurePanel extends JPanel {
     private PalletTown palletTown;
     private Container container;
     public static Trainer trainer; //I do a object to store the name because for the future saving progress
-    private pokemon selectedPokemon;
+    private Pokemon selectedPokemon;
     private Location location;
 
     public NewAdventurePanel(Container container) throws FileNotFoundException {
@@ -118,7 +118,7 @@ public class NewAdventurePanel extends JPanel {
     private void updateAdvToPalletTown() throws FileNotFoundException {
         // Create a Location for Pallet Town
         Location palletTownLocation = new Location(Location.PALLET_TOWN);
-
+        
         // Create a new instance of PalletTown with the necessary arguments
         palletTown = new PalletTown(container, trainer, palletTownLocation);
 

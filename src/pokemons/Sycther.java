@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Vermillion City
-public class Sycther extends pokemon {
+public class Sycther extends Pokemon {
     public Sycther() {
         super(
             "Sycther",

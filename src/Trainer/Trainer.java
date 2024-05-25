@@ -7,7 +7,7 @@ package Trainer;
 import java.io.*;
 import java.util.*;
 import javax.swing.JPanel;
-import pokemons.pokemon;
+import pokemons.Pokemon;
 import PokemonBattle_LevelUp.Location;
 
 /**
@@ -19,9 +19,9 @@ public class Trainer {
     private String TrainerName;
     private Location currentLocation; // Updated to use Location instead of JPanel
     private static ArrayList<String> badges = new ArrayList<>();
-    private static ArrayList<pokemon> pokemonList = new ArrayList<>();
+    private static ArrayList<Pokemon> pokemonList = new ArrayList<>();
     private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>();
-    private pokemon selectedPokemon; // Field to store the selected Pokémon
+    private Pokemon selectedPokemon; // Field to store the selected Pokémon
 
     public void setTrainerName(String TrainerName) {
         this.TrainerName = TrainerName;
@@ -31,7 +31,7 @@ public class Trainer {
         this.currentLocation = currentLocation;
     }
 
-    public void setSelectedPokemon(pokemon selectedPokemon) {
+    public void setSelectedPokemon(Pokemon selectedPokemon) {
         this.selectedPokemon = selectedPokemon;
         addPokemon(); // Automatically add the selected Pokémon to the list
     }
@@ -44,7 +44,7 @@ public class Trainer {
         return currentLocation;
     }
 
-    public pokemon getSelectedPokemon() {
+    public Pokemon getSelectedPokemon() {
         return selectedPokemon;
     }
 
@@ -57,7 +57,7 @@ public class Trainer {
     public String showPokemonList() {
         if (!pokemonList.isEmpty()) {
             StringBuilder result = new StringBuilder();
-            for (pokemon p : pokemonList) {
+            for (Pokemon p : pokemonList) {
                 result.append(p.toString()).append("\n");
             }
             return result.toString();

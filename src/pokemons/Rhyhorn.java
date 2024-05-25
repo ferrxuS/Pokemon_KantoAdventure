@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Rhyhorn extends pokemon{
+public class Rhyhorn extends Pokemon{
     // Viridian City
     public Rhyhorn() {
         super(

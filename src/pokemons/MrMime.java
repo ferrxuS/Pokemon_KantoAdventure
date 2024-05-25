@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class MrMime extends pokemon{
+public class MrMime extends Pokemon{
     // Saffron City
     public MrMime() {
         super(

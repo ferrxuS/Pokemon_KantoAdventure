@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author raishahaque
  */
-public class Psyduck extends pokemon{
+public class Psyduck extends Pokemon{
     // Cerulean City
     public Psyduck() {
         super(

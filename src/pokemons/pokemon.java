@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 
-public class pokemon {
+public class Pokemon {
 
     String name;
     ArrayList<String> types = new ArrayList<>();
@@ -27,7 +27,7 @@ public class pokemon {
     String location;
 
     // Constructor for wild or gym leader pokemon
-    public pokemon(String name, ArrayList<String> types, int level, int HP, Map<String, Integer> moveDamages, boolean isGymLeaderPokemon, boolean isWildPokemon, String location) {
+    public Pokemon(String name, ArrayList<String> types, int level, int HP, Map<String, Integer> moveDamages, boolean isGymLeaderPokemon, boolean isWildPokemon, String location) {
         this.name = name;
         this.types = types;
         this.level = level;
@@ -41,7 +41,7 @@ public class pokemon {
     }
 
     // Constructor for trainer pokemon
-    public pokemon(String name, ArrayList<String> types, int level, Map<String, Integer> moveDamages, ArrayList<String> strengths, ArrayList<String> weaknesses) {
+    public Pokemon(String name, ArrayList<String> types, int level, Map<String, Integer> moveDamages, ArrayList<String> strengths, ArrayList<String> weaknesses) {
         this.name = name;
         this.types = types;
         this.level = level;

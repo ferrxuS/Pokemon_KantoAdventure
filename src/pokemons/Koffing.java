@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 //Fuchsia City
-public class Koffing extends pokemon {
+public class Koffing extends Pokemon {
 
     public Koffing() {
         super(

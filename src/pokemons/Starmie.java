@@ -6,7 +6,7 @@ package pokemons;
 
 import java.util.*;
 
-public class Starmie extends pokemon {
+public class Starmie extends Pokemon {
     // Cerulean City
     public Starmie() {
         super(

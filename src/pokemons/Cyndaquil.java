@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Cyndaquil extends pokemon {
+public class Cyndaquil extends Pokemon {
 
     //Saffron City
     public Cyndaquil() {

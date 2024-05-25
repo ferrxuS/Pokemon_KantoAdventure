@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Pallet Town
-public class Bulbasaur extends pokemon {
+public class Bulbasaur extends Pokemon {
 
     public Bulbasaur() {
         super(

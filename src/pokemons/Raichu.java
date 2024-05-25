@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author raishahaque
  */
-public class Raichu extends pokemon{
+public class Raichu extends Pokemon{
     // Vermillion City
     public Raichu() {
         super(

@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Cerulean City
-public class Meowth extends pokemon {
+public class Meowth extends Pokemon {
     public Meowth() {
         super(
             "Meowth",

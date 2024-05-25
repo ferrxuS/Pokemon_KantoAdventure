@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author raishahaque
  */
-public class Geodude extends pokemon {
+public class Geodude extends Pokemon {
     
     // Pewter City
     public Geodude() {

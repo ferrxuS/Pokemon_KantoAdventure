@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Ponyta extends pokemon {
+public class Ponyta extends Pokemon {
 // Cinnabar Island
     public Ponyta() {
         super(

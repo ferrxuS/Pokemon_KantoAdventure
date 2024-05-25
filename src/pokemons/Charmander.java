@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Charmander extends pokemon {
+public class Charmander extends Pokemon {
 
     public Charmander() {
         //pallet town

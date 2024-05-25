@@ -37,7 +37,9 @@ public class PalletTown extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.black);
         setLayout(new BorderLayout());
-        trainer.setCurrentLocation(new Location(Location.PALLET_TOWN));
+
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
 
         // Adv Label
         label = new JLabel();
@@ -136,7 +138,8 @@ public class PalletTown extends JPanel {
     private void moveToViridianCity() throws FileNotFoundException {
         // Create a new Location object for Viridian City
         Location viridianCityLocation = new Location(Location.VIRIDIAN_CITY);
-        ViridianCity viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
+        
+        ViridianCity viridianCityPanel;
         try {
             viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
         } catch (FileNotFoundException e) {

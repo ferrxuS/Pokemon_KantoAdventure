@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Growlithe extends pokemon {
+public class Growlithe extends Pokemon {
 
     //Cinnabar Island
     public Growlithe() {

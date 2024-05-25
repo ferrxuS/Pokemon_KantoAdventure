@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Saffron City
-public class Kadabra extends pokemon{
+public class Kadabra extends Pokemon{
     public Kadabra() {
         super(
             "Kadabra", 

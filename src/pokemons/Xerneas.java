@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Viridian City
-public class Xerneas extends pokemon {
+public class Xerneas extends Pokemon {
     public Xerneas() {
         super(
             "Xerneas",

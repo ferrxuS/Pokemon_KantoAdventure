@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Victreebel extends pokemon{
+public class Victreebel extends Pokemon{
     // Celadon City
     public Victreebel() {
         super(

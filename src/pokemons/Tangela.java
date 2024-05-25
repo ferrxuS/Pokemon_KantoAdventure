@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Tangela extends pokemon {
+public class Tangela extends Pokemon {
     // Celadon City
     public Tangela() {
         super(

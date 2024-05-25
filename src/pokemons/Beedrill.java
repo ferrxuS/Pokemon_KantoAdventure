@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Celadon City
-public class Beedrill extends pokemon {
+public class Beedrill extends Pokemon {
     public Beedrill() {
         super(
             "Beedrill", 

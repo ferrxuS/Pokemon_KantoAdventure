@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Muk extends pokemon{
+public class Muk extends Pokemon{
     // Fuchsia City
     public Muk() {
         super(

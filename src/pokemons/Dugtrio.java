@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author ilsat
  */
-public class Dugtrio extends pokemon {
+public class Dugtrio extends Pokemon {
     
     //Viridian City
     public Dugtrio() {

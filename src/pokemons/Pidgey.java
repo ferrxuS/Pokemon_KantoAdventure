@@ -11,7 +11,7 @@ import java.util.*;
  * @author ilsat
  */
 // Pewter City
-public class Pidgey extends pokemon {
+public class Pidgey extends Pokemon {
     public Pidgey() {
         super(
             "Pidgey",

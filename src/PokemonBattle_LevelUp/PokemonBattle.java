@@ -7,7 +7,7 @@ package PokemonBattle_LevelUp;
 import javax.swing.*;
 import Trainer.Trainer;
 import java.util.*;
-import pokemons.pokemon;
+import pokemons.Pokemon;
 
 /**
  *
@@ -16,8 +16,8 @@ import pokemons.pokemon;
 public class PokemonBattle {
 
     public Trainer trainer;
-    public pokemon trainerPokemon;
-    public pokemon enemyPokemon;
+    public Pokemon trainerPokemon;
+    public Pokemon enemyPokemon;
     public int xp;
     public StringBuilder console = new StringBuilder();
     Location location;
@@ -27,10 +27,10 @@ public class PokemonBattle {
         this.location = trainer.getCurrentLocation();
         this.trainerPokemon = trainer.getSelectedPokemon();
         Object enemy = determineEnemyPokemon(isWildPokemon);
-        if (enemy instanceof pokemon) {
-            this.enemyPokemon = (pokemon) enemy;
+        if (enemy instanceof Pokemon) {
+            this.enemyPokemon = (Pokemon) enemy;
         } else if (enemy instanceof List<?>) {
-            List<pokemon> gymLeaderPokemons = (List<pokemon>) enemy;
+            List<Pokemon> gymLeaderPokemons = (List<Pokemon>) enemy;
             this.enemyPokemon = gymLeaderPokemons.get(0);
         } else {
             throw new IllegalStateException("Invalid enemy type encountered.");
@@ -92,7 +92,7 @@ public class PokemonBattle {
         return trainerPokemon.getHP();
     }
 
-    public double calculateEffectiveness(pokemon attacker, pokemon defender) {
+    public double calculateEffectiveness(Pokemon attacker, Pokemon defender) {
         double effectiveness = 1.0;
         for (String type : attacker.getStrengths()) {
             if (defender.getTypes().contains(type)) {
@@ -137,14 +137,14 @@ public class PokemonBattle {
         Location location = trainer.getCurrentLocation();
 
         if (isWildPokemon) {
-            List<pokemon> wildPokemons = location.getWildPokemons();
+            List<Pokemon> wildPokemons = location.getWildPokemons();
             if (wildPokemons.isEmpty()) {
                 throw new IllegalStateException("No wild Pokémon found in the current location.");
             }
             Random random = new Random();
             return wildPokemons.get(random.nextInt(wildPokemons.size()));
         } else {
-            List<pokemon> gymLeaderPokemons = location.getGymLeaderPokemons();
+            List<Pokemon> gymLeaderPokemons = location.getGymLeaderPokemons();
             if (!gymLeaderPokemons.isEmpty()) {
                 return gymLeaderPokemons;
             } else {
@@ -155,9 +155,9 @@ public class PokemonBattle {
 
     public void challengeGymLeader(Trainer trainer, Location location) {
         try {
-            List<pokemon> gymLeaderPokemons = location.getGymLeaderPokemons();
+            List<Pokemon> gymLeaderPokemons = location.getGymLeaderPokemons();
             if (!gymLeaderPokemons.isEmpty()) {
-                for (pokemon gymLeaderPokemon : gymLeaderPokemons) {
+                for (Pokemon gymLeaderPokemon : gymLeaderPokemons) {
                     PokemonBattle gymLeaderBattle = new PokemonBattle(trainer, false, location);
                     gymLeaderBattle.battle();
                     console.append(gymLeaderBattle.console.toString());
@@ -172,9 +172,9 @@ public class PokemonBattle {
 
     public void fightWildPokemon(Trainer trainer, Location location) {
         try {
-            List<pokemon> wildPokemons = location.getWildPokemons();
+            List<Pokemon> wildPokemons = location.getWildPokemons();
             if (!wildPokemons.isEmpty()) {
-                pokemon wildPokemon = wildPokemons.get(0);
+                Pokemon wildPokemon = wildPokemons.get(0);
                 PokemonBattle wildPokemonBattle = new PokemonBattle(trainer, true, location);
                 wildPokemonBattle.battle();
                 console.append(wildPokemonBattle.console.toString());
@@ -187,7 +187,7 @@ public class PokemonBattle {
     }
 
     // Trainer Pokemon methods
-    public pokemon getTrainerPokemon() {
+    public Pokemon getTrainerPokemon() {
         return trainer.getSelectedPokemon();
     }
 
@@ -224,7 +224,7 @@ public class PokemonBattle {
     }
 
     // Enemy Pokemon methods
-    public pokemon getEnemyPokemon() {
+    public Pokemon getEnemyPokemon() {
         return enemyPokemon;
     }
 

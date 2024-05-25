@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author raishahaque
  */
-public class Onix extends pokemon{
+public class Onix extends Pokemon{
     // Pewter City
     public Onix() {
         super(
