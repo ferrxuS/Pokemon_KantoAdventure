@@ -322,7 +322,7 @@ public class PokeMaze extends JPanel implements KeyListener {
     }
 
     // Create PokeMaze object and call this method in Lavendertown to run this class
-    private void initializeGame() {
+    public void initializeGame() {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("PokeMaze");
             PokeMaze mazeGame = new PokeMaze();
