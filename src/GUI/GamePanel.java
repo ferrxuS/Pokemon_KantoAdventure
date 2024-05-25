@@ -151,3 +151,21 @@ public class GamePanel {
         }
     }
 }
+
+
+
+    // Get User Input
+//    private void handleUserInput(String input) {
+//        input = input.trim();
+//
+//        if (input.equalsIgnoreCase("enter")) {
+//            updateTitleToMenu(); // to Enter MENU
+//        } else if (input.equals("1")) {
+//            startAdventure();
+//        } else if (input.equals("3")) {
+//            exitMenu(); // to Exit MENU
+//        } else {
+//            JOptionPane.showMessageDialog(screen, "Invalid command!");
+//        }
+//    }
+

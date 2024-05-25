@@ -11,9 +11,11 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.*;
 import static GUI.GamePanel.*;
 import static GUI.Graph.*;
-import java.io.FileNotFoundException;
 
 public class VermillionCity extends JPanel {
 
@@ -25,9 +27,13 @@ public class VermillionCity extends JPanel {
     private SaffronCity saffronCity;
     private FuchsiaCity fuchsiaCity;
     private LavenderTown lavenderTown;
+    private Trainer trainer;
+    private Location location;
 
-    public VermillionCity(Container container) throws FileNotFoundException {
+    public VermillionCity(Container container, Trainer trainer, Location location) throws FileNotFoundException {
         this.container = container;
+        this.trainer = trainer;
+        this.location = location;
         this.saffronCity = saffronCity;
         this.fuchsiaCity = fuchsiaCity;
         this.lavenderTown = lavenderTown;
@@ -104,31 +110,28 @@ public class VermillionCity extends JPanel {
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToLavenderTown();
+                    break;
+                case "2":
+                    challengeGymLeader();
+                    break;
+                case "3":
+                    fightWildPokemon();
+                    break;
                 case "4a":
-                    console.append("  +---------------------------------------------------------------------+  \n"
-                            + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
-                            + "     |                      |              |                      |\n"
-                            + "  [Viridian City]           |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |      [**Vermillion City**]----------|\n"
-                            + "     |                      |                                     |\n"
-                            + " [Pallet Town]              |                                     |\n"
-                            + "     |                      |                                     |\n"
-                            + "     |            [Fuchsia City]----------------------------------|\n"
-                            + "     |                      |\n"
-                            + "     |                      |\n"
-                            + "  [Cinnabar Island]---------|\n"
-                            + "  +---------------------------------------------------------------------+  \n"
-                    );
+                    showMap();
+                    break;
+                case "4b":
+                    showMyPokemon();
+                    break;
+                case "4c":
+                    showMyBadges();
+                    break;
+                case "4d":
+                    saveAndExit();
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");
+                    inputField.setText("");
                     break; // Add break statement here
             }
 
@@ -139,10 +142,10 @@ public class VermillionCity extends JPanel {
     }
 
     private void moveToSaffronCity() {
-
+        Location saffronCityLocation = new Location(Location.SAFFRON_CITY);
         SaffronCity saffronCityPanel;
         try {
-            saffronCityPanel = new SaffronCity(container);
+            saffronCityPanel = new SaffronCity(container, trainer, saffronCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -155,12 +158,12 @@ public class VermillionCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
-    private void moveToFuchsiaCity() {
 
+    private void moveToFuchsiaCity() {
+        Location fuchsiaCityLocation = new Location(Location.FUCHSIA_CITY);
         FuchsiaCity fuchsiaCityPanel;
         try {
-            fuchsiaCityPanel = new FuchsiaCity(container);
+            fuchsiaCityPanel = new FuchsiaCity(container, trainer, fuchsiaCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -173,12 +176,12 @@ public class VermillionCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
-    private void moveToLavenderTown() {
 
+    private void moveToLavenderTown() {
+        Location lavenderTownLocation = new Location(Location.LAVENDER_TOWN);
         LavenderTown lavenderTownPanel;
         try {
-            lavenderTownPanel = new LavenderTown(container);
+            lavenderTownPanel = new LavenderTown(container, trainer, lavenderTownLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -192,4 +195,50 @@ public class VermillionCity extends JPanel {
         container.repaint();
     }
 
+    private void challengeGymLeader() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
+        pokemonBattle.challengeGymLeader(trainer, location);
+    }
+
+    private void fightWildPokemon() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
+        pokemonBattle.fightWildPokemon(trainer, location);
+    }
+
+    private void showMap() {
+        console.append("  +---------------------------------------------------------------------+  \n"
+                + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
+                + "     |                      |              |                      |\n"
+                + "  [Viridian City]           |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |      [**Vermillion City**]----------|\n"
+                + "     |                      |                                     |\n"
+                + " [Pallet Town]              |                                     |\n"
+                + "     |                      |                                     |\n"
+                + "     |            [Fuchsia City]----------------------------------|\n"
+                + "     |                      |\n"
+                + "     |                      |\n"
+                + "  [Cinnabar Island]---------|\n"
+                + "  +---------------------------------------------------------------------+  \n"
+        );
+    }
+
+    private void showMyPokemon() {
+        console.append(trainer.showPokemonList());
+    }
+
+    private void showMyBadges() {
+        console.append(trainer.showBadges());
+    }
+
+    private void saveAndExit() {
+        // Implement save and exit logic here
+        System.exit(0);
+    }
 }

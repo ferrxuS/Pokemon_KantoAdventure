@@ -11,9 +11,11 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.*;
 import static GUI.GamePanel.*;
 import static GUI.Graph.*;
-import java.io.FileNotFoundException;
 
 public class FuchsiaCity extends JPanel {
 
@@ -26,9 +28,14 @@ public class FuchsiaCity extends JPanel {
     private VermillionCity vermillionCity;
     private CeladonCity celadonCity;
     private LavenderTown lavenderTown;
+    private Trainer trainer;
+    private Location location;
+    private ActionListener defaultListener;
 
-    public FuchsiaCity(Container container) throws FileNotFoundException {
+    public FuchsiaCity(Container container, Trainer trainer, Location location) throws FileNotFoundException {
         this.container = container;
+        this.trainer = trainer;
+        this.location = location;
         this.cinnabarIsland = cinnabarIsland;
         this.vermillionCity = vermillionCity;
         this.celadonCity = celadonCity;
@@ -88,76 +95,105 @@ public class FuchsiaCity extends JPanel {
                 + "  +---------------------------------------------------------------------+  \n"
         );
 
-        inputField.addActionListener((ActionEvent e) -> {
-            String input = inputField.getText();
-            if (input.isEmpty()) {
-                return;
-            }
-            console.append("> " + input + "\n");
-            switch (input) {
-                case "1a":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToCinnabarIsland();
-                    break;
-                case "1b":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToVermillionCity();
-                    break;
-                case "1c":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToCeladonCity();
-                    break;
-                case "1d":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToLavenderTown();
-                    break;
-                case "4a":
-                    console.append("  +---------------------------------------------------------------------+  \n"
-                            + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
-                            + "     |                      |              |                      |\n"
-                            + "  [Viridian City]           |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |        [Vermillion City]------------|\n"
-                            + "     |                      |                                     |\n"
-                            + " [Pallet Town]              |                                     |\n"
-                            + "     |                      |                                     |\n"
-                            + "     |            [**Fuchsia City**]------------------------------|\n"
-                            + "     |                      |\n"
-                            + "     |                      |\n"
-                            + "  [Cinnabar Island]---------|\n"
-                            + "  +---------------------------------------------------------------------+  \n"
-                    );
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(this, "Invalid command!");
-                    break; // Add break statement here
-            }
+        // Define the default action listener
+        defaultListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = inputField.getText();
+                if (input.isEmpty()) {
+                    return;
+                }
+                console.append("> " + input + "\n");
+                switch (input) {
+                    case "1a":
+                        console.append("    Your choice: " + input
+                                + "\n  +---------------------------------------------------------------------+  \n");
+                        moveToCinnabarIsland();
+                        break;
+                    case "1b":
+                        console.append("    Your choice: " + input
+                                + "\n  +---------------------------------------------------------------------+  \n");
+                        moveToVermillionCity();
+                        break;
+                    case "1c":
+                        console.append("    Your choice: " + input
+                                + "\n  +---------------------------------------------------------------------+  \n");
+                        moveToCeladonCity();
+                        break;
+                    case "1d":
+                        console.append("    Your choice: " + input
+                                + "\n  +---------------------------------------------------------------------+  \n");
+                        moveToLavenderTown();
+                        break;
+                    case "2":
+                        challengeGymLeader();
+                        break;
+                    case "3":
+                        fightWildPokemon();
+                        break;
+                    case "4a":
+                        showMap();
+                        break;
+                    case "4b":
+                        showMyPokemon();
+                        break;
+                    case "4c":
+                        showMyBadges();
+                        break;
+                    case "4d":
+                        saveAndExit();
+                        break;
+                    case "5":
+                        console.append("  +---------------------------------------------------------------------+  \n");
+                        inputField.setText("");
+                        console.append("    Welcome to the Safari Zone! Today's challenge: Sort the Pokemon!\n"
+                                + "  +---------------------------------------------------------------------+  \n");
+                        console.append("    Enter the Pokemon in your party (separated by a comma): \n"
+                                + "  +---------------------------------------------------------------------+  \n");
+                        // Remove the default action listener
+                        inputField.removeActionListener(this);
+                        // Add action listener for sorting Pokémon
+                        ActionListener pokemonSortingListener = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent f) {
+                                String pokemonList = inputField.getText();
+                                console.append("    You entered: " + pokemonList + "\n");
+                                console.append(SafariZone.result(pokemonList));
+                                // Clear the input field after Safari Zone runs
+                                inputField.setText("");
+                                // Remove the sorting listener and add back the default listener
+                                inputField.removeActionListener(this);
+                                inputField.addActionListener(defaultListener);
+                            }
+                        };
+                        inputField.addActionListener(pokemonSortingListener);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(FuchsiaCity.this, "Invalid command!");
+                        inputField.setText("");
+                        break;
+                }
 
-            inputField.setText(""); // Clear the input field
-        });
+                inputField.setText(""); // Clear the input field
+            }
+        };
+
+        // Add the default action listener to the input field
+        inputField.addActionListener(defaultListener);
 
         add(inputField, BorderLayout.SOUTH);
     }
+
     private void moveToCinnabarIsland() {
-        
+        Location cinnabarIslandLocation = new Location(Location.CINNABAR_ISLAND);
         CinnabarIsland cinnabarIslandPanel;
         try {
-            cinnabarIslandPanel = new CinnabarIsland(container);
+            cinnabarIslandPanel = new CinnabarIsland(container, trainer, cinnabarIslandLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
         }
-        
+
         container.remove(this);
         container.add(cinnabarIslandPanel, BorderLayout.CENTER);
 
@@ -167,10 +203,10 @@ public class FuchsiaCity extends JPanel {
     }
 
     private void moveToVermillionCity() {
-
+        Location vermillionCityLocation = new Location(Location.VERMILLION_CITY);
         VermillionCity vermillionCityPanel;
         try {
-            vermillionCityPanel = new VermillionCity(container);
+            vermillionCityPanel = new VermillionCity(container, trainer, vermillionCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -183,12 +219,12 @@ public class FuchsiaCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
-    private void moveToCeladonCity() {
 
+    private void moveToCeladonCity() {
+        Location celadonCityLocation = new Location(Location.CELADON_CITY);
         CeladonCity celadonCityPanel;
         try {
-            celadonCityPanel = new CeladonCity(container);
+            celadonCityPanel = new CeladonCity(container, trainer, celadonCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -201,12 +237,12 @@ public class FuchsiaCity extends JPanel {
         container.revalidate();
         container.repaint();
     }
-    
-    private void moveToLavenderTown() {
 
+    private void moveToLavenderTown() {
+        Location lavenderTownLocation = new Location(Location.LAVENDER_TOWN);
         LavenderTown lavenderTownPanel;
         try {
-            lavenderTownPanel = new LavenderTown(container);
+            lavenderTownPanel = new LavenderTown(container, trainer, lavenderTownLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -220,5 +256,50 @@ public class FuchsiaCity extends JPanel {
         container.repaint();
     }
 
-}
+    private void challengeGymLeader() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
+        pokemonBattle.challengeGymLeader(trainer, location);
+    }
 
+    private void fightWildPokemon() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
+        pokemonBattle.fightWildPokemon(trainer, location);
+    }
+
+    private void showMap() {
+        console.append("  +---------------------------------------------------------------------+  \n"
+                + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
+                + "     |                      |              |                      |\n"
+                + "  [Viridian City]           |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |        [Vermillion City]------------|\n"
+                + "     |                      |                                     |\n"
+                + " [Pallet Town]              |                                     |\n"
+                + "     |                      |                                     |\n"
+                + "     |            [**Fuchsia City**]------------------------------|\n"
+                + "     |                      |\n"
+                + "     |                      |\n"
+                + "  [Cinnabar Island]---------|\n"
+                + "  +---------------------------------------------------------------------+  \n"
+        );
+    }
+
+    private void showMyPokemon() {
+        console.append(trainer.showPokemonList());
+    }
+
+    private void showMyBadges() {
+        console.append(trainer.showBadges());
+    }
+
+    private void saveAndExit() {
+        // Implement save and exit logic here
+        System.exit(0);
+    }
+}

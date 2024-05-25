@@ -7,9 +7,11 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.*;
 import static GUI.GamePanel.*;
 import static GUI.Graph.*;
-import java.io.FileNotFoundException;
 
 public class PewterCity extends JPanel {
 
@@ -20,9 +22,13 @@ public class PewterCity extends JPanel {
     private Container container;
     private ViridianCity viridianCity;
     private CeruleanCity ceruleanCity;
+    private Trainer trainer;
+    private Location location;
 
-    public PewterCity(Container container) throws FileNotFoundException {
+    public PewterCity(Container container, Trainer trainer, Location location) throws FileNotFoundException {
         this.container = container;
+        this.trainer = trainer;
+        this.location = location;
         this.viridianCity = viridianCity;
         this.ceruleanCity = ceruleanCity;
         setBackground(Color.black);
@@ -92,32 +98,32 @@ public class PewterCity extends JPanel {
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToCeruleanCity();
                     break;
+                case "2":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    challengeGymLeader();
+                    break;
+                case "3":
+                    console.append("    Your choice: " + input
+                            + "\n  +---------------------------------------------------------------------+  \n");
+                    fightWildPokemon();
+                    break;
                 case "4a":
-                    console.append("  +---------------------------------------------------------------------+  \n"
-                            + "  [**Pewter City**]-----------------[Cerulean City]---------------|\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
-                            + "     |                      |              |                      |\n"
-                            + "  [Viridian City]           |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |        [Vermillion City]------------|\n"
-                            + "     |                      |                                     |\n"
-                            + " [Pallet Town]              |                                     |\n"
-                            + "     |                      |                                     |\n"
-                            + "     |            [Fuchsia City]----------------------------------|\n"
-                            + "     |                      |\n"
-                            + "     |                      |\n"
-                            + "  [Cinnabar Island]---------|\n"
-                            + "  +---------------------------------------------------------------------+  \n"
-                    );
+                    showMap();
+                    break;
+                case "4b":
+                    showMyPokemon();
+                    break;
+                case "4c":
+                    showMyBadges();
+                    break;
+                case "4d":
+                    saveAndExit();
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");
-                    break; // Add break statement here
+                    inputField.setText("");
+                    break;
             }
 
             inputField.setText(""); // Clear the input field
@@ -127,31 +133,27 @@ public class PewterCity extends JPanel {
     }
 
     private void moveToViridianCity() {
-        // Create a new instance of the ViridianCity panel
+        Location viridianCityLocation = new Location(Location.VIRIDIAN_CITY);
         ViridianCity viridianCityPanel;
         try {
-            viridianCityPanel = new ViridianCity(container);
+            viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
         } catch (FileNotFoundException e) {
-            e.printStackTrace(); // Handle file not found exception
+            e.printStackTrace();
             return;
         }
 
-        // Remove the current PalletTown panel from the container
         container.remove(this);
-
-        // Add the ViridianCity panel to the container
         container.add(viridianCityPanel, BorderLayout.CENTER);
 
-        // Revalidate and repaint the container to reflect the changes
         container.revalidate();
         container.repaint();
     }
 
     private void moveToCeruleanCity() {
-  
+        Location ceruleanCityLocation = new Location(Location.CERULEAN_CITY);
         CeruleanCity ceruleanCityPanel;
         try {
-            ceruleanCityPanel = new CeruleanCity(container);
+            ceruleanCityPanel = new CeruleanCity(container, trainer, ceruleanCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
@@ -160,9 +162,54 @@ public class PewterCity extends JPanel {
         container.remove(this);
         container.add(ceruleanCityPanel, BorderLayout.CENTER);
 
-        // Revalidate and repaint container
         container.revalidate();
         container.repaint();
     }
-   
+
+    private void challengeGymLeader() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
+        pokemonBattle.challengeGymLeader(trainer, location);
+    }
+
+    private void fightWildPokemon() {
+        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
+        pokemonBattle.fightWildPokemon(trainer, location);
+    }
+
+    private void showMap() {
+        console.append("  +---------------------------------------------------------------------+  \n"
+                + "  [**Pewter City**]-----------------[Cerulean City]---------------|\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
+                + "     |                      |              |                      |\n"
+                + "  [Viridian City]           |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |        [Vermillion City]------------|\n"
+                + "     |                      |                                     |\n"
+                + " [Pallet Town]              |                                     |\n"
+                + "     |                      |                                     |\n"
+                + "     |            [Fuchsia City]----------------------------------|\n"
+                + "     |                      |\n"
+                + "     |                      |\n"
+                + "  [Cinnabar Island]---------|\n"
+                + "  +---------------------------------------------------------------------+  \n"
+        );
+    }
+
+    private void showMyPokemon() {
+        console.append(trainer.showPokemonList());
+    }
+
+    private void showMyBadges() {
+        console.append(trainer.showBadges());
+    }
+
+    private void saveAndExit() {
+        // Implement save and exit logic here
+        System.exit(0);
+    }
 }

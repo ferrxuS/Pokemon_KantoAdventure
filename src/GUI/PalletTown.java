@@ -4,12 +4,16 @@
  */
 package GUI;
 
-import static GUI.GamePanel.*;
-import static GUI.Graph.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.*;
+import static GUI.GamePanel.*;
+import static GUI.Graph.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PalletTown extends JPanel {
 
@@ -20,15 +24,20 @@ public class PalletTown extends JPanel {
     private Container container;
     private ViridianCity viridianCity;
     private CinnabarIsland cinnabarIsland;
+    private Trainer trainer;
+    private Location location;
 
-    public PalletTown(Container container) throws FileNotFoundException {
+    public PalletTown(Container container, Trainer trainer, Location location) throws FileNotFoundException {
         this.container = container;
+        this.trainer = trainer;
+        this.location = location;
         this.viridianCity = viridianCity;
         this.cinnabarIsland = cinnabarIsland;
         setBackground(Color.black);
         setLayout(new BorderLayout());
         setBackground(Color.black);
         setLayout(new BorderLayout());
+        trainer.setCurrentLocation(new Location(Location.PALLET_TOWN));
 
         // Adv Label
         label = new JLabel();
@@ -62,7 +71,6 @@ public class PalletTown extends JPanel {
         graph.addEdge(v1, v2);
         graph.addEdge(v1, v3);
 
-        
         // Input Field
         inputField = new JTextField();
         inputField.setBackground(Color.LIGHT_GRAY);
@@ -87,44 +95,36 @@ public class PalletTown extends JPanel {
                 case "1a":
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToViridianCity();
+                {
+                    try {
+                        moveToViridianCity();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(PalletTown.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                     break;
+
                 case "1b":
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
                     moveToCinnabarIsland();
                     break;
                 case "2":
-                    console.append("  +---------------------------------------------------------------------+  \n"
-                            + "    Mom: amamamamam \n" //finish the dialogue
-                            + "  +---------------------------------------------------------------------+  \n"
-                    );
+                    talkToMom();
                     break;
-                case "4a":
-                    console.append("  +---------------------------------------------------------------------+  \n"
-                            + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |                                     |                      |\n"
-                            + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
-                            + "     |                      |              |                      |\n"
-                            + "  [Viridian City]           |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |              |                      |\n"
-                            + "     |                      |        [Vermillion City]------------|\n"
-                            + "     |                      |                                     |\n"
-                            + " [**Pallet Town**]          |                                     |\n"
-                            + "     |                      |                                     |\n"
-                            + "     |            [Fuchsia City]----------------------------------|\n"
-                            + "     |                      |\n"
-                            + "     |                      |\n"
-                            + "  [Cinnabar Island]---------|\n"
-                            + "  +---------------------------------------------------------------------+  \n"
-                    );
+                case "3a":
+                    showMap();
+                    break;
+                case "3b":
+                    showMyPokemon();
+                    break;
+                case "3c":
+                    showMyBadges();
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");
+                    inputField.setText("");
+                    break;
             }
 
             inputField.setText(""); // Clear the input field
@@ -133,17 +133,18 @@ public class PalletTown extends JPanel {
         add(inputField, BorderLayout.SOUTH);
     }
 
-    private void moveToViridianCity() {
-        // Create a new instance of the ViridianCity panel
-        ViridianCity viridianCityPanel;
+    private void moveToViridianCity() throws FileNotFoundException {
+        // Create a new Location object for Viridian City
+        Location viridianCityLocation = new Location(Location.VIRIDIAN_CITY);
+        ViridianCity viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
         try {
-            viridianCityPanel = new ViridianCity(container);
+            viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace(); // Handle file not found exception
             return;
         }
 
-        // Remove the current PalletTown panel from the container
+        // Remove the current panel from the container
         container.remove(this);
 
         // Add the ViridianCity panel to the container
@@ -155,20 +156,70 @@ public class PalletTown extends JPanel {
     }
 
     private void moveToCinnabarIsland() {
-        
+        // Create a new Location object for Cinnabar Island
+        Location cinnabarIslandLocation = new Location(Location.CINNABAR_ISLAND);
+
+        // Create a new instance of the CinnabarIsland panel with the Location object
         CinnabarIsland cinnabarIslandPanel;
         try {
-            cinnabarIslandPanel = new CinnabarIsland(container);
+            cinnabarIslandPanel = new CinnabarIsland(container, trainer, cinnabarIslandLocation);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return;
         }
-        
+
+        // Remove the current panel from the container
         container.remove(this);
+
+        // Add the CinnabarIsland panel to the container
         container.add(cinnabarIslandPanel, BorderLayout.CENTER);
 
-        // Revalidate and repaint container
+        // Revalidate and repaint the container to reflect the changes
         container.revalidate();
         container.repaint();
+    }
+
+    private void talkToMom() {
+        console.append("  +---------------------------------------------------------------------+  \n"
+                + "    Mom: amamamamam \n" //finish the dialogue
+                + "  +---------------------------------------------------------------------+  \n"
+        );
+    }
+
+    private void showMap() {
+        console.append("  +---------------------------------------------------------------------+  \n"
+                + "  [Pewter City]---------------------[Cerulean City]---------------|\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |                                     |                      |\n"
+                + "     |            [Celadon City]-----[Saffron City]-----[Lavender Town]\n"
+                + "     |                      |              |                      |\n"
+                + "  [Viridian City]           |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |              |                      |\n"
+                + "     |                      |        [Vermillion City]------------|\n"
+                + "     |                      |                                     |\n"
+                + " [**Pallet Town**]          |                                     |\n"
+                + "     |                      |                                     |\n"
+                + "     |            [Fuchsia City]----------------------------------|\n"
+                + "     |                      |\n"
+                + "     |                      |\n"
+                + "  [Cinnabar Island]---------|\n"
+                + "  +---------------------------------------------------------------------+  \n"
+        );
+    }
+
+    private void showMyPokemon() {
+        console.append(trainer.showPokemonList());
+    }
+
+    private void showMyBadges() {
+        console.append(trainer.showBadges());
+    }
+
+    private void saveAndExit() {
+        // Implement save and exit logic here
+        System.exit(0);
     }
 }

@@ -9,6 +9,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import Trainer.Trainer;
+import pokemons.*;
+import PokemonBattle_LevelUp.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NewAdventurePanel extends JPanel {
 
@@ -19,8 +24,12 @@ public class NewAdventurePanel extends JPanel {
     private String currentState;
     private PalletTown palletTown;
     private Container container;
+    public static Trainer trainer; //I do a object to store the name because for the future saving progress
+    private pokemon selectedPokemon;
+    private Location location;
 
     public NewAdventurePanel(Container container) throws FileNotFoundException {
+        this.trainer = new Trainer();
         this.container = container;
         setBackground(Color.black);
         setLayout(new BorderLayout());
@@ -47,8 +56,6 @@ public class NewAdventurePanel extends JPanel {
         advScroll.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(advScroll, BorderLayout.CENTER);
 
-        palletTown = new PalletTown(container);
-
         // Input Field
         inputField = new JTextField();
         inputField.setBackground(Color.LIGHT_GRAY);
@@ -72,12 +79,15 @@ public class NewAdventurePanel extends JPanel {
                 if (input.equals("1")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Bulbasaur, an amazing choice. Best of luck!\n");
+                    selectedPokemon = new Bulbasaur();
                 } else if (input.equals("2")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Squirtle, an amazing choice. Best of luck!\n");
+                    selectedPokemon = new Squirtle();
                 } else if (input.equals("3")) {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     You chose Charmander, an amazing choice. Best of luck!\n");
+                    selectedPokemon = new Charmander();
                 } else {
                     advConsole.append("  +---------------------------------------------------------------------+  \n"
                             + "    OAK:     Please enter a valid input.\n"
@@ -90,7 +100,11 @@ public class NewAdventurePanel extends JPanel {
                         + "  Type NEXT to continue\n");
             } else if (currentState.equals("palletTown")) {
                 if (input.equalsIgnoreCase("next")) {
-                    updateAdvToPalletTown();
+                    try {
+                        updateAdvToPalletTown();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(NewAdventurePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else if (!input.equalsIgnoreCase("next")) {
                     JOptionPane.showMessageDialog(this, "Invalid command!");
                 }
@@ -101,15 +115,42 @@ public class NewAdventurePanel extends JPanel {
         add(inputField, BorderLayout.SOUTH);
     }
 
-    private void updateAdvToPalletTown() {
+    private void updateAdvToPalletTown() throws FileNotFoundException {
+        // Create a Location for Pallet Town
+        Location palletTownLocation = new Location(Location.PALLET_TOWN);
+
+        // Create a new instance of PalletTown with the necessary arguments
+        palletTown = new PalletTown(container, trainer, palletTownLocation);
+
         // Remove current panel (NewAdventurePanel)
         container.remove(this);
 
-        // Add the new menuPanel
+        // Add the new palletTown panel
         container.add(palletTown, BorderLayout.CENTER);
-        
+
+        // Set the selected Pokémon in Trainer class
+        trainer.setSelectedPokemon(selectedPokemon);
+
         // Revalidate and repaint container
         container.revalidate();
         container.repaint();
+
+        inputField.setText("");
+        inputField.requestFocusInWindow();
+        inputField.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+    }
+
+    private String getASCII(String filename) throws FileNotFoundException {
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                result.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.toString();
     }
 }
+
