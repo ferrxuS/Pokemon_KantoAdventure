@@ -36,10 +36,8 @@ public class FuchsiaCity extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
-        this.cinnabarIsland = cinnabarIsland;
-        this.vermillionCity = vermillionCity;
-        this.celadonCity = celadonCity;
-        this.lavenderTown = lavenderTown;
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
         setBackground(Color.black);
         setLayout(new BorderLayout());
 
@@ -106,30 +104,26 @@ public class FuchsiaCity extends JPanel {
                 console.append("> " + input + "\n");
                 switch (input) {
                     case "1a":
-                        console.append("    Your choice: " + input
-                                + "\n  +---------------------------------------------------------------------+  \n");
+                        console.append("    +---------------------------------------------------------------------+  \n");
                         moveToCinnabarIsland();
                         break;
                     case "1b":
-                        console.append("    Your choice: " + input
-                                + "\n  +---------------------------------------------------------------------+  \n");
+                        console.append("    +---------------------------------------------------------------------+  \n");
                         moveToVermillionCity();
                         break;
                     case "1c":
-                        console.append("    Your choice: " + input
-                                + "\n  +---------------------------------------------------------------------+  \n");
+                        console.append("    +---------------------------------------------------------------------+  \n");
                         moveToCeladonCity();
                         break;
                     case "1d":
-                        console.append("    Your choice: " + input
-                                + "\n  +---------------------------------------------------------------------+  \n");
+                        console.append("    +---------------------------------------------------------------------+  \n");
                         moveToLavenderTown();
                         break;
                     case "2":
-                        challengeGymLeader();
+                        startChallengeGymLeader();
                         break;
                     case "3":
-                        fightWildPokemon();
+                        startFightWildPokemon();
                         break;
                     case "4a":
                         showMap();
@@ -169,7 +163,6 @@ public class FuchsiaCity extends JPanel {
                         inputField.addActionListener(pokemonSortingListener);
                         break;
                     default:
-                        JOptionPane.showMessageDialog(FuchsiaCity.this, "Invalid command!");
                         inputField.setText("");
                         break;
                 }
@@ -256,14 +249,26 @@ public class FuchsiaCity extends JPanel {
         container.repaint();
     }
 
-    private void challengeGymLeader() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
-        pokemonBattle.challengeGymLeader(trainer, location);
+    private void startChallengeGymLeader() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
-    private void fightWildPokemon() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
-        pokemonBattle.fightWildPokemon(trainer, location);
+    private void startFightWildPokemon() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
     private void showMap() {

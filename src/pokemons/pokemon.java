@@ -10,7 +10,6 @@ import java.util.*;
  *
  * @author ilsat
  */
-
 public class Pokemon {
 
     String name;
@@ -53,16 +52,17 @@ public class Pokemon {
         this.isWildPokemon = false;
         this.isGymLeaderPokemon = false;
         this.location = null;
-        calculateHP();
-        updateMoveDamages();
+        this.HP = 70;
     }
 
     public void calculateHP() {
-        this.HP = 45 + 5 * level;
-        if (level >= 10) {
+        this.HP = 70;
+
+        if (level < 10) {
+            this.HP += 5;
+        } else if (level >= 10 && level < 20) {
             this.HP += 10;
-        }
-        if (level >= 20) {
+        } else if (level >= 20) {
             this.HP += 15;
         }
     }
@@ -156,7 +156,7 @@ public class Pokemon {
         }
         ret = ret.substring(0, ret.length() - 1);
         ret += "\n    HP: " + HP + "\n"
-                + "    XP: " + XP + "/100\n"
+                + "    XP: " + XP + "\n"
                 + "    Moves: \n";
         for (String move : moves) {
             ret += "    - " + move + "\n";

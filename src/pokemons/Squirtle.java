@@ -29,7 +29,7 @@ public class Squirtle extends Pokemon {
         },
                 new ArrayList<String>() {
             {
-                add("Water");
+                add("Rock");
                 add("Fire");
             }
         },

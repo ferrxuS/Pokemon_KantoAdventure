@@ -16,15 +16,22 @@ import PokemonBattle_LevelUp.Location;
  */
 public class Trainer {
 
-    private String TrainerName;
+    private String trainerName;
     private Location currentLocation; // Updated to use Location instead of JPanel
     private static ArrayList<String> badges = new ArrayList<>();
     private static ArrayList<Pokemon> pokemonList = new ArrayList<>();
     private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>();
     private Pokemon selectedPokemon; // Field to store the selected Pokémon
+    
+    public Trainer() {
+        this.trainerName = trainerName;
+        this.selectedPokemon = selectedPokemon;
+        this.currentLocation = currentLocation;
+    }
 
-    public void setTrainerName(String TrainerName) {
-        this.TrainerName = TrainerName;
+    
+    public void setTrainerName(String trainerName) {
+        this.trainerName = trainerName;
     }
     
     public void setCurrentLocation(Location currentLocation) { // Updated setter for Location
@@ -37,7 +44,7 @@ public class Trainer {
     }
 
     public String getTrainerName() {
-        return TrainerName;
+        return trainerName;
     }
 
     public Location getCurrentLocation() { // Updated getter for Location

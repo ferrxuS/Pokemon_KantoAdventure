@@ -39,8 +39,8 @@ public class Bulbasaur extends Pokemon {
                 new ArrayList<String>() {
             {
                 add("Fire");
-                add("Flying");
-                add("Psychic");
+                add("Poison");
+                add("Bug");
             }
         }
         );

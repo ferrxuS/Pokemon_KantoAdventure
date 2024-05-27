@@ -35,10 +35,8 @@ public class SaffronCity extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
-        this.ceruleanCity = ceruleanCity;
-        this.vermillionCity = vermillionCity;
-        this.celadonCity = celadonCity;
-        this.lavenderTown = lavenderTown;
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
         setBackground(Color.black);
         setLayout(new BorderLayout());
 
@@ -102,49 +100,44 @@ public class SaffronCity extends JPanel {
             console.append("> " + input + "\n");
             switch (input) {
                 case "1a":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToCeruleanCity();
+                    console.append("    +---------------------------------------------------------------------+  \n");
+                    this.moveToCeruleanCity();
                     break;
                 case "1b":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToVermillionCity();
+                    console.append("   +---------------------------------------------------------------------+  \n");
+                    this.moveToVermillionCity();
                     break;
                 case "1c":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToCeladonCity();
+                    console.append("    +---------------------------------------------------------------------+  \n");
+                    this.moveToCeladonCity();
                     break;
                 case "1d":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToLavenderTown();
+                    console.append("    +---------------------------------------------------------------------+  \n");
+                    this.moveToLavenderTown();
                     break;
                 case "2":
-                    challengeGymLeader();
+                    this.startChallengeGymLeader();
                     break;
                 case "3":
-                    fightWildPokemon();
+                    this.startFightWildPokemon();
                     break;
                 case "4a":
-                    showMap();
+                    this.showMap();
                     break;
                 case "4b":
-                    showMyPokemon();
+                    this.showMyPokemon();
                     break;
                 case "4c":
-                    showMyBadges();
+                    this.showMyBadges();
                     break;
                 case "4d":
-                    saveAndExit();
+                    this.saveAndExit();
                     break;
                 case "5":
                     console.append("  +---------------------------------------------------------------------+  \n");
                     console.append(Race.ShortestDistance());
                     break;
                 default:
-                    JOptionPane.showMessageDialog(this, "Invalid command!");
                     inputField.setText("");
                     break;
             }
@@ -227,14 +220,26 @@ public class SaffronCity extends JPanel {
         container.repaint();
     }
 
-    private void challengeGymLeader() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
-        pokemonBattle.challengeGymLeader(trainer, location);
+    private void startChallengeGymLeader() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
-    private void fightWildPokemon() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
-        pokemonBattle.fightWildPokemon(trainer, location);
+    private void startFightWildPokemon() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
     private void showMap() {

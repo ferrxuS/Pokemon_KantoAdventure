@@ -4,14 +4,13 @@
  */
 package GUI;
 
-import static GUI.GamePanel.*;
-import static GUI.Graph.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import javax.swing.*;
+import java.io.FileNotFoundException;
 import Trainer.Trainer;
 import PokemonBattle_LevelUp.*;
+import static GUI.GamePanel.*;
 import static GUI.Graph.*;
 
 /**
@@ -34,6 +33,8 @@ public class CinnabarIsland extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
         setBackground(Color.black);
         setLayout(new BorderLayout());
 
@@ -92,35 +93,32 @@ public class CinnabarIsland extends JPanel {
             console.append("> " + input + "\n");
             switch (input) {
                 case "1a":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToPalletTown();
+                    console.append("    +---------------------------------------------------------------------+  \n");
+                    this.moveToPalletTown();
                     break;
                 case "1b":
-                    console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                    moveToFuchsiaCity();
+                    this.console.append("    +---------------------------------------------------------------------+  \n");
+                    this.moveToFuchsiaCity();
                     break;
                 case "2":
-                    challengeGymLeader();
+                    this.startChallengeGymLeader();
                     break;
                 case "3":
-                    fightWildPokemon();
+                    this.startFightWildPokemon();
                     break;
                 case "4a":
-                    showMap();
+                    this.showMap();
                     break;
                 case "4b":
-                    showMyPokemon();
+                    this.showMyPokemon();
                     break;
                 case "4c":
-                    showMyBadges();
+                    this.showMyBadges();
                     break;
                 case "4d":
-                    saveAndExit();
+                    this.saveAndExit();
                     break;
                 default:
-                    JOptionPane.showMessageDialog(this, "Invalid command!");
                     inputField.setText("");
                     break; // Add break statement here
             }
@@ -170,14 +168,26 @@ public class CinnabarIsland extends JPanel {
         container.repaint();
     }
 
-    private void challengeGymLeader() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location);
-        pokemonBattle.challengeGymLeader(trainer, location);
+    private void startChallengeGymLeader() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, false, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
-    private void fightWildPokemon() {
-        PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location);
-        pokemonBattle.fightWildPokemon(trainer, location);
+    private void startFightWildPokemon() {
+        new Thread(() -> {
+            System.out.println("Before battle: " + console.getText()); // Track execution flow
+
+            PokemonBattle pokemonBattle = new PokemonBattle(trainer, true, location, console, inputField);
+            pokemonBattle.battle(); // Perform the battle
+
+            System.out.println("After battle: " + console.getText()); // Verify battle log in console
+        }).start();
     }
 
     private void showMap() {

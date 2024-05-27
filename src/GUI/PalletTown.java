@@ -31,15 +31,10 @@ public class PalletTown extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
-        this.viridianCity = viridianCity;
-        this.cinnabarIsland = cinnabarIsland;
-        setBackground(Color.black);
-        setLayout(new BorderLayout());
-        setBackground(Color.black);
-        setLayout(new BorderLayout());
-
         this.trainer.setCurrentLocation(location);
         this.location.loadPokemons(trainer);
+        setBackground(Color.black);
+        setLayout(new BorderLayout());;
 
         // Adv Label
         label = new JLabel();
@@ -97,13 +92,13 @@ public class PalletTown extends JPanel {
                 case "1a":
                     console.append("    Your choice: " + input
                             + "\n  +---------------------------------------------------------------------+  \n");
-                {
-                    try {
-                        moveToViridianCity();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(PalletTown.class.getName()).log(Level.SEVERE, null, ex);
+                     {
+                        try {
+                            moveToViridianCity();
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(PalletTown.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                }
                     break;
 
                 case "1b":
@@ -138,7 +133,7 @@ public class PalletTown extends JPanel {
     private void moveToViridianCity() throws FileNotFoundException {
         // Create a new Location object for Viridian City
         Location viridianCityLocation = new Location(Location.VIRIDIAN_CITY);
-        
+
         ViridianCity viridianCityPanel;
         try {
             viridianCityPanel = new ViridianCity(container, trainer, viridianCityLocation);
@@ -184,7 +179,16 @@ public class PalletTown extends JPanel {
 
     private void talkToMom() {
         console.append("  +---------------------------------------------------------------------+  \n"
-                + "    Mom: amamamamam \n" //finish the dialogue
+                + "    Mom: Oh, " + trainer.getTrainerName() + "! You're leaving on your adventure with Pokémon? How\n"
+                + "    exciting! I know you've always dreamed of this day. Remember, the\n"
+                + "    bond you share with your Pokémon is the most important thing. Take\n"
+                + "    care of them, and they'll take care of you. Don't worry about me;\n"
+                + "    I'll be just fine here. I can't wait to hear all about your adventures\n"
+                + "    and the new friends you're going to make. Remember, no matter how far\n"
+                + "    you go, I'm always here for you. Be brave, be kind, and everything \n"
+                + "    will turn out just fine. I'm so proud of you already! Now, go on, your\n"
+                + "    adventure awaits! Oh, and don’t forget to change your underwear every\n"
+                + "    day! Safe travels, my dear!\n"
                 + "  +---------------------------------------------------------------------+  \n"
         );
     }

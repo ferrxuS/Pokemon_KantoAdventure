@@ -31,13 +31,13 @@ public class Charmander extends Pokemon {
                 new ArrayList<String>() {
             {
                 add("Grass");
-                add("Fire");
+                add("Bug");
+                add("Ice");
             }
         },
                 new ArrayList<String>() {
             {
                 add("Water");
-                add("Ground");
                 add("Rock");
             }
         }

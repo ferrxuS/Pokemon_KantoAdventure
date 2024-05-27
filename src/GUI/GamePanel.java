@@ -19,19 +19,19 @@ public class GamePanel {
     JFrame screen;
     JPanel currentPanel, titlePanel, menuPanel; //,startButtonPanel
     JLabel titleLabel, menuLabel;
-    JTextField userInput;
+
     Container container;
     private NewAdventurePanel advPanel;
 
     public static void main(String[] args) throws FileNotFoundException {
         GamePanel gp = new GamePanel();
-        
+
     }
 
     public GamePanel() throws FileNotFoundException {
-        //creating a game screen
+        // Creating a game screen
         screen = new JFrame();
-        screen.setSize(600, 600); //800x600 pixels
+        screen.setSize(600, 600); // 800x600 pixels
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screen.setResizable(false);
         screen.setTitle("Pokémon - Kanto Adventure");
@@ -40,23 +40,27 @@ public class GamePanel {
 
         // Container
         container = screen.getContentPane();
-        container.setLayout(new BorderLayout()); //for better layout management
-
-        // User Input
-        userInput = new JTextField();
-        userInput.setBackground(Color.LIGHT_GRAY);
-        userInput.addActionListener((ActionEvent e) -> {
-            handleUserInput(userInput.getText());
-        });
+        container.setLayout(new BorderLayout()); // for better layout management
 
         // Title Screen
-        titlePanel = new JPanel();
+        titlePanel = new JPanel(new BorderLayout()); // Use BorderLayout for titlePanel
         titlePanel.setBackground(Color.black);
+
+        screen.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    updateTitleToMenu();
+                }
+            }
+        });
+
+        // Add title label to the center of the title panel
         titleLabel = new JLabel();
         titleLabel.setForeground(Color.green);
         String titleText = getASCII("GameTitle.txt");
-        titleLabel.setText("<html><pre>" + titleText + "</pre></html>"); //wrap text in html for preserve formatting
-        titlePanel.add(titleLabel);
+        titleLabel.setText("<html><pre>" + titleText + "</pre></html>"); // wrap text in html for preserve formatting
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
 
         // Menu Screen
         menuPanel = new JPanel();
@@ -70,11 +74,26 @@ public class GamePanel {
         // New Adventure Screen
         advPanel = new NewAdventurePanel(container);
 
-        // Container (keep it in reverse order)
-        container.add(advPanel, BorderLayout.CENTER);
-        container.add(menuPanel, BorderLayout.CENTER);
+        // Keys
+        screen.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (currentPanel == menuPanel) {
+                    if (e.getKeyCode() == KeyEvent.VK_1) {
+                        startAdventure();
+                    } else if (e.getKeyCode() == KeyEvent.VK_2) {
+                        // loadGame();
+                    } else if (e.getKeyCode() == KeyEvent.VK_3) {
+                        exitMenu();
+                    }
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    updateTitleToMenu();
+                }
+            }
+        });
+
+        // Initially, show the title panel
         container.add(titlePanel, BorderLayout.CENTER);
-        container.add(userInput, BorderLayout.SOUTH);
 
         screen.setVisible(true);
     }
@@ -94,78 +113,35 @@ public class GamePanel {
     }
 
     // Enter MENU
-    private void updateTitleToMenu() {
+    public void updateTitleToMenu() {
         currentPanel = titlePanel;
         container.remove(titlePanel);
         container.add(menuPanel, BorderLayout.CENTER);
         currentPanel = menuPanel;
         container.revalidate(); // refresh the screen
         container.repaint();
-        userInput.setText(""); //clear the input field
     }
 
     // Exit Menu
-    private void exitMenu() {
+    public void exitMenu() {
         currentPanel = menuPanel;
         container.remove(menuPanel);
         container.add(titlePanel, BorderLayout.CENTER);
         currentPanel = titlePanel;
         container.revalidate(); // refresh the screen
         container.repaint();
-        userInput.setText(""); //clear the input field
     }
 
     // Start New Adventure
-    private void startAdventure() {
+    public void startAdventure() {
         currentPanel = menuPanel;
         container.remove(menuPanel);
-        container.remove(userInput);
         container.add(advPanel, BorderLayout.CENTER);
         currentPanel = advPanel;
         container.revalidate(); // refresh the screen
         container.repaint();
-        userInput.setText(""); //clear the input field
     }
-    
-    private void handleUserInput(String input) {
-        input = input.trim();
 
-        if (input.equalsIgnoreCase("enter")) {
-            updateTitleToMenu(); // Move to menu
-        } else if (currentPanel == menuPanel) { // Check if current panel is menu
-            switch (input) {
-                case "1" :
-                    startAdventure();
-                    break;
-                case "3" : 
-                    exitMenu();
-                    break;
-                default : 
-                    JOptionPane.showMessageDialog(screen, "Invalid command!");
-                    userInput.setText("");
-                    break;
-            }
-        } else {
-            JOptionPane.showMessageDialog(screen, "Invalid command!");
-            userInput.setText("");
-        }
-    }
 }
 
-
-
-    // Get User Input
-//    private void handleUserInput(String input) {
-//        input = input.trim();
-//
-//        if (input.equalsIgnoreCase("enter")) {
-//            updateTitleToMenu(); // to Enter MENU
-//        } else if (input.equals("1")) {
-//            startAdventure();
-//        } else if (input.equals("3")) {
-//            exitMenu(); // to Exit MENU
-//        } else {
-//            JOptionPane.showMessageDialog(screen, "Invalid command!");
-//        }
-//    }
 

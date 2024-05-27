@@ -66,6 +66,7 @@ public class NewAdventurePanel extends JPanel {
             }
             advConsole.append("> " + input + "\n");
             if (currentState.equals("name")) {
+                this.trainer.setTrainerName(input);
                 advConsole.append("  +---------------------------------------------------------------------+  \n"
                         + "    OAK:     Right! So your name is " + input + "! Welcome to the world of Pokémon. "
                         + "\n    It's time to choose your starting Pokémon. \n"

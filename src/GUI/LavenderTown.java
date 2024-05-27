@@ -31,6 +31,8 @@ public class LavenderTown extends JPanel {
         this.container = container;
         this.trainer = trainer;
         this.location = location;
+        this.trainer.setCurrentLocation(location);
+        this.location.loadPokemons(trainer);
         setBackground(Color.black);
         setLayout(new BorderLayout());
 
