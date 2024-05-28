@@ -1,5 +1,3 @@
-package sql_implementation;
-
 public class User {
 
     private int account_id;

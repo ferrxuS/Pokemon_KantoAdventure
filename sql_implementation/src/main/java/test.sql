@@ -29,8 +29,8 @@
 -- SELECT *
 -- FROM Game_State;
 
--- INSERT INTO Account (username, password_hash, email)
--- VALUES ("hehe2", "password123", "example2@test.com"); 
+-- INSERT INTO Account (username, password_hash, salt)
+-- VALUES ("hehe2", "password123", "hehe"); 
 
 -- INSERT INTO Account (username, password_hash, email)
 -- VALUES ("hehe3", "password123", "example3@test.com"); 
@@ -40,3 +40,5 @@
 
 SELECT *
 FROM Account;
+
+-- SELECT COUNT(*) FROM Account;
