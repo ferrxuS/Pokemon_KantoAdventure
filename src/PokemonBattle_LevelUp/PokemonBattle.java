@@ -66,7 +66,6 @@ public class PokemonBattle {
         System.out.println("Battle started"); // Debug statement
 
         StringBuilder battleLog = new StringBuilder();
-        // Store initial HP of the trainer's Pokémon
         int initialTrainerPokemonHP = trainerPokemon.getHP();
 
         if (isWildPokemon) {
@@ -75,127 +74,49 @@ public class PokemonBattle {
             initialGymLeaderBattleSetup();
         }
 
-        // Start the battle loop in a separate thread
         new Thread(() -> {
             System.out.println("Battle loop thread started"); // Debug statement
 
             int roundCount = 1;
             try {
                 while (trainerPokemon.getHP() > 0 && enemyPokemon.getHP() > 0) {
-                    // Build round information
-                    battleLog.append("\n    Round ").append(roundCount).append(":\n");
-                    battleLog.append("\n    ").append(trainerPokemon.getName()).append("'s Moves:");
-
-                    List<String> moves = trainerPokemon.getMoves();
-                    for (int i = 0; i < moves.size(); i++) {
-                        String move = moves.get(i);
-                        int moveDamage = trainerPokemon.getMoveDamage(move);
-                        battleLog.append("\n    ").append((char) ('a' + i)).append(". ").append(move).append(" [Damage: ").append(moveDamage).append("]");
-                    }
-
-                    battleLog.append("\n");
-                    battleLog.append("\n    Which move will ").append(trainerPokemon.getName()).append(" use?\n");
-                    battleLog.append("\n  +---------------------------------------------------------------------+  \n");
-
-                    // Update UI with the round information
+                    displayRoundInfo(roundCount, battleLog);
+                    checkLevelUp(battleLog); // debug one
+                    System.out.println("Level up 1");
                     SwingUtilities.invokeLater(() -> {
                         console.append(battleLog.toString());
-                        console.setCaretPosition(console.getDocument().getLength()); // Scroll to the bottom
+                        console.setCaretPosition(console.getDocument().getLength());
                     });
 
-                    // Wait for input and process it
                     waitForInput();
 
                     battleLog.setLength(0);
-
                     String input = inputField.getText().toLowerCase();
                     inputField.setText("");
+                    processMoveSelection(input, battleLog);
 
-                    // Process the user's move choice
-                    int moveIndex = input.charAt(0) - 'a';
-                    if (moveIndex < 0 || moveIndex >= trainerPokemon.getMoves().size()) {
-                        throw new IllegalArgumentException("Invalid move selection!");
-                    }
-                    String chosenMove = trainerPokemon.getMoves().get(moveIndex);
-                    battleLog.append("  +---------------------------------------------------------------------+  \n");
-                    battleLog.append("    Your choice: ").append(input).append("\n  +---------------------------------------------------------------------+  \n");
-
-                    trainerPokemonAttack(chosenMove, battleLog);
+                    trainerPokemonAttack(trainerPokemon.getMoves().get(input.charAt(0) - 'a'), battleLog);
 
                     if (enemyPokemon.getHP() <= 0) {
-                        battleLog.append("    ").append(enemyPokemon.getName()).append(" faints!\n");
-                        xp += 5 * enemyPokemon.getLevel();
-                        trainerPokemon.setXP(xp);
-                        battleLog.append("    ").append(trainerPokemon.getName()).append(" gained ").append(xp).append(" XP!");
-                        battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]");
-                        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+                        handleEnemyPokemonFaint(battleLog);
 
-                        // Check if there are more gym leader Pokémon left
                         if (!isWildPokemon && currentGymLeaderPokemonIndex < remainingGymLeaderPokemons.size() - 1) {
                             currentGymLeaderPokemonIndex++;
                             enemyPokemon = remainingGymLeaderPokemons.get(currentGymLeaderPokemonIndex);
                             battleLog.append("    The Gym Leader of ").append(enemyPokemon.getLocation()).append(" sent out ").append(enemyPokemon.getName()).append("! You have to defeat \n    all the Pokemons!\n");
                             trainerPokemon.setHP(initialTrainerPokemonHP);
-                            // Display move options and process player's move choice
-                            battleLog.append("\n    Round ").append(roundCount + 1).append(":\n");
-                            battleLog.append("\n    ").append(trainerPokemon.getName()).append("'s Moves:");
-
-                            List<String> moves1 = trainerPokemon.getMoves();
-                            for (int i = 0; i < moves1.size(); i++) {
-                                String move = moves1.get(i);
-                                int moveDamage = trainerPokemon.getMoveDamage(move);
-                                battleLog.append("\n    ").append((char) ('a' + i)).append(". ").append(move).append(" [Damage: ").append(moveDamage).append("]");
-                            }
-
-                            battleLog.append("\n");
-                            battleLog.append("\n    Which move will ").append(trainerPokemon.getName()).append(" use?\n");
-                            battleLog.append("\n  +---------------------------------------------------------------------+  \n");
-
-                            // Update UI with the round information
-                            SwingUtilities.invokeLater(() -> {
-                                console.append(battleLog.toString());
-                                console.setCaretPosition(console.getDocument().getLength()); // Scroll to the bottom
-                            });
-
-                            // Wait for input and process it
-                            waitForInput();
-
-                            battleLog.setLength(0);
-
-                            String input1 = inputField.getText().toLowerCase();
-                            inputField.setText("");
-
-                            // Process the user's move choice
-                            List<String> movesList = trainerPokemon.getMoves();
-                            if (movesList.isEmpty()) {
-                                battleLog.append("No moves available for ").append(trainerPokemon.getName()).append("!\n");
-                                return; // or handle the situation appropriately
-                            }
-
-                            int moveIndex1 = input1.charAt(0) - 'a';
-                            if (moveIndex1 < 0 || moveIndex1 >= movesList.size()) {
-                                throw new IllegalArgumentException("Invalid move selection!");
-                            }
-                            String chosenMove1 = movesList.get(moveIndex1);
-                            battleLog.append("  +---------------------------------------------------------------------+  \n");
-                            battleLog.append("    Your choice: ").append(input1).append("\n  +---------------------------------------------------------------------+  \n");
-
-                            // Trainer attacks
-                            trainerPokemonAttack(chosenMove1, battleLog);
-
-                            // Remove the move after it is used
-                            movesList.remove(moveIndex1);
-                        } else if (!isWildPokemon && currentGymLeaderPokemonIndex == remainingGymLeaderPokemons.size() - 1) {
-                            // If so, earn the badge
-                            earnBadges(enemyPokemon.getLocation());
-                            break;
+                            roundCount++;  // Increment roundCount here for new Pokemon
+                            checkLevelUp(battleLog); // 1
+                            System.out.println("Level up 2");
+                            continue;  // Go to the next iteration of the while loop
                         } else {
-                            // No more gym leader Pokémon left, end the battle
+                            earnBadges(enemyPokemon.getLocation());
+                            checkLevelUp(battleLog); //2
+                            System.out.println("Level up 3");
                             break;
                         }
                     }
 
-                    // Simulate enemy's move
                     enemyPokemonAttack(battleLog);
 
                     if (trainerPokemon.getHP() <= 0) {
@@ -205,24 +126,60 @@ public class PokemonBattle {
                     }
 
                     roundCount++;
+                    checkLevelUp(battleLog); // 2
+                    System.out.println("Level up 4");
                 }
 
             } catch (NumberFormatException ex) {
-                battleLog.append("Invalid input! Please enter a letter (a, b, c, d).\n");
+                System.out.println("Invalid input! Please enter a letter (a, b, c, d).\n");
             } catch (IllegalArgumentException ex) {
-                battleLog.append(ex.getMessage()).append("\n");
+                System.out.println(ex.getMessage());
             } catch (Exception ex) {
-                battleLog.append("An unexpected error occurred: ").append(ex.getMessage()).append("\n");
+                System.out.println("An unexpected error occurred: " + ex.getMessage());
             } finally {
-                // Update UI with the complete battle log after processing
                 SwingUtilities.invokeLater(() -> {
                     console.append(battleLog.toString());
-                    console.setCaretPosition(console.getDocument().getLength()); // Scroll to the bottom
-                    // Reset the HP of the trainer's Pokemon
+                    console.setCaretPosition(console.getDocument().getLength());
                     trainerPokemon.setHP(initialTrainerPokemonHP);
+                    checkLevelUp(battleLog); //3
+                    System.out.println("Level up 5");
                 });
             }
         }).start();
+    }
+
+    private void displayRoundInfo(int roundCount, StringBuilder battleLog) {
+        battleLog.append("\n    Round ").append(roundCount).append(":\n");
+        battleLog.append("\n    ").append(trainerPokemon.getName()).append("'s Moves:");
+        List<String> moves = trainerPokemon.getMoves();
+        for (int i = 0; i < moves.size(); i++) {
+            String move = moves.get(i);
+            int moveDamage = trainerPokemon.getMoveDamage(move);
+            battleLog.append("\n    ").append((char) ('a' + i)).append(". ").append(move).append(" [Damage: ").append(moveDamage).append("]");
+        }
+        battleLog.append("\n");
+        battleLog.append("\n    Which move will ").append(trainerPokemon.getName()).append(" use?\n");
+        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+    }
+
+    private void processMoveSelection(String input, StringBuilder battleLog) {
+        int moveIndex = input.charAt(0) - 'a';
+        if (moveIndex < 0 || moveIndex >= trainerPokemon.getMoves().size()) {
+            throw new IllegalArgumentException("Invalid move selection!");
+        }
+        battleLog.append("  +---------------------------------------------------------------------+  \n");
+        battleLog.append("    Your choice: ").append(input).append("\n  +---------------------------------------------------------------------+  \n");
+    }
+
+    private void handleEnemyPokemonFaint(StringBuilder battleLog) {
+        battleLog.append("    ").append(enemyPokemon.getName()).append(" faints!\n");
+        int xp = 5 * enemyPokemon.getLevel();
+        trainerPokemon.setXP(trainerPokemon.getXP() + xp);
+        battleLog.append("    ").append(trainerPokemon.getName()).append(" gained ").append(xp).append(" XP!");
+        battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]");
+        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+        checkLevelUp(battleLog);
+        System.out.println("Level up 5");
     }
 
     // Input handling logic, made sure it handles waiting and notifying correctly
@@ -249,7 +206,7 @@ public class PokemonBattle {
         battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Gym Leader of ").append(enemyPokemon.getLocation());
         battleLog.append("\n    The Gym Leader sends out ").append(enemyPokemon.getName()).append(" [Level ").append(enemyPokemon.getLevel()).append("]\n");
         battleLog.append("\n");
-        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append(" against the \n    opponent's ").append(enemyPokemon.getTypes()).append(" type!");
+        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
         battleLog.append("\n");
 
         SwingUtilities.invokeLater(() -> {
@@ -268,7 +225,7 @@ public class PokemonBattle {
         battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Wild Pokemon of ").append(enemyPokemon.getLocation());
         battleLog.append("\n    ").append(enemyPokemon.getName()).append(" is sent out! [Level ").append(enemyPokemon.getLevel()).append("]\n");
         battleLog.append("\n");
-        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append(" against the \n    opponent's ").append(enemyPokemon.getTypes()).append(" type!");
+        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
         battleLog.append("\n");
 
         SwingUtilities.invokeLater(() -> {
@@ -316,42 +273,44 @@ public class PokemonBattle {
     }
 
     public void checkLevelUp(StringBuilder battleLog) {
+        System.out.println("Level's Not Up Yet");
         int level = trainerPokemon.getLevel();
         boolean leveledUp = false;
 
         if (level <= 10) {
-            if (xp >= 100) {
+            if (trainerPokemon.getXP() >= 100) {
                 trainerPokemon.setLevel(level + 1);
                 leveledUp = true;
-                if (xp == 100) {
+                if (trainerPokemon.getXP() == 100) {
                     trainerPokemon.setXP(0);
-                } else if (xp > 100) {
-                    trainerPokemon.setXP(xp - 100);
+                } else if (trainerPokemon.getXP() > 100) {
+                    trainerPokemon.setXP(trainerPokemon.getXP() - 100);
                 }
             }
         } else if (level > 10 && level < 20) {
-            if (xp >= 200) {
+            if (trainerPokemon.getXP() >= 200) {
                 trainerPokemon.setLevel(level + 1);
                 leveledUp = true;
-                if (xp == 200) {
+                if (trainerPokemon.getXP() == 200) {
                     trainerPokemon.setXP(0);
-                } else if (xp > 200) {
-                    trainerPokemon.setXP(xp - 200);
+                } else if (trainerPokemon.getXP() > 200) {
+                    trainerPokemon.setXP(trainerPokemon.getXP() - 200);
                 }
             }
         } else if (level >= 20 && level < 30) { // Corrected this line to include level 20
-            if (xp >= 300) {
+            if (trainerPokemon.getXP() >= 300) {
                 trainerPokemon.setLevel(level + 1);
                 leveledUp = true;
-                if (xp == 300) {
+                if (trainerPokemon.getXP() == 300) {
                     trainerPokemon.setXP(0);
-                } else if (xp > 300) {
-                    trainerPokemon.setXP(xp - 300);
+                } else if (trainerPokemon.getXP() > 300) {
+                    trainerPokemon.setXP(trainerPokemon.getXP() - 300);
                 }
             }
         }
 
         if (leveledUp) {
+            System.out.println("Levels up");
             trainerPokemon.updateMoveDamages();
             trainerPokemon.calculateHP(); // Recalculate HP after leveling up
             evolution.evolve();
@@ -360,7 +319,6 @@ public class PokemonBattle {
             battleLog.append("\n  +---------------------------------------------------------------------+  \n");
         }
     }
-
     // Trainer Pokemon
     // Determine the enemy Pokemon based on the current location
     public Object determineEnemyPokemon(boolean isWildPokemon) {
@@ -498,6 +456,3 @@ public class PokemonBattle {
         return enemyPokemon.getHP();
     }
 }
-
-
-

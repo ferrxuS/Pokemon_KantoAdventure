@@ -29,7 +29,10 @@ public class Trainer {
         this.currentLocation = currentLocation;
     }
 
-    
+    public static ArrayList<Pokemon> getPokemonList() {
+        return pokemonList;
+    }
+
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
     }

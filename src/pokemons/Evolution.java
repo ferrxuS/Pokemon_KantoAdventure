@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package pokemons;
 
 /**
@@ -15,6 +16,7 @@ public class Evolution {
     public Pokemon trainerPokemon;
     
     public void evolve() {
+        StringBuilder ret = new StringBuilder();
     String evolution = "";
 
     switch (trainerPokemon.name) {
@@ -40,23 +42,24 @@ public class Evolution {
             }
             break;
         default:
-            System.out.println("Invalid Pokemon");
+            ret.append("Invalid Pokemon");
             return; // Exit method if the Pokemon is invalid
     }
 
     if (!evolution.isEmpty()) {
-        System.out.println("Your Pokemon " + trainerPokemon.name + " has evolved!");
-        System.out.println(trainerPokemon.name + " has evolved to " + evolution);
+        ret.append("Your Pokemon ").append(trainerPokemon.name).append(" has evolved!");
+        ret.append(trainerPokemon.name).append(" has evolved to ").append(evolution);
         trainerPokemon.name = evolution;
 
         if (trainerPokemon.level == 30) {
-            System.out.println("Your team is complete!");
-        } else {
-            System.out.println("Choose another Pokemon to add to your team:");
-            System.out.println(trainer.showPokemonList());
+            ret.append("Your team is complete!");
+        } else if(Trainer.getPokemonList().get(0).getLevel() == 10 || (Trainer.getPokemonList().get(0).level == 20 && Trainer.getPokemonList().get(1).level == 10)){
+            ret.append("Choose another Pokemon to add to your team:");
+            ret.append(trainer.showPokemonList());
             trainer.addPokemon();
         }
     }
+    evolution = "";
 }
 
 }

@@ -52,7 +52,7 @@ public class Pokemon {
         this.isWildPokemon = false;
         this.isGymLeaderPokemon = false;
         this.location = null;
-        this.HP = 70;
+        this.HP = 60;
     }
 
     public void calculateHP() {
@@ -91,6 +91,10 @@ public class Pokemon {
 
     public int getLevel() {
         return level;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setLevel(int level) {
@@ -146,6 +150,32 @@ public class Pokemon {
     }
 
     @Override
+//    public String toString() {
+//        String ret = "  +---------------------------------------------------------------------+  \n"
+//                + "    Your Pokémon: \n"
+//                + "    " + name + " - Level: " + level
+//                + "\n    Type: ";
+//        for (String type : types) {
+//            ret += type + "/";
+//        }
+//        ret = ret.substring(0, ret.length() - 1);
+//        ret += "\n    HP: " + HP + "\n"
+//                + "    XP: " + XP + "\n"
+//                + "    Moves: \n";
+//        for (String move : moves) {
+//            ret += "    - " + move + "\n";
+//        }
+//        ret += "    Strong against: \n";
+//        for (String strength : strengths) {
+//            ret += "    - " + strength + "\n";
+//        }
+//        ret += "    Weak against: \n";
+//        for (String weakness : weaknesses) {
+//            ret += "    - " + weakness + "\n";
+//        }
+//        ret += "  +---------------------------------------------------------------------+";
+//        return ret;
+//    }
     public String toString() {
         String ret = "  +---------------------------------------------------------------------+  \n"
                 + "    Your Pokémon: \n"
@@ -157,9 +187,9 @@ public class Pokemon {
         ret = ret.substring(0, ret.length() - 1);
         ret += "\n    HP: " + HP + "\n"
                 + "    XP: " + XP + "\n"
-                + "    Moves: \n";
-        for (String move : moves) {
-            ret += "    - " + move + "\n";
+                + "    Move Damages: \n";
+        for (Map.Entry<String, Integer> entry : moveDamages.entrySet()) {
+            ret += "    - " + entry.getKey() + " [Damage " + entry.getValue() + "]\n";
         }
         ret += "    Strong against: \n";
         for (String strength : strengths) {
