@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/GUI/GamePanel.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/pokemons/Charmander.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/Trainer/Trainer.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/PokemonBattle_LevelUp/Location.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/pokemons/Pokemon.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/pokemons/Geodude.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/PokemonBattle_LevelUp/PokemonBattle.java</file>
-            <file>file:/Users/raishahaque/Desktop/Pokemon_KantoAdventure%20copy%202/src/pokemons/Evolution.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/UserAuthentication.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/User.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/schema.sql</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/Main.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/PasswordUtils.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/DatabaseConnection.java</file>
+            <file>file:/C:/Users/Feras%20Hamid/OneDrive/Desktop/VS%20Code/Pokemon_KantoAdventure/src/sql_implementation/GameSaveManager.java</file>
         </group>
     </open-files>
 </project-private>
