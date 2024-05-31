@@ -18,8 +18,8 @@ public class Sycther extends Pokemon {
             new ArrayList<String>() {{
                 add("Bug");
             }},
-            15,
-            120,
+            13,
+            100,
             new HashMap<String, Integer>() {{
                 put("Fury Cutter", 33);
                 put("Slash", 23);

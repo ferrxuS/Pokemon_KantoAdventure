@@ -56,7 +56,7 @@ public class Pokemon {
     }
 
     public void calculateHP() {
-        this.HP = 70;
+        this.HP = 60;
 
         if (level < 10) {
             this.HP += 5;
@@ -70,7 +70,7 @@ public class Pokemon {
     public void updateMoveDamages() {
         for (String move : moveDamages.keySet()) {
             int baseDamage = moveDamages.get(move);
-            int adjustedDamage = baseDamage + 2 * level;
+            int adjustedDamage = baseDamage + 2;
             if (level >= 10) {
                 adjustedDamage += 3;
             }
@@ -150,32 +150,6 @@ public class Pokemon {
     }
 
     @Override
-//    public String toString() {
-//        String ret = "  +---------------------------------------------------------------------+  \n"
-//                + "    Your Pokémon: \n"
-//                + "    " + name + " - Level: " + level
-//                + "\n    Type: ";
-//        for (String type : types) {
-//            ret += type + "/";
-//        }
-//        ret = ret.substring(0, ret.length() - 1);
-//        ret += "\n    HP: " + HP + "\n"
-//                + "    XP: " + XP + "\n"
-//                + "    Moves: \n";
-//        for (String move : moves) {
-//            ret += "    - " + move + "\n";
-//        }
-//        ret += "    Strong against: \n";
-//        for (String strength : strengths) {
-//            ret += "    - " + strength + "\n";
-//        }
-//        ret += "    Weak against: \n";
-//        for (String weakness : weaknesses) {
-//            ret += "    - " + weakness + "\n";
-//        }
-//        ret += "  +---------------------------------------------------------------------+";
-//        return ret;
-//    }
     public String toString() {
         String ret = "  +---------------------------------------------------------------------+  \n"
                 + "    Your Pokémon: \n"

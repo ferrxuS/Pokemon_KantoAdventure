@@ -313,7 +313,7 @@ public class PokemonBattle {
             System.out.println("Levels up");
             trainerPokemon.updateMoveDamages();
             trainerPokemon.calculateHP(); // Recalculate HP after leveling up
-            evolution.evolve();
+            evolution.evolve(trainerPokemon);
             battleLog.append("    Congrats! ").append(trainerPokemon.getName()).append(" moves to level ").append(trainerPokemon.getLevel()).append(" !\n");
             battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]\n");
             battleLog.append("\n  +---------------------------------------------------------------------+  \n");

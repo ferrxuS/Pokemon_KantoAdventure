@@ -15,29 +15,29 @@ public class Evolution {
     public Trainer trainer;
     public Pokemon trainerPokemon;
     
-    public void evolve() {
+    public void evolve(Pokemon pokemon) {
         StringBuilder ret = new StringBuilder();
     String evolution = "";
 
-    switch (trainerPokemon.name) {
+    switch (pokemon.getName()) {
         case "Squirtle":
-            if (trainerPokemon.level == 10) {
+            if (pokemon.getLevel() == 10) {
                 evolution = "Wartortle";
-            } else if (trainerPokemon.level == 20) {
+            } else if (pokemon.getLevel() == 20) {
                 evolution = "Blastoise";
             }
             break;
         case "Charmander":
-            if (trainerPokemon.level == 10) {
+            if (pokemon.getLevel() == 10) {
                 evolution = "Charmeleon";
-            } else if (trainerPokemon.level == 20) {
+            } else if (pokemon.getLevel() == 20) {
                 evolution = "Charizard";
             }
             break;
         case "Bulbasaur":
-            if (trainerPokemon.level == 10) {
+            if (pokemon.getLevel() == 10) {
                 evolution = "Ivysaur";
-            } else if (trainerPokemon.level == 20) {
+            } else if (pokemon.getLevel() == 20) {
                 evolution = "Venusaur";
             }
             break;
@@ -47,14 +47,16 @@ public class Evolution {
     }
 
     if (!evolution.isEmpty()) {
-        ret.append("Your Pokemon ").append(trainerPokemon.name).append(" has evolved!");
-        ret.append(trainerPokemon.name).append(" has evolved to ").append(evolution);
-        trainerPokemon.name = evolution;
+        ret.append("\n  +---------------------------------------------------------------------+  \n");
+        ret.append("    Your Pokemon ").append(pokemon.getName()).append(" has evolved!\n");
+        ret.append("    ").append(pokemon.getName()).append(" has evolved to ").append(evolution);
+        pokemon.setName(evolution);
+        ret.append("\n  +---------------------------------------------------------------------+  \n");
 
-        if (trainerPokemon.level == 30) {
-            ret.append("Your team is complete!");
-        } else if(Trainer.getPokemonList().get(0).getLevel() == 10 || (Trainer.getPokemonList().get(0).level == 20 && Trainer.getPokemonList().get(1).level == 10)){
-            ret.append("Choose another Pokemon to add to your team:");
+        if (pokemon.getLevel() == 30) {
+            ret.append("    Your team is complete!\n");
+        } else if(Trainer.getPokemonList().get(0).getLevel() == 10 || (Trainer.getPokemonList().get(0).getLevel() == 20 && Trainer.getPokemonList().get(1).getLevel() == 10)){
+            ret.append("    Choose another Pokemon to add to your team:");
             ret.append(trainer.showPokemonList());
             trainer.addPokemon();
         }
