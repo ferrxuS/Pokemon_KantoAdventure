@@ -1,5 +1,6 @@
 package sql_implementation;
 // import java.awt.BorderLayout;
+
 // import java.awt.Dimension;
 // import java.awt.FlowLayout;
 // import java.awt.GridBagConstraints;
@@ -20,8 +21,23 @@ package sql_implementation;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import java.awt.event.FocusListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusAdapter;
+
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import GUI.GamePanel;
 
 public class Main {
 
@@ -116,7 +132,7 @@ public class Main {
 
         frame.add(panel);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        // frame.setResizable(false);
         frame.setVisible(true);
     }
 
@@ -166,8 +182,8 @@ public class Main {
             if (loggedInUser != null) {
                 JOptionPane.showMessageDialog(loginDialog, "Login successful!");
                 loginDialog.dispose();
-                parentFrame.dispose();
-                showWelcomeWindow();
+                // parentFrame.dispose();
+                showWelcomeWindow(parentFrame);
             } else {
                 JOptionPane.showMessageDialog(loginDialog, "Invalid username or password.", "Error",
                         JOptionPane.ERROR_MESSAGE);
@@ -302,11 +318,12 @@ public class Main {
         registerDialog.setVisible(true);
     }
 
-    private static void showWelcomeWindow() {
-        JFrame welcomeFrame = new JFrame("Welcome Window");
-        welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        welcomeFrame.setSize(800, 450);
-        welcomeFrame.setLayout(new BorderLayout());
+    private static void showWelcomeWindow(JFrame frame) {
+        // JFrame welcomeFrame = new JFrame("Welcome Window");
+        JFrame welcomeFrame = frame;
+        // welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // welcomeFrame.setSize(800, 450);
+        // welcomeFrame.setLayout(new BorderLayout());
 
         // Background Image
         ImageIcon backgroundIcon = new ImageIcon("background9.jpg");
@@ -314,16 +331,73 @@ public class Main {
                 Image.SCALE_SMOOTH);
         backgroundIcon = new ImageIcon(image);
         JLabel backgroundLabel = new JLabel(backgroundIcon);
-        backgroundLabel.setLayout(new BorderLayout());
+        backgroundLabel.setLayout(new GridBagLayout()); // Use GridBagLayout to center components
         welcomeFrame.setContentPane(backgroundLabel);
 
         // Welcome Label
         JLabel welcomeLabel = new JLabel();
         welcomeLabel.setFont(new Font("DialogInput", Font.BOLD, 50));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        backgroundLabel.add(welcomeLabel, BorderLayout.CENTER);
 
-        // Blinking animation
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 0); // Initial position at the center
+        backgroundLabel.add(welcomeLabel, gbc);
+
+        // Create a JPanel for the button
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setOpaque(false); // Make the panel transparent
+        // Create the "Play Game" button
+        JButton playButton = new JButton("Play Game");
+        playButton.setFont(new Font("Monospaced", Font.BOLD, 30)); // Set the font of the button text
+        playButton.setForeground(Color.WHITE); // Set the text color to white
+
+        // Add a hover effect to the button
+        playButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                playButton.setForeground(Color.YELLOW); // Change text color on hover
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                playButton.setForeground(Color.WHITE); // Reset text color on exit
+            }
+        });
+
+        // Add a click effect to the button
+        playButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                playButton.setForeground(new Color(255, 223, 0)); // Change text color when pressed
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                playButton.setForeground(Color.WHITE); // Reset text color when released
+            }
+        });
+
+        // Make the button transparent
+        playButton.setOpaque(false);
+        playButton.setContentAreaFilled(false);
+        playButton.setBorderPainted(false);
+        playButton.setForeground(new Color(255, 255, 255, 0)); // Set initial transparency to 0
+
+        // Create a Timer for the fade-in animation
+        Timer fadeInTimer = new Timer(30, new ActionListener() {
+            private int alpha = 0; // Initial alpha value
+            private final int targetAlpha = 255; // Target alpha value (fully opaque)
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                alpha += 5; // Increase alpha by a small amount
+                if (alpha >= targetAlpha) {
+                    alpha = targetAlpha; // Ensure we reach the target alpha
+                    ((Timer) e.getSource()).stop(); // Stop the timer
+                }
+                playButton.setForeground(new Color(255, 255, 255, alpha)); // Update button color
+            }
+        });
+
+        // Start the fade-in animation when the welcome label finishes blinking
         Timer blinkAnimation = new Timer(450, new ActionListener() {
             private boolean isVisible = true;
             private int count = 0;
@@ -332,10 +406,19 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 isVisible = !isVisible;
                 welcomeLabel.setForeground(new Color(255, 255, 255, isVisible ? 255 : 0));
-                // welcomeLabel.setForeground(new Color(0, 0, 0));
                 count++;
                 if (count >= 2) { // Stop after two iterations (fade out and fade in)
                     ((Timer) e.getSource()).stop();
+                    // Start the fade-in animation and show the button
+                    fadeInTimer.start();
+                    playButton.setVisible(true);
+                    welcomeLabel.setForeground(new Color(255, 223, 0)); // Change the text color to yellow
+                } else {
+                    // Move the welcome label up by 10 pixels
+                    gbc.insets = new Insets(-10 * count, 0, 0, 0);
+                    backgroundLabel.remove(welcomeLabel); // Remove the label
+                    backgroundLabel.add(welcomeLabel, gbc); // Add the label with updated constraints
+                    backgroundLabel.revalidate(); // Refresh the layout
                 }
             }
         });
@@ -355,25 +438,415 @@ public class Main {
                     blinkAnimation.start();
                 }
                 welcomeLabel.setText(fullText.substring(0, charIndex));
-                welcomeLabel.setForeground(new Color(255, 255, 255, 255)); // White
-                //welcomeLabel.setForeground(new Color(0, 0, 0));
+                welcomeLabel.setForeground(new Color(255, 223, 0)); // Change the text color to yellow
             }
         });
 
         timer.start();
 
-        JButton playButton = new JButton("Play Game");
-        playButton.addActionListener(e -> {
-            // Action to perform when the button is clicked
-            
-            welcomeFrame.dispose();
+        // Create a Timer for the move-up animation
+        Timer moveUpTimer = new Timer(30, new ActionListener() {
+            private int moveAmount = 10; // Amount to move the label up
+            private int moveCount = 0; // Counter for the number of moves
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveCount++;
+                gbc.insets = new Insets(-moveAmount * moveCount, 0, 0, 0); // Incrementally move up
+                backgroundLabel.remove(welcomeLabel); // Remove the label
+                backgroundLabel.add(welcomeLabel, gbc); // Add the label with updated constraints
+                backgroundLabel.revalidate(); // Refresh the layout
+
+                if (moveCount >= 5) { // Stop after moving up 5 times
+                    ((Timer) e.getSource()).stop();
+                }
+            }
         });
-        backgroundLabel.add(playButton, BorderLayout.SOUTH);
+
+        // Start the move-up animation when the blink animation is complete
+        blinkAnimation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveUpTimer.start();
+            }
+        });
+
+        // Add an action listener to the button
+        playButton.addActionListener(e -> {
+            // welcomeFrame.dispose();
+            showGameMenuWindow(welcomeFrame);
+        });
+
+        // Initially hide the button
+        playButton.setVisible(false);
+
+        // Add the button to the JPanel
+        buttonPanel.add(playButton, BorderLayout.CENTER);
+
+        // Add the JPanel to the background label
+        gbc.insets = new Insets(30, 0, -50, 0);
+        gbc.gridy = 1; // Position the panel below the welcome label
+        backgroundLabel.add(buttonPanel, gbc);
 
         // Make the frame visible
         welcomeFrame.setResizable(false);
-        welcomeFrame.setLocationRelativeTo(null);
+        // welcomeFrame.setLocationRelativeTo(null);
         welcomeFrame.setVisible(true);
+    }
+
+    private static void showGameMenuWindow(JFrame frame) {
+        JFrame gameMenuFrame = frame;
+        // JFrame gameMenuFrame = new JFrame("Game Menu");
+        // gameMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // gameMenuFrame.setSize(800, 450);
+
+        // Background Image
+        ImageIcon background = new ImageIcon(new ImageIcon("background10.jpg").getImage()
+                .getScaledInstance(gameMenuFrame.getWidth(), gameMenuFrame.getHeight(), Image.SCALE_SMOOTH));
+        JLabel backgroundLabel = new JLabel(background);
+        gameMenuFrame.setContentPane(backgroundLabel); // Set the background image as content
+
+        // Set layout manager to BorderLayout
+        gameMenuFrame.setLayout(new BorderLayout());
+
+        // Create a panel with GridBagLayout
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(0, -540, 0, 0);
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+
+        // Label for Pokemon: Kanto Adventures
+        JLabel pokemonLabel = new JLabel("Pokemon:");
+        pokemonLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 35));
+        pokemonLabel.setForeground(Color.YELLOW);
+        gbc.gridy = 0;
+        mainPanel.add(pokemonLabel, gbc);
+
+        JLabel kantoAdventuresLabel = new JLabel("Kanto Adventures");
+        kantoAdventuresLabel.setFont(new Font("Comic Sans MS", Font.ITALIC, 30));
+        kantoAdventuresLabel.setForeground(Color.GREEN);
+        gbc.insets = new Insets(0, -450, 60, 0);
+        gbc.gridy++;
+        mainPanel.add(kantoAdventuresLabel, gbc);
+
+        // Button colors
+        Color hoverColor = Color.YELLOW;
+        Color textColor = Color.WHITE;
+
+        // Button hover listener
+        MouseAdapter hoverListener = new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                JButton button = (JButton) e.getSource();
+                button.setForeground(hoverColor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                JButton button = (JButton) e.getSource();
+                button.setForeground(textColor);
+            }
+        };
+
+        // Creating the buttons
+        JButton newAdventureButton = new JButton("New Adventure");
+        JButton loadAdventureButton = new JButton("Load Adventure");
+        JButton deleteAdventureButton = new JButton("Delete Adventure");
+
+        // Setting font and its colour
+        Font buttonFont = new Font("Monospaced", Font.BOLD, 25);
+        newAdventureButton.setFont(buttonFont);
+        loadAdventureButton.setFont(buttonFont);
+        deleteAdventureButton.setFont(buttonFont);
+        newAdventureButton.setForeground(textColor);
+        loadAdventureButton.setForeground(textColor);
+        deleteAdventureButton.setForeground(textColor);
+
+        // Making buttons transparent
+        newAdventureButton.setContentAreaFilled(false);
+        loadAdventureButton.setContentAreaFilled(false);
+        deleteAdventureButton.setContentAreaFilled(false);
+        newAdventureButton.setOpaque(false);
+        loadAdventureButton.setOpaque(false);
+        deleteAdventureButton.setOpaque(false);
+        newAdventureButton.setBorderPainted(false);
+        loadAdventureButton.setBorderPainted(false);
+        deleteAdventureButton.setBorderPainted(false);
+        newAdventureButton.setFocusPainted(false);
+        loadAdventureButton.setFocusPainted(false);
+        deleteAdventureButton.setFocusPainted(false);
+
+        newAdventureButton.addMouseListener(hoverListener);
+        loadAdventureButton.addMouseListener(hoverListener);
+        deleteAdventureButton.addMouseListener(hoverListener);
+
+        newAdventureButton.setPreferredSize(deleteAdventureButton.getPreferredSize());
+        loadAdventureButton.setPreferredSize(deleteAdventureButton.getPreferredSize());
+        newAdventureButton.setHorizontalAlignment(SwingConstants.LEFT);
+        loadAdventureButton.setHorizontalAlignment(SwingConstants.LEFT);
+
+        newAdventureButton.addActionListener(e -> {
+            // gameMenuFrame.dispose();
+            showAdventureWindow("New Adventure", gameMenuFrame);
+        });
+        loadAdventureButton.addActionListener(e -> {
+            // gameMenuFrame.dispose();
+            showAdventureWindow("Load Adventure", gameMenuFrame);
+        });
+        deleteAdventureButton.addActionListener(e -> {
+            // gameMenuFrame.dispose();
+            showAdventureWindow("Delete Adventure", gameMenuFrame);
+        });
+
+        // Adding the buttons to the panel
+        gbc.insets = new Insets(0, -450, 5, 0);
+        gbc.gridy++;
+        mainPanel.add(newAdventureButton, gbc);
+        gbc.gridy++;
+        mainPanel.add(loadAdventureButton, gbc);
+        gbc.gridy++;
+        mainPanel.add(deleteAdventureButton, gbc);
+
+        // Add main panel to the frame
+        gameMenuFrame.add(mainPanel, BorderLayout.CENTER);
+
+        // Make the frame visible
+        gameMenuFrame.setResizable(false);
+        // gameMenuFrame.setLocationRelativeTo(null);
+        gameMenuFrame.setVisible(true);
+    }
+
+    private static void showAdventureWindow(String actionString, JFrame frame) {
+        JFrame adventureFrame = frame;
+        // JFrame adventureFrame = new JFrame(actionString);
+        // adventureFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // adventureFrame.setSize(800, 450);
+
+        int action = -1;
+        if (actionString.equals("New Adventure")) {
+            action = 0; // 0 for new save
+        } else if (actionString.equals("Load Adventure")) {
+            action = 1; // 1 for load save
+        } else if (actionString.equals("Delete Adventure")) {
+            action = 2; // 2 for delete save
+        }
+
+        String backgroundImage;
+        if (action == 0) {
+            backgroundImage = "background19.jpg";
+        } else if (action == 1) {
+            backgroundImage = "background20.jpg";
+        } else {
+            backgroundImage = "background15.jpg";
+        }
+        // Background Image
+        ImageIcon background = new ImageIcon(new ImageIcon(backgroundImage).getImage()
+                .getScaledInstance(adventureFrame.getWidth(), adventureFrame.getHeight(), Image.SCALE_SMOOTH));
+        JLabel backgroundLabel = new JLabel(background);
+        adventureFrame.setContentPane(backgroundLabel); // Set the background image as content
+
+        // Set layout manager to BorderLayout
+        adventureFrame.setLayout(new BorderLayout());
+
+        // Create a panel with GridBagLayout
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(7, -500, 7, 0);
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        // // Panel hover listener
+        // MouseAdapter hoverListener = new MouseAdapter() {
+        // @Override
+        // public void mouseEntered(MouseEvent e) {
+        // JButton button = (JButton) e.getSource();
+        // button.setForeground(hoverColor);
+        // }
+
+        // @Override
+        // public void mouseExited(MouseEvent e) {
+        // JButton button = (JButton) e.getSource();
+        // button.setForeground(textColor);
+        // }
+        // };
+        // Labels for saved adventures
+        String[] saves = { "Save 1", "Save 2", "Save 3" };
+        GameSaveManager gsm = new GameSaveManager();
+        for (int i = 0; i < saves.length; i++) {
+            final int slotNumber = i + 1; // Declare index as final
+            final int ACTION = action;
+            JPanel slotPanel = new JPanel();
+            slotPanel.setOpaque(false);
+            slotPanel.setPreferredSize(new Dimension(150, 75));
+            String saveLabel = saves[i];
+            JLabel slotLabel = new JLabel(saveLabel);
+            int save_id = calculateSaveId(slotNumber);
+            if (!gsm.saveExists(save_id)) { // if empty slot
+                slotLabel.setText(saveLabel + " does not exist");
+                slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+
+                if (action == 0) { // To add mouse listener to all slots if new game
+                    slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                    slotPanel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            System.out.println("Empty slot for new adventure");
+                            handleNewGameOption(adventureFrame, slotNumber);
+                        }
+
+                        Color hoverColor = Color.GREEN;
+                        Color defaultColor = Color.WHITE;
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
+                        }
+                    });
+                }
+            } else { // if slot not empty
+                slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                if (action == 0) { // if new game set border to red
+                    slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+                }
+                MouseAdapter slotPanelMouseListener = new MouseAdapter() {
+                    boolean saveDeleted = false;
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        System.out.println("nonEmptySlot");
+                        if (ACTION == 0) { // Confirm overwrite chosen save
+                            int choice = JOptionPane.showConfirmDialog(adventureFrame,
+                                    "Are you sure you would like to overwrite the current save?", "Confirm Overwrite",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (choice == JOptionPane.YES_OPTION) {
+                                handleNewGameOption(adventureFrame, slotNumber);
+                            }
+                        } else if (ACTION == 1) { // Load chosen save
+                            handleLoadGameOption(gsm, adventureFrame, save_id);
+                        } else { // Confirm delete chosen save
+                            int choice = JOptionPane.showConfirmDialog(adventureFrame,
+                                    "Are you sure you would like to delete the save?", "Confirm Deletion",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (choice == JOptionPane.YES_OPTION) {
+                                saveDeleted = true;
+                                slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                                slotLabel.setText("Save " + slotNumber + " does not exist");
+                                slotLabel.setText(saveLabel + " does not exist");
+                                handleDeleteGameOption(save_id);
+                                slotPanel.removeMouseListener(this);
+                            }
+                        }
+                    }
+
+                    Color hoverColor = Color.GREEN;
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        Color defaultColor = Color.WHITE;
+                        if (ACTION == 0) {
+                            defaultColor = Color.RED;
+                        }
+                        if (saveDeleted == true) {
+                            defaultColor = Color.DARK_GRAY;
+                        }
+                        slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
+                    }
+                };
+                slotPanel.addMouseListener(slotPanelMouseListener);
+
+            }
+
+            slotLabel.setForeground(Color.WHITE);
+            slotPanel.add(slotLabel);
+            // slotLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+            gbc.gridy = i;
+            mainPanel.add(slotPanel, gbc);
+        }
+        JButton backButton = new JButton("Back");
+        backButton.setFont(new Font("Monospaced", Font.BOLD, 20));
+        backButton.setForeground(Color.WHITE);
+        backButton.setContentAreaFilled(false);
+        backButton.setOpaque(false);
+        backButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.WHITE, 1),
+                BorderFactory.createEmptyBorder(7, 10, 7, 10)));
+        // backButton.setBorderPainted(false);
+        backButton.setFocusPainted(false);
+        gbc.insets = new Insets(40, -500, 0, 0);
+        gbc.gridy++;
+        mainPanel.add(backButton, gbc);
+        backButton.addActionListener(e -> {
+            // adventureFrame.dispose();
+            showGameMenuWindow(adventureFrame);
+        });
+        // Add a hover effect to the button
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backButton.setForeground(Color.RED); // Change text color on hover
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backButton.setForeground(Color.WHITE); // Reset text color on exit
+            }
+        });
+
+        // Add main panel to the frame
+        adventureFrame.add(mainPanel, BorderLayout.CENTER);
+
+        // Make the frame visible
+        adventureFrame.setResizable(false);
+        // adventureFrame.setLocationRelativeTo(null);
+        adventureFrame.setVisible(true);
+    }
+
+    // private static boolean saveExists(int slotNumber) {
+    // int save_id = (loggedInUser.getAccount_id() - 1) * 3 + (slotNumber);
+    // GameSaveManager gsm = new GameSaveManager();
+    // return gsm.saveExists(save_id);
+    // }
+
+    public static int calculateSaveId(int slotNumber) {
+        return ((loggedInUser.getAccount_id() - 1) * 3 + (slotNumber));
+    }
+
+    public static void handleNewGameOption(JFrame frame, int save_id) {
+        System.out.println("Creating new save in save_id: " + save_id);
+        frame.dispose();
+        try {
+            GamePanel.main(new String[] {});
+        } catch (Exception e) {
+
+        }
+    }
+
+    public static void handleLoadGameOption(GameSaveManager gsm, JFrame frame, int save_id) {
+        System.out.println("Loading save id: " + save_id);
+        frame.dispose();
+        Save chosenSave = gsm.loadSave(save_id);
+        System.out.println(chosenSave.getTrainer_name());
+        System.out.println(chosenSave.getCurrent_location());
+        chosenSave.printPokemonTeam();
+        System.out.println(chosenSave.getGym_leaders_defeated());
+        System.out.println(chosenSave.getBadges());
+        System.out.println(chosenSave.getLast_saved());
+    }
+
+    public static void handleDeleteGameOption(int save_id) {
+        System.out.println("Deleting save id: " + save_id);
+        // panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
     }
 
 }

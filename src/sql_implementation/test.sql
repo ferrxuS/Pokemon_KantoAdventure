@@ -4,30 +4,24 @@
 -- SELECT *
 -- FROM Account;
 
--- INSERT INTO Game_State (account_id, current_location, current_level, pokemon_team, last_saved) 
--- VALUES (1, 'Pallet Town', 5, '[
+-- INSERT INTO Game_Save (save_id, trainer_name, current_location, pokemon_team, gym_leaders_defeated, badges, last_saved) 
+-- VALUES (1,'hehe', 'Pallet Town','[
 --     {
---         "pokemon_id": 1,
 --         "name": "Pikachu",
---         "type": "Electric",
 --         "level": 25
 --     },
 --     {
---         "pokemon_id": 2,
 --         "name": "Charmander",
---         "type": "Fire",
 --         "level": 15
 --     },
 --     {
---         "pokemon_id": 3,
 --         "name": "Bulbasaur",
---         "type": "Grass/Poison",
 --         "level": 20
 --     }
--- ]', CURRENT_TIMESTAMP);
+-- ]', '["none","hehe"]','["badge1","badge2"]', CURRENT_TIMESTAMP);
 
--- SELECT *
--- FROM Game_State;
+SELECT *
+FROM Game_Save;
 
 -- INSERT INTO Account (username, password_hash, salt)
 -- VALUES ("hehe2", "password123", "hehe"); 
