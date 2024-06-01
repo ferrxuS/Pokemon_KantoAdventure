@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package GUI;
 
 import java.awt.*;
@@ -10,22 +6,17 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Scanner;
 
-/**
- *
- * @author raishahaque
- */
 public class GamePanel {
 
     JFrame screen;
-    JPanel currentPanel, titlePanel, menuPanel; //,startButtonPanel
-    JLabel titleLabel, menuLabel;
+    JPanel currentPanel, titlePanel; // Removed menuPanel
+    JLabel titleLabel;
 
     Container container;
     private NewAdventurePanel advPanel;
 
     public static void main(String[] args) throws FileNotFoundException {
         GamePanel gp = new GamePanel();
-
     }
 
     public GamePanel() throws FileNotFoundException {
@@ -50,7 +41,7 @@ public class GamePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    updateTitleToMenu();
+                    startAdventure(); // Directly start the adventure on Enter key
                 }
             }
         });
@@ -62,35 +53,8 @@ public class GamePanel {
         titleLabel.setText("<html><pre>" + titleText + "</pre></html>"); // wrap text in html for preserve formatting
         titlePanel.add(titleLabel, BorderLayout.CENTER);
 
-        // Menu Screen
-        menuPanel = new JPanel();
-        menuPanel.setBackground(Color.black);
-        menuLabel = new JLabel();
-        menuLabel.setForeground(Color.green);
-        String menuText = getASCII("MenuPanel.txt");
-        menuLabel.setText("<html><pre>" + menuText + "</pre></html>");
-        menuPanel.add(menuLabel);
-
         // New Adventure Screen
         advPanel = new NewAdventurePanel(container);
-
-        // Keys
-        screen.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (currentPanel == menuPanel) {
-                    if (e.getKeyCode() == KeyEvent.VK_1) {
-                        startAdventure();
-                    } else if (e.getKeyCode() == KeyEvent.VK_2) {
-                        // loadGame();
-                    } else if (e.getKeyCode() == KeyEvent.VK_3) {
-                        exitMenu();
-                    }
-                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    updateTitleToMenu();
-                }
-            }
-        });
 
         // Initially, show the title panel
         container.add(titlePanel, BorderLayout.CENTER);
@@ -112,36 +76,15 @@ public class GamePanel {
         return builder.toString();
     }
 
-    // Enter MENU
-    public void updateTitleToMenu() {
-        currentPanel = titlePanel;
-        container.remove(titlePanel);
-        container.add(menuPanel, BorderLayout.CENTER);
-        currentPanel = menuPanel;
-        container.revalidate(); // refresh the screen
-        container.repaint();
-    }
-
-    // Exit Menu
-    public void exitMenu() {
-        currentPanel = menuPanel;
-        container.remove(menuPanel);
-        container.add(titlePanel, BorderLayout.CENTER);
-        currentPanel = titlePanel;
-        container.revalidate(); // refresh the screen
-        container.repaint();
-    }
-
     // Start New Adventure
     public void startAdventure() {
-        currentPanel = menuPanel;
-        container.remove(menuPanel);
+        currentPanel = titlePanel;
+        container.remove(titlePanel);
         container.add(advPanel, BorderLayout.CENTER);
         currentPanel = advPanel;
         container.revalidate(); // refresh the screen
         container.repaint();
     }
-
 }
 
 
