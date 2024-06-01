@@ -28,6 +28,8 @@ public class PokemonBattle {
     private Evolution evolution;
     private List<Pokemon> remainingGymLeaderPokemons;
     private int currentGymLeaderPokemonIndex;
+    ArrayList<String> trainerPokemonList;
+    String initialTrainerPokemonName;
 
     // Constructor
     public PokemonBattle(Trainer trainer, boolean isWildPokemon, Location location, JTextArea console, JTextField inputField) {
@@ -51,6 +53,7 @@ public class PokemonBattle {
         }
         this.xp = trainerPokemon.getXP();
         this.inputReceived = false;
+        initialTrainerPokemonName = trainerPokemon.getName();
 
         inputField.addActionListener(e -> {
             synchronized (inputField) {
@@ -103,14 +106,16 @@ public class PokemonBattle {
                         if (!isWildPokemon && currentGymLeaderPokemonIndex < remainingGymLeaderPokemons.size() - 1) {
                             currentGymLeaderPokemonIndex++;
                             enemyPokemon = remainingGymLeaderPokemons.get(currentGymLeaderPokemonIndex);
-                            battleLog.append("    The Gym Leader of ").append(enemyPokemon.getLocation()).append(" sent out ").append(enemyPokemon.getName()).append("! You have to defeat \n    all the Pokemons!\n");
+                            battleLog.append("\n    The Gym Leader of ").append(enemyPokemon.getLocation()).append(" sent out ").append(enemyPokemon.getName()).append("! You have to defeat \n    all the Pokemons!\n");
                             trainerPokemon.setHP(initialTrainerPokemonHP);
                             roundCount++;  // Increment roundCount here for new Pokemon
                             checkLevelUp(battleLog); // 1
                             System.out.println("Level up 2");
                             continue;  // Go to the next iteration of the while loop
                         } else {
+                            if (!isWildPokemon){
                             earnBadges(enemyPokemon.getLocation());
+                            }
                             checkLevelUp(battleLog); //2
                             System.out.println("Level up 3");
                             break;
@@ -176,7 +181,7 @@ public class PokemonBattle {
         int xp = 5 * enemyPokemon.getLevel();
         trainerPokemon.setXP(trainerPokemon.getXP() + xp);
         battleLog.append("    ").append(trainerPokemon.getName()).append(" gained ").append(xp).append(" XP!");
-        battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]");
+        battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]\n");
         battleLog.append("\n  +---------------------------------------------------------------------+  \n");
         checkLevelUp(battleLog);
         System.out.println("Level up 5");
@@ -271,6 +276,13 @@ public class PokemonBattle {
         effectiveness = Math.max(0.2, Math.min(2.0, effectiveness));
         return effectiveness;
     }
+    
+    public void setTrainerPokemonList(){
+        trainerPokemonList = new ArrayList<>();
+        trainerPokemonList.add("Bulbasaur");
+        trainerPokemonList.add("Squirtle");
+        trainerPokemonList.add("Charmander");
+    }
 
     public void checkLevelUp(StringBuilder battleLog) {
         System.out.println("Level's Not Up Yet");
@@ -313,12 +325,36 @@ public class PokemonBattle {
             System.out.println("Levels up");
             trainerPokemon.updateMoveDamages();
             trainerPokemon.calculateHP(); // Recalculate HP after leveling up
-            evolution.evolve();
             battleLog.append("    Congrats! ").append(trainerPokemon.getName()).append(" moves to level ").append(trainerPokemon.getLevel()).append(" !\n");
             battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]\n");
-            battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+            battleLog.append("  +---------------------------------------------------------------------+  \n");
+            
+            if(evolution.evolve(trainerPokemon)){
+                
+                battleLog.append("    Congratulations! Your Pokemon has evolved to ").append(trainerPokemon.getName()).append("!!!");
+                battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+
+                if (trainerPokemon.getLevel() == 30) {
+                    battleLog.append("    Your team is complete!\n");
+                } else {
+                    
+                    addPokemonToTeam(battleLog);
+                }
+            }
         }
     }
+    
+    private void addPokemonToTeam(StringBuilder battleLog){
+        setTrainerPokemonList();
+        List<String> availablePokemon = new ArrayList<>(trainerPokemonList);
+        availablePokemon.remove(initialTrainerPokemonName);
+        String chosenPokemon = availablePokemon.getLast();
+        trainer.addToList(chosenPokemon);
+        battleLog.append("    You unlocked ").append(availablePokemon.removeLast()).append("!!!\n    It is added to your team!!!");
+        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+    }
+    
+    
     // Trainer Pokemon
     // Determine the enemy Pokemon based on the current location
     public Object determineEnemyPokemon(boolean isWildPokemon) {

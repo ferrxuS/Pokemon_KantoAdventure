@@ -22,7 +22,7 @@ public class Location {
     public static final String PEWTER_CITY = "Pewter City";
     public static final String CERULEAN_CITY = "Cerulean City";
     public static final String VERMILLION_CITY = "Vermillion City";
-    public static final String CELADON_CITY = "Celdaon City";
+    public static final String CELADON_CITY = "Celadon City";
     public static final String FUCHSIA_CITY = "Fuchsia City";
     public static final String SAFFRON_CITY = "Saffron City";
     public static final String CINNABAR_ISLAND = "Cinnabar Island";

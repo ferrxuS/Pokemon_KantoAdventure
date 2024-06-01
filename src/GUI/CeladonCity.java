@@ -36,7 +36,6 @@ public class CeladonCity extends JPanel {
         this.location = location;
         this.trainer.setCurrentLocation(location);
         this.location.loadPokemons(trainer);
-        
         setBackground(Color.black);
         setLayout(new BorderLayout());
 

@@ -12,54 +12,48 @@ package pokemons;
 import Trainer.Trainer;
 
 public class Evolution {
+
+    
     public Trainer trainer;
     public Pokemon trainerPokemon;
-    
-    public void evolve() {
+
+    public boolean evolve(Pokemon pokemon) {
         StringBuilder ret = new StringBuilder();
-    String evolution = "";
+       
+            switch (pokemon.getName()) {
+                case "Squirtle":
+                    if (pokemon.getLevel() == 10) {
+                        pokemon.setName("Wartortle");
+                        return true;
+                    } else if (pokemon.getLevel() == 20) {
+                        pokemon.setName("Blastoise");
+                        return true;
+                    }
+                    break;
+                case "Charmander":
+                    if (pokemon.getLevel() == 10) {
+                        pokemon.setName("Charmeleon");
+                        return true;
+                    } else if (pokemon.getLevel() == 20) {
+                        pokemon.setName("Charizard");
+                        return true;
+                    }
+                    break;
+                case "Bulbasaur":
+                    if (pokemon.getLevel() == 10) {
+                        pokemon.setName("Ivysaur");
+                        return true;
+                    } else if (pokemon.getLevel() == 20) {
+                        pokemon.setName("Venusaur");
+                        return true;
+                    }
+                    break;
+                default:
+                    ret.append("Invalid Pokemon");
+                    return false; // Exit method if the Pokemon is invalid
+            }
 
-    switch (trainerPokemon.name) {
-        case "Squirtle":
-            if (trainerPokemon.level == 10) {
-                evolution = "Wartortle";
-            } else if (trainerPokemon.level == 20) {
-                evolution = "Blastoise";
-            }
-            break;
-        case "Charmander":
-            if (trainerPokemon.level == 10) {
-                evolution = "Charmeleon";
-            } else if (trainerPokemon.level == 20) {
-                evolution = "Charizard";
-            }
-            break;
-        case "Bulbasaur":
-            if (trainerPokemon.level == 10) {
-                evolution = "Ivysaur";
-            } else if (trainerPokemon.level == 20) {
-                evolution = "Venusaur";
-            }
-            break;
-        default:
-            ret.append("Invalid Pokemon");
-            return; // Exit method if the Pokemon is invalid
+            
+        return false;
     }
-
-    if (!evolution.isEmpty()) {
-        ret.append("Your Pokemon ").append(trainerPokemon.name).append(" has evolved!");
-        ret.append(trainerPokemon.name).append(" has evolved to ").append(evolution);
-        trainerPokemon.name = evolution;
-
-        if (trainerPokemon.level == 30) {
-            ret.append("Your team is complete!");
-        } else if(Trainer.getPokemonList().get(0).getLevel() == 10 || (Trainer.getPokemonList().get(0).level == 20 && Trainer.getPokemonList().get(1).level == 10)){
-            ret.append("Choose another Pokemon to add to your team:");
-            ret.append(trainer.showPokemonList());
-            trainer.addPokemon();
-        }
-    }
-    evolution = "";
-}
-
 }

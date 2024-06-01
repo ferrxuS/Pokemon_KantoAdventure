@@ -18,8 +18,8 @@ public class Raichu extends Pokemon{
             new ArrayList<String>() {{
                 add("Electric");
             }},
-            14,
-            110,
+            12,
+            90,
             new HashMap<String, Integer>() {{
                 put("Electro Ball", 28);
                 put("Iron Tail", 27);

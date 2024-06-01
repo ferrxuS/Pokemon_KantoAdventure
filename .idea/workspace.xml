@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c8bd050-c354-40cb-a105-010d035579d7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameTitle.txt" beforeDir="false" afterPath="$PROJECT_DIR$/GameTitle.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/build-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/genfiles.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI/CeladonCity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI/CeladonCity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PokemonBattle_LevelUp/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PokemonBattle_LevelUp/Location.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PokemonBattle_LevelUp/PokemonBattle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PokemonBattle_LevelUp/PokemonBattle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pokemons/Evolution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemons/Evolution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pokemons/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemons/Pokemon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pokemons/Raichu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemons/Raichu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pokemons/Squirtle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemons/Squirtle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pokemons/Sycther.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pokemons/Sycther.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,14 +29,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "GUI",
-    "last_opened_file_path": "/Users/raishahaque/Desktop/Pokemon_KantoAdventure copy"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GUI&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/raishahaque/Desktop/Pokemon_KantoAdventure copy&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

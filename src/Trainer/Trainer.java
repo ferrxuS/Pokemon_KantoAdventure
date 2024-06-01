@@ -7,8 +7,8 @@ package Trainer;
 import java.io.*;
 import java.util.*;
 import javax.swing.JPanel;
-import pokemons.Pokemon;
-import PokemonBattle_LevelUp.Location;
+import pokemons.*;
+import PokemonBattle_LevelUp.*;
 
 /**
  *
@@ -56,6 +56,16 @@ public class Trainer {
 
     public Pokemon getSelectedPokemon() {
         return selectedPokemon;
+    }
+    
+    public void addToList(String pokemon){
+        if(pokemon == "Squirtle"){
+            pokemonList.add(new Squirtle());
+        }else if(pokemon == "Charmander"){
+            pokemonList.add(new Charmander());
+        }else if(pokemon == "Bulbasaur"){
+            pokemonList.add(new Bulbasaur());
+        }
     }
 
     public void addPokemon(){
