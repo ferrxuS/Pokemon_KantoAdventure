@@ -113,7 +113,7 @@ public class Pokemon {
         this.HP = HP;
     }
 
-    public List<String> getMoves() {
+    public ArrayList<String> getMoves() {
         return moves;
     }
 

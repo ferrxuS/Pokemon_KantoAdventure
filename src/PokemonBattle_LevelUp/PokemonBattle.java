@@ -348,9 +348,9 @@ public class PokemonBattle {
         setTrainerPokemonList();
         List<String> availablePokemon = new ArrayList<>(trainerPokemonList);
         availablePokemon.remove(initialTrainerPokemonName);
-        String chosenPokemon = availablePokemon.getLast();
+        String chosenPokemon = availablePokemon.get(availablePokemon.size() - 1);
         trainer.addToList(chosenPokemon);
-        battleLog.append("    You unlocked ").append(availablePokemon.removeLast()).append("!!!\n    It is added to your team!!!");
+        battleLog.append("    You unlocked ").append(availablePokemon.remove(availablePokemon.size() - 1)).append("!!!\n    It is added to your team!!!");
         battleLog.append("\n  +---------------------------------------------------------------------+  \n");
     }
     

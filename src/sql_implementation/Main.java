@@ -38,6 +38,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import GUI.GamePanel;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.Location;
+import pokemons.Pokemon;
+import pokemons.Evolution;
+
+import java.util.ArrayList;
 
 public class Main {
 
@@ -515,16 +521,17 @@ public class Main {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(0, -540, 0, 0);
-        gbc.gridwidth = 1;
+        gbc.gridwidth = 2;
         gbc.gridx = 0;
 
-        // Label for Pokemon: Kanto Adventures
+        // Label for Pokemon:
         JLabel pokemonLabel = new JLabel("Pokemon:");
         pokemonLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 35));
         pokemonLabel.setForeground(Color.YELLOW);
         gbc.gridy = 0;
         mainPanel.add(pokemonLabel, gbc);
 
+        // Label for Kanto Adventures
         JLabel kantoAdventuresLabel = new JLabel("Kanto Adventures");
         kantoAdventuresLabel.setFont(new Font("Comic Sans MS", Font.ITALIC, 30));
         kantoAdventuresLabel.setForeground(Color.GREEN);
@@ -532,10 +539,43 @@ public class Main {
         gbc.gridy++;
         mainPanel.add(kantoAdventuresLabel, gbc);
 
+        // Button for logout:
+        ImageIcon logout1Icon = new ImageIcon(new ImageIcon("logout1.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon logout2Icon = new ImageIcon(new ImageIcon("logout2.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+        JButton logoutButton = new JButton(logout2Icon);
+        logoutButton.setOpaque(false);
+        logoutButton.setBorderPainted(false);
+        logoutButton.setContentAreaFilled(false);
+        logoutButton.setFocusPainted(false);
+        logoutButton.setMinimumSize(new Dimension(45,45));
+        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutButton.setIcon(logout1Icon);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutButton.setIcon(logout2Icon);
+            }
+        });
+        logoutButton.addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(gameMenuFrame,
+                    "Are you sure you would like to logout?", "Confirm logout",
+                    JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                gameMenuFrame.dispose();
+                showUserAuthenticationWindow();
+            }
+        });
+
+        gbc.insets = new Insets(0, 0, 0, -630);
+        gbc.gridy = 0;
+        gbc.gridx++;
+        mainPanel.add(logoutButton, gbc);
+        gbc.gridy++;
+
         // Button colors
         Color hoverColor = Color.YELLOW;
         Color textColor = Color.WHITE;
-
+        
         // Button hover listener
         MouseAdapter hoverListener = new MouseAdapter() {
             @Override
@@ -550,7 +590,7 @@ public class Main {
                 button.setForeground(textColor);
             }
         };
-
+        
         // Creating the buttons
         JButton newAdventureButton = new JButton("New Adventure");
         JButton loadAdventureButton = new JButton("Load Adventure");
@@ -694,7 +734,7 @@ public class Main {
                     slotPanel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            System.out.println("Empty slot for new adventure");
+                            // System.out.println("Empty slot for new adventure");
                             handleNewGameOption(adventureFrame, slotNumber);
                         }
 
@@ -719,9 +759,10 @@ public class Main {
                 }
                 MouseAdapter slotPanelMouseListener = new MouseAdapter() {
                     boolean saveDeleted = false;
+
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        System.out.println("nonEmptySlot");
+                        // System.out.println("nonEmptySlot");
                         if (ACTION == 0) { // Confirm overwrite chosen save
                             int choice = JOptionPane.showConfirmDialog(adventureFrame,
                                     "Are you sure you would like to overwrite the current save?", "Confirm Overwrite",
@@ -736,12 +777,17 @@ public class Main {
                                     "Are you sure you would like to delete the save?", "Confirm Deletion",
                                     JOptionPane.YES_NO_OPTION);
                             if (choice == JOptionPane.YES_OPTION) {
-                                saveDeleted = true;
-                                slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-                                slotLabel.setText("Save " + slotNumber + " does not exist");
-                                slotLabel.setText(saveLabel + " does not exist");
-                                handleDeleteGameOption(save_id);
-                                slotPanel.removeMouseListener(this);
+                                if (gsm.deleteSave(save_id)) {
+                                    saveDeleted = true;
+                                    slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                                    slotLabel.setText("Save " + slotNumber + " does not exist");
+                                    slotLabel.setText(saveLabel + " does not exist");
+                                    handleDeleteGameOption(gsm, save_id);
+                                    slotPanel.removeMouseListener(this);
+                                } else {
+                                    JOptionPane.showMessageDialog(adventureFrame, "Error deleting save", "Error",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
                             }
                         }
                     }
@@ -836,17 +882,53 @@ public class Main {
         System.out.println("Loading save id: " + save_id);
         frame.dispose();
         Save chosenSave = gsm.loadSave(save_id);
-        System.out.println(chosenSave.getTrainer_name());
-        System.out.println(chosenSave.getCurrent_location());
-        chosenSave.printPokemonTeam();
-        System.out.println(chosenSave.getGym_leaders_defeated());
-        System.out.println(chosenSave.getBadges());
-        System.out.println(chosenSave.getLast_saved());
+        // location
+        Location currentLocation = new Location(chosenSave.getCurrent_location());
+        Trainer trainer = new Trainer(chosenSave.getTrainer_name(), currentLocation);
+        // pokemon
+        Evolution evol = new Evolution();
+        for (int i = 0; i < chosenSave.getPokemon_team().size(); i++) {
+            String[] pokemon = chosenSave.getPokemon_team().get(i);
+            trainer.addToList(pokemon[0]);
+            Pokemon thisPokemon = Trainer.getPokemonList().get(i);
+            // System.out.println("Before: " + thisPokemon.getName() + " - " +
+            // thisPokemon.getLevel());
+            int level = Integer.parseInt(pokemon[1]);
+            if (level < 10) {
+            
+            } else {
+                int tempLevel;
+                if (level >= 20) {
+                    tempLevel = 20;
+                } else {
+                    tempLevel = 10;
+                }
+                thisPokemon.setLevel(tempLevel);
+                evol.evolve(thisPokemon);
+                // System.out.println(evol.evolve(thisPokemon));
+            }
+            thisPokemon.setLevel(level);
+            thisPokemon.setHP(Integer.parseInt(pokemon[2]));
+            thisPokemon.setXP(Integer.parseInt(pokemon[3]));
+            thisPokemon.getMoveDamages().replace(pokemon[4], (Integer.parseInt(pokemon[5])));
+            thisPokemon.getMoveDamages().replace(pokemon[6], (Integer.parseInt(pokemon[7])));
+            // System.out.println("After: " + thisPokemon.getName() + " - " +
+            // thisPokemon.getLevel());
+            // System.out.println();
+        }
+
+        for (Pokemon pokemon : Trainer.getPokemonList()) {
+        System.out.println(pokemon);
+        }
+        // badges
+        trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
+        //System.out.println(trainer.showBadges());
+
     }
 
-    public static void handleDeleteGameOption(int save_id) {
+    public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
-        // panel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        // if (gsm.deleteSave(save_id))
     }
 
 }

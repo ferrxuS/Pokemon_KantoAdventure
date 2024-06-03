@@ -20,12 +20,14 @@ public class Trainer {
     private Location currentLocation; // Updated to use Location instead of JPanel
     private static ArrayList<String> badges = new ArrayList<>();
     private static ArrayList<Pokemon> pokemonList = new ArrayList<>();
-    private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>();
+    private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>(); 
     private Pokemon selectedPokemon; // Field to store the selected Pokémon
-    
+
     public Trainer() {
+    }
+
+    public Trainer(String trainerName, Location currentLocation) {
         this.trainerName = trainerName;
-        this.selectedPokemon = selectedPokemon;
         this.currentLocation = currentLocation;
     }
 
@@ -36,7 +38,7 @@ public class Trainer {
     public void setTrainerName(String trainerName) {
         this.trainerName = trainerName;
     }
-    
+
     public void setCurrentLocation(Location currentLocation) { // Updated setter for Location
         this.currentLocation = currentLocation;
     }
@@ -57,18 +59,18 @@ public class Trainer {
     public Pokemon getSelectedPokemon() {
         return selectedPokemon;
     }
-    
-    public void addToList(String pokemon){
-        if(pokemon == "Squirtle"){
+
+    public void addToList(String pokemon) {
+        if (pokemon.equals("Squirtle")) {
             pokemonList.add(new Squirtle());
-        }else if(pokemon == "Charmander"){
+        } else if (pokemon.equals("Charmander")) {
             pokemonList.add(new Charmander());
-        }else if(pokemon == "Bulbasaur"){
+        } else if (pokemon.equals("Bulbasaur")) {
             pokemonList.add(new Bulbasaur());
         }
     }
 
-    public void addPokemon(){
+    public void addPokemon() {
         if (!pokemonList.contains(selectedPokemon)) {
             pokemonList.add(selectedPokemon);
         }
@@ -119,7 +121,7 @@ public class Trainer {
         } else {
             // Append each badge to the result with a newline character
             for (String badge : badges) {
-                result.append("    -").append(badge).append("\n");
+                result.append("    - ").append(badge).append("\n");
             }
             if (badges.size() == 8) {
                 String temp = "\n";
@@ -135,5 +137,10 @@ public class Trainer {
             }
         }
         return result.toString();
+    }
+
+    public void loadBadges(ArrayList<String> savedBadges) {
+        badges.clear();
+        badges.addAll(savedBadges);
     }
 }

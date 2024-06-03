@@ -26,7 +26,7 @@ public class Evolution {
                         pokemon.setName("Wartortle");
                         return true;
                     } else if (pokemon.getLevel() == 20) {
-                        pokemon.setName("Blastoise");
+                        pokemon.setName("Hydrorein");
                         return true;
                     }
                     break;
