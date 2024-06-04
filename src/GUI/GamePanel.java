@@ -86,6 +86,3 @@ public class GamePanel {
         container.repaint();
     }
 }
-
-
-

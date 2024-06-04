@@ -1,6 +1,6 @@
 Pewter City,Boulder Badge
 Cerulean City,Cascade Badge
-Vermilion City,Thunder Badge
+Vermillion City,Thunder Badge
 Celadon City,Rainbow Badge
 Fuchsia City,Soul Badge
 Saffron City,Marsh Badge

@@ -24,6 +24,7 @@ public class Pokemon {
     boolean isGymLeaderPokemon;
     boolean isWildPokemon;
     String location;
+    int baseHP;
 
     // Constructor for wild or gym leader pokemon
     public Pokemon(String name, ArrayList<String> types, int level, int HP, Map<String, Integer> moveDamages, boolean isGymLeaderPokemon, boolean isWildPokemon, String location) {
@@ -44,6 +45,7 @@ public class Pokemon {
         this.name = name;
         this.types = types;
         this.level = level;
+        this.HP = 0;
         this.moveDamages = moveDamages;
         this.strengths = strengths;
         this.weaknesses = weaknesses;
@@ -52,26 +54,18 @@ public class Pokemon {
         this.isWildPokemon = false;
         this.isGymLeaderPokemon = false;
         this.location = null;
-        this.HP = 60;
-    }
-
-    public void calculateHP() {
-        this.HP = 60;
-
-        if (level < 10) {
-            this.HP += 5;
-        } else if (level >= 10 && level < 20) {
-            this.HP += 10;
-        } else if (level >= 20) {
-            this.HP += 15;
-        }
+        setBaseHP(40);
+        getMaxHP();
     }
 
     public void updateMoveDamages() {
         for (String move : moveDamages.keySet()) {
             int baseDamage = moveDamages.get(move);
-            int adjustedDamage = baseDamage + 2;
-            if (level >= 10) {
+            int adjustedDamage = baseDamage;
+            if (level >= 5 && level<= 9) {
+                adjustedDamage += 2;
+            }
+            if (level >= 10 && level < 20) {
                 adjustedDamage += 3;
             }
             if (level >= 20) {
@@ -103,6 +97,17 @@ public class Pokemon {
 
     public int getXP() {
         return XP;
+    }
+    
+    public int getMaxHP(){
+        return baseHP + level * 5;
+    }
+    
+    public void setBaseHP(int baseHP){
+        this.baseHP = baseHP;
+    }
+    public int getBaseHP(){
+        return baseHP;
     }
 
     public void setXP(int xp) {
@@ -159,7 +164,7 @@ public class Pokemon {
             ret += type + "/";
         }
         ret = ret.substring(0, ret.length() - 1);
-        ret += "\n    HP: " + HP + "\n"
+        ret += "\n    HP: " + getMaxHP() + "\n"
                 + "    XP: " + XP + "\n"
                 + "    Move Damages: \n";
         for (Map.Entry<String, Integer> entry : moveDamages.entrySet()) {

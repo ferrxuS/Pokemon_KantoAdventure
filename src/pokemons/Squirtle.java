@@ -20,7 +20,7 @@ public class Squirtle extends Pokemon {
                 add("Water");
             }
         },
-                5,
+                5, 
                 new HashMap<String, Integer>() {
             {
                 put("Water Gun", 30);
