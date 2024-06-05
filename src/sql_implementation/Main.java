@@ -25,7 +25,7 @@ import javax.swing.border.Border;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.io.FileNotFoundException;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
@@ -869,12 +869,12 @@ public class Main {
     }
 
     public static void handleNewGameOption(JFrame frame, int save_id) {
-        System.out.println("Creating new save in save_id: " + save_id);
+        System.out.println("Creating new save in save id: " + save_id);
         frame.dispose();
         try {
-            GamePanel.main(new String[] {});
-        } catch (Exception e) {
-
+            GamePanel gp = new GamePanel(null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -884,6 +884,7 @@ public class Main {
         Save chosenSave = gsm.loadSave(save_id);
         // location
         Location currentLocation = new Location(chosenSave.getCurrent_location());
+        //System.out.println(currentLocation.getName());
         Trainer trainer = new Trainer(chosenSave.getTrainer_name(), currentLocation);
         // pokemon
         Evolution evol = new Evolution();
@@ -917,12 +918,17 @@ public class Main {
             // System.out.println();
         }
 
-        for (Pokemon pokemon : Trainer.getPokemonList()) {
-        System.out.println(pokemon);
-        }
+        // for (Pokemon pokemon : Trainer.getPokemonList()) {
+        // System.out.println(pokemon);
+        // }
         // badges
         trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
         //System.out.println(trainer.showBadges());
+        try {
+            GamePanel gp = new GamePanel(trainer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 

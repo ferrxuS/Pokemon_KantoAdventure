@@ -3,7 +3,13 @@ package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.Location;
+
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class GamePanel {
@@ -15,11 +21,11 @@ public class GamePanel {
     Container container;
     private NewAdventurePanel advPanel;
 
-    public static void main(String[] args) throws FileNotFoundException {
-        GamePanel gp = new GamePanel();
-    }
+    // public static void main(String[] args) throws FileNotFoundException {
+    // GamePanel gp = new GamePanel();
+    // }
 
-    public GamePanel() throws FileNotFoundException {
+    public GamePanel(Trainer trainer) throws FileNotFoundException {
         // Creating a game screen
         screen = new JFrame();
         screen.setSize(600, 600); // 800x600 pixels
@@ -41,7 +47,11 @@ public class GamePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    startAdventure(); // Directly start the adventure on Enter key
+                    if (trainer == null) {
+                        startNewAdventure(); // Directly start the adventure on Enter key
+                    } else {
+                        startSavedAdventure(trainer);
+                    }
                 }
             }
         });
@@ -77,7 +87,7 @@ public class GamePanel {
     }
 
     // Start New Adventure
-    public void startAdventure() {
+    public void startNewAdventure() {
         currentPanel = titlePanel;
         container.remove(titlePanel);
         container.add(advPanel, BorderLayout.CENTER);
@@ -85,4 +95,33 @@ public class GamePanel {
         container.revalidate(); // refresh the screen
         container.repaint();
     }
+
+    public void startSavedAdventure(Trainer trainer) {
+        Location savedLocation = trainer.getCurrentLocation(); // Assuming this method exists in the Trainer class to
+                                                               // get the current location
+        JPanel locationPanel = null;
+        trainer.setSelectedPokemon(trainer.getPokemonList().get(0));
+
+        String locationName = savedLocation.getName();
+        String className = "GUI." + locationName.replace(" ", "");
+        try {
+            Class<?> locationClass = Class.forName(className);
+            Constructor<?> constructor = locationClass.getConstructor(Container.class, Trainer.class, Location.class);
+            locationPanel = (JPanel) constructor.newInstance(container, trainer, savedLocation);
+
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Unknown location: " + locationName, e);
+        }
+
+
+        if (locationPanel != null) {
+            container.remove(titlePanel); // Assuming titlePanel is the current panel being displayed
+            container.add(locationPanel, BorderLayout.CENTER);
+            currentPanel = locationPanel;
+            container.revalidate();
+            container.repaint();
+        }
+    }
+
 }
