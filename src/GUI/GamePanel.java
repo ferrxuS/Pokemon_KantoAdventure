@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import Trainer.Trainer;
+import sql_implementation.Main;
 import PokemonBattle_LevelUp.Location;
 
 import java.io.*;
@@ -47,7 +48,7 @@ public class GamePanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (trainer == null) {
+                    if (trainer.getTrainerName() == null) {
                         startNewAdventure(); // Directly start the adventure on Enter key
                     } else {
                         startSavedAdventure(trainer);
@@ -64,7 +65,7 @@ public class GamePanel {
         titlePanel.add(titleLabel, BorderLayout.CENTER);
 
         // New Adventure Screen
-        advPanel = new NewAdventurePanel(container);
+        advPanel = new NewAdventurePanel(container, trainer);
 
         // Initially, show the title panel
         container.add(titlePanel, BorderLayout.CENTER);
@@ -97,8 +98,7 @@ public class GamePanel {
     }
 
     public void startSavedAdventure(Trainer trainer) {
-        Location savedLocation = trainer.getCurrentLocation(); // Assuming this method exists in the Trainer class to
-                                                               // get the current location
+        Location savedLocation = trainer.getCurrentLocation();
         JPanel locationPanel = null;
         trainer.setSelectedPokemon(trainer.getPokemonList().get(0));
 
@@ -109,11 +109,11 @@ public class GamePanel {
             Constructor<?> constructor = locationClass.getConstructor(Container.class, Trainer.class, Location.class);
             locationPanel = (JPanel) constructor.newInstance(container, trainer, savedLocation);
 
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException
+                | InvocationTargetException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Unknown location: " + locationName, e);
         }
-
 
         if (locationPanel != null) {
             container.remove(titlePanel); // Assuming titlePanel is the current panel being displayed
@@ -122,6 +122,16 @@ public class GamePanel {
             container.revalidate();
             container.repaint();
         }
+    }
+
+    public static void saveAndExit(Container container, Trainer trainerToSave) {
+        // System.out.println(trainerToSave.showPokemonList());
+        Main.saveGame(trainerToSave);
+
+        JFrame thisScreen = (JFrame) SwingUtilities.windowForComponent(container);
+
+        thisScreen.dispose();
+
     }
 
 }

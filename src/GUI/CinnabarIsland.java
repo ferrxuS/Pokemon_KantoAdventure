@@ -82,8 +82,7 @@ public class CinnabarIsland extends JPanel {
                 + "    [4] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -97,7 +96,8 @@ public class CinnabarIsland extends JPanel {
                     this.moveToPalletTown();
                     break;
                 case "1b":
-                    this.console.append("    +---------------------------------------------------------------------+  \n");
+                    this.console
+                            .append("    +---------------------------------------------------------------------+  \n");
                     this.moveToFuchsiaCity();
                     break;
                 case "2":
@@ -116,7 +116,7 @@ public class CinnabarIsland extends JPanel {
                     this.showMyBadges();
                     break;
                 case "4d":
-                    this.saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     inputField.setText("");
@@ -210,8 +210,7 @@ public class CinnabarIsland extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [**Cinnabar Island**]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -222,8 +221,8 @@ public class CinnabarIsland extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // System.exit(0);
+    // Main.saveGame(trainer);
+    // }
 }

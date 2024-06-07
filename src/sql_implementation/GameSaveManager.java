@@ -13,20 +13,23 @@ import org.json.JSONObject;
 public class GameSaveManager {
 
     // Method to save a game (create new or overwrite)
-    public boolean saveGame(int account_id, int save_id, String trainerName, String current_location, String pokemon_team,
-            String gym_leaders_defeated) {
+    public boolean saveGame(Save save) {
 
-        String query = "INSERT INTO Game_Save (save_id, account_id, trainer_name, current_location, pokemon_team, gym_leaders_defeated, last_saved) VALUES (?, ?, ?, ?, ?, ?, datetime('now')) ON CONFLICT(save_id) DO UPDATE SET current_location = excluded.current_location, pokemon_team = excluded.pokemon_team, gym_leaders_defeated = excluded.gym_leaders_defeated, last_saved = datetime('now')";
+        String query = "INSERT INTO Game_Save (save_id, trainer_name, current_location, pokemon_team, gym_leaders_defeated, badges, last_saved) VALUES (?, ?, ?, ?, ?, ?, datetime('now')) ON CONFLICT(save_id) DO UPDATE SET trainer_name = excluded.trainer_name, current_location = excluded.current_location, pokemon_team = excluded.pokemon_team, gym_leaders_defeated = excluded.gym_leaders_defeated, badges = excluded.badges, last_saved = datetime('now')";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setInt(1, save_id);
-            pstmt.setInt(2, account_id);
-            pstmt.setString(3, trainerName);
-            pstmt.setString(4, current_location);
-            pstmt.setString(5, pokemon_team);
-            pstmt.setString(6, gym_leaders_defeated);
+            pstmt.setInt(1, save.getSave_id());
+            pstmt.setString(2, save.getTrainer_name());
+            pstmt.setString(3, save.getCurrent_location());
+            String JSON_pokemon_team = listArrayToJsonObject(new ArrayList<>(save.getPokemon_team()));
+            System.out.println(JSON_pokemon_team);
+            pstmt.setString(4, JSON_pokemon_team);
+            String JSON_gym_leaders_defeated = listStringToJsonArray(new ArrayList<>(save.getGym_leaders_defeated()));
+            pstmt.setString(5, JSON_gym_leaders_defeated);
+            String JSON_badges = listStringToJsonArray(new ArrayList<>(save.getBadges()));
+            pstmt.setString(6, JSON_badges);
 
             int rowsAffected = pstmt.executeUpdate();
 
@@ -140,6 +143,7 @@ public class GameSaveManager {
                 String move2Damage = String.valueOf(move2.getInt("damage"));
 
                 String[] object = new String[] { name, level, hp, xp, move1Name, move1Damage, move2Name, move2Damage };
+
                 listArray.add(object);
             }
         } catch (JSONException e) {
@@ -155,10 +159,58 @@ public class GameSaveManager {
             for (int i = 0; i < jsonArray.length(); i++) {
                 listString.add(jsonArray.getString(i));
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return listString;
     }
+
+    public static String listArrayToJsonObject(ArrayList<String[]> listArray) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (String[] object : listArray) {
+
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+
+                jsonObject.put("name", object[0]);
+                jsonObject.put("level", Integer.parseInt(object[1]));
+                jsonObject.put("hp", Integer.parseInt(object[2]));
+                jsonObject.put("xp", Integer.parseInt(object[3]));
+    
+                JSONArray movesArray = new JSONArray();
+                JSONObject move1 = new JSONObject();
+                move1.put("name", object[4]);
+                move1.put("damage", Integer.parseInt(object[5]));
+                movesArray.put(move1);
+    
+                JSONObject move2 = new JSONObject();
+                move2.put("name", object[6]);
+                move2.put("damage", Integer.parseInt(object[7]));
+                movesArray.put(move2);
+    
+                jsonObject.put("moves", movesArray);
+    
+                jsonArray.put(jsonObject);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return jsonArray.toString();
+    }
+
+    public static String listStringToJsonArray(ArrayList<String> listString) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (String str : listString) {
+            jsonArray.put(str);
+        }
+
+        return jsonArray.toString();
+    }
+
 
 }

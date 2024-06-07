@@ -56,4 +56,16 @@ public class Evolution {
             
         return false;
     }
+
+    public static String getBaseForm(String evolvedPokemon) {
+        if (evolvedPokemon.equals("Wartortle") || evolvedPokemon.equals("Hydrorein")) {
+            return "Squirtle";
+        } else if (evolvedPokemon.equals("Charmeleon") || evolvedPokemon.equals("Charizard")) {
+            return "Charmander";
+        } else if (evolvedPokemon.equals("Ivysaur") || evolvedPokemon.equals("Venusaur")) {
+            return "Bulbasaur";
+        } else {
+            return "";
+        }
+    }
 }

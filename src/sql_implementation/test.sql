@@ -38,19 +38,19 @@
 --     }
 -- ]', '["none","hehe"]','["badge1","badge2"]', CURRENT_TIMESTAMP);
 
+
+-- -- INSERT INTO Account (us0ername, password_hash, salt)
+-- -- VALUES ("hehe2", "password123", "hehe"); 
+
+-- -- INSERT INTO Account (username, password_hash, email)
+-- -- VALUES ("hehe3", "password123", "example3@test.com"); 
+
+-- DELETE FROM Game_Save WHERE "save_id" = 0;
+-- DELETE FROM Account;
+
 SELECT *
 FROM Game_Save;
-
--- INSERT INTO Account (username, password_hash, salt)
--- VALUES ("hehe2", "password123", "hehe"); 
-
--- INSERT INTO Account (username, password_hash, email)
--- VALUES ("hehe3", "password123", "example3@test.com"); 
-
--- DELETE FROM Account;
--- DELETE FROM Game_Save;
-
-SELECT *
-FROM Account;
+-- SELECT *
+-- FROM Account;
 
 -- SELECT COUNT(*) FROM Account;

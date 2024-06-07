@@ -83,8 +83,7 @@ public class LavenderTown extends JPanel {
                 + "    [3] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -128,7 +127,7 @@ public class LavenderTown extends JPanel {
                     showMyBadges();
                     break;
                 case "3d":
-                    saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");
@@ -234,8 +233,7 @@ public class LavenderTown extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -246,8 +244,10 @@ public class LavenderTown extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+// private void saveAndExit() {
+// // Implement save and exit logic here
+// System.exit(0);
+// Main.saveGame(trainer);
+// }
+
 }

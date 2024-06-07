@@ -17,6 +17,7 @@ import PokemonBattle_LevelUp.*;
 import static GUI.GamePanel.*;
 import static GUI.Graph.*;
 
+
 public class VermillionCity extends JPanel {
 
     private JLabel label;
@@ -85,8 +86,7 @@ public class VermillionCity extends JPanel {
                 + "    [4] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -123,7 +123,7 @@ public class VermillionCity extends JPanel {
                     this.showMyBadges();
                     break;
                 case "4d":
-                    this.saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     inputField.setText("");
@@ -232,8 +232,7 @@ public class VermillionCity extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -244,8 +243,9 @@ public class VermillionCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    //     // Implement save and exit logic here
+    //     System.exit(0);
+    //     Main.saveGame(trainer);
+    // }
 }

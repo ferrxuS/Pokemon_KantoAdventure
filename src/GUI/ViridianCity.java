@@ -81,8 +81,7 @@ public class ViridianCity extends JPanel {
                 + "    [4] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -100,7 +99,7 @@ public class ViridianCity extends JPanel {
                     this.moveToPewterCity();
                     break;
                 case "2":
-                    console.append( "  +---------------------------------------------------------------------+  \n");
+                    console.append("  +---------------------------------------------------------------------+  \n");
                     this.startChallengeGymLeader();
                     break;
                 case "3":
@@ -117,7 +116,7 @@ public class ViridianCity extends JPanel {
                     this.showMyBadges();
                     break;
                 case "4d":
-                    this.saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     inputField.setText("");
@@ -203,8 +202,7 @@ public class ViridianCity extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -215,8 +213,9 @@ public class ViridianCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // // Implement save and exit logic here
+    // System.exit(0);
+    // Main.saveGame(trainer);
+    // }
 }

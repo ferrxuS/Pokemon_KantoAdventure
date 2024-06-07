@@ -89,8 +89,7 @@ public class SaffronCity extends JPanel {
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
                 + "    [5] Rival’s Race \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -131,7 +130,7 @@ public class SaffronCity extends JPanel {
                     this.showMyBadges();
                     break;
                 case "4d":
-                    this.saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 case "5":
                     console.append("  +---------------------------------------------------------------------+  \n");
@@ -262,8 +261,7 @@ public class SaffronCity extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -274,8 +272,9 @@ public class SaffronCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // // Implement save and exit logic here
+    // System.exit(0);
+    // Main.saveGame(trainer);
+    // }
 }

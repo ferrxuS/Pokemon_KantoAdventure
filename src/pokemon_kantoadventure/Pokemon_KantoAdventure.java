@@ -1,20 +1,27 @@
-// /*
-//  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-//  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
-//  */
-// package pokemon_kantoadventure;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package pokemon_kantoadventure;
 
-// import Trainer.Trainer;
-// import PokemonBattle_LevelUp.*;
-// import pokemons.*;
-// import java.lang.reflect.Constructor;
-// import java.lang.reflect.Method;
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.ArrayList;
-// import java.util.List;
+import Trainer.Trainer;
+import PokemonBattle_LevelUp.*;
+import pokemons.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
-// public class Pokemon_KantoAdventure {
+public class Pokemon_KantoAdventure {
+
+    public static void main(String[] args) {
+        Trainer trainer = new Trainer(4);
+        if (trainer.getTrainerName() == null) {
+            System.out.println("hi");
+        }
+    }
 
 //     // public static void main(String[] args) {
 //     // // Create a trainer
@@ -112,4 +119,4 @@
 //     //     }
 //     //     return classes;
 //     // }
-// }
+}

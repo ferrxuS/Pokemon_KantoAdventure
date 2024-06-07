@@ -16,17 +16,24 @@ import PokemonBattle_LevelUp.*;
  */
 public class Trainer {
 
+    private int save_id;
     private String trainerName;
     private Location currentLocation; // Updated to use Location instead of JPanel
     private static ArrayList<String> badges = new ArrayList<>();
     private static ArrayList<Pokemon> pokemonList = new ArrayList<>();
-    private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>(); 
+    private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>();
+    private ArrayList<String> gymLeadersDefeated = new ArrayList<>();
     private Pokemon selectedPokemon; // Field to store the selected Pokémon
 
     public Trainer() {
     }
 
-    public Trainer(String trainerName, Location currentLocation) {
+    public Trainer(int save_id) {
+        this.save_id = save_id;
+    }
+
+    public Trainer(int save_id, String trainerName, Location currentLocation) {
+        this.save_id = save_id;
         this.trainerName = trainerName;
         this.currentLocation = currentLocation;
     }
@@ -48,6 +55,10 @@ public class Trainer {
         addPokemon(); // Automatically add the selected Pokémon to the list
     }
 
+    public void setGymLeadersDefeated(ArrayList<String> gymLeadersDefeated) {
+        this.gymLeadersDefeated = gymLeadersDefeated;
+    }
+
     public String getTrainerName() {
         return trainerName;
     }
@@ -60,20 +71,54 @@ public class Trainer {
         return selectedPokemon;
     }
 
+    public ArrayList<String> getGymLeadersDefeated() {
+        return gymLeadersDefeated;
+    }
+
+    // Method to get the names of the Pokemon from the pokemonList
+
+    public List<String> getPokemonNames() {
+        List<String> pokemonNames = new ArrayList<>();
+        for (Pokemon pokemon : pokemonList) {
+            pokemonNames.add(pokemon.getName());
+        }
+        return pokemonNames;
+    }
+
+    public int getSaveID() {
+        return save_id;
+    }
+
+    public ArrayList<String> getBadges() {
+        return badges;
+    }
+
     public void addToList(String pokemon) {
-        if (pokemon.equals("Squirtle")) {
+        if (pokemon.equals("Squirtle") || Evolution.getBaseForm(pokemon).equals("Squirtle")) {
             pokemonList.add(new Squirtle());
-        } else if (pokemon.equals("Charmander")) {
+        } else if (pokemon.equals("Charmander") || Evolution.getBaseForm(pokemon).equals("Charmander")) {
             pokemonList.add(new Charmander());
-        } else if (pokemon.equals("Bulbasaur")) {
+        } else if (pokemon.equals("Bulbasaur") || Evolution.getBaseForm(pokemon).equals("Bulbasaur")) {
             pokemonList.add(new Bulbasaur());
         }
+    }
+
+    public void emptyList() {
+
+        pokemonList.clear();
+
     }
 
     public void addPokemon() {
         if (!pokemonList.contains(selectedPokemon)) {
             pokemonList.add(selectedPokemon);
+            System.out.println("adding pokemon");
         }
+        // for (Pokemon p : pokemonList) {
+        // if (!p.getName().equals(selectedPokemon.getName())) {
+        // pokemonList.add(selectedPokemon)
+        // }
+        // }
     }
 
     public String showPokemonList() {

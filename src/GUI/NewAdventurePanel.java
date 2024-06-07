@@ -28,8 +28,8 @@ public class NewAdventurePanel extends JPanel {
     private Pokemon selectedPokemon;
     private Location location;
 
-    public NewAdventurePanel(Container container) throws FileNotFoundException {
-        this.trainer = new Trainer();
+    public NewAdventurePanel(Container container, Trainer trainerForSaveID) throws FileNotFoundException {
+        this.trainer = new Trainer(trainerForSaveID.getSaveID());
         this.container = container;
         setBackground(Color.black);
         setLayout(new BorderLayout());
@@ -115,22 +115,23 @@ public class NewAdventurePanel extends JPanel {
 
         add(inputField, BorderLayout.SOUTH);
     }
-
+    
     private void updateAdvToPalletTown() throws FileNotFoundException {
         // Create a Location for Pallet Town
         Location palletTownLocation = new Location(Location.PALLET_TOWN);
         
         // Create a new instance of PalletTown with the necessary arguments
         palletTown = new PalletTown(container, trainer, palletTownLocation);
-
+        
         // Remove current panel (NewAdventurePanel)
         container.remove(this);
-
+        
         // Add the new palletTown panel
         container.add(palletTown, BorderLayout.CENTER);
-
+        
         // Set the selected Pokémon in Trainer class
         trainer.setSelectedPokemon(selectedPokemon);
+        //System.out.println(trainer.getPokemonList());
 
         // Revalidate and repaint container
         container.revalidate();

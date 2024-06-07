@@ -90,8 +90,7 @@ public class FuchsiaCity extends JPanel {
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
                 + "    [5] Safari Zone \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         // Define the default action listener
         defaultListener = new ActionListener() {
@@ -104,19 +103,23 @@ public class FuchsiaCity extends JPanel {
                 console.append("> " + input + "\n");
                 switch (input) {
                     case "1a":
-                        console.append("    +---------------------------------------------------------------------+  \n");
+                        console.append(
+                                "    +---------------------------------------------------------------------+  \n");
                         moveToCinnabarIsland();
                         break;
                     case "1b":
-                        console.append("    +---------------------------------------------------------------------+  \n");
+                        console.append(
+                                "    +---------------------------------------------------------------------+  \n");
                         moveToVermillionCity();
                         break;
                     case "1c":
-                        console.append("    +---------------------------------------------------------------------+  \n");
+                        console.append(
+                                "    +---------------------------------------------------------------------+  \n");
                         moveToCeladonCity();
                         break;
                     case "1d":
-                        console.append("    +---------------------------------------------------------------------+  \n");
+                        console.append(
+                                "    +---------------------------------------------------------------------+  \n");
                         moveToLavenderTown();
                         break;
                     case "2":
@@ -135,7 +138,7 @@ public class FuchsiaCity extends JPanel {
                         showMyBadges();
                         break;
                     case "4d":
-                        saveAndExit();
+                        GamePanel.saveAndExit(container, trainer);
                         break;
                     case "5":
                         console.append("  +---------------------------------------------------------------------+  \n");
@@ -291,8 +294,7 @@ public class FuchsiaCity extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -303,8 +305,9 @@ public class FuchsiaCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // // Implement save and exit logic here
+    // System.exit(0);
+    // Main.saveGame(trainer);
+    // }
 }

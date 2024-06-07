@@ -37,6 +37,13 @@ public class Save {
     }
 
     public List<String[]> getPokemon_team() {
+        //System.out.println("number of pokemon: " + pokemon_team.size());
+        // for (String[] pok : pokemon_team) {
+        //     System.out.println(pok[0]);
+        //     System.out.println(pok[1]);
+        //     System.out.println(pok[2]);
+        //     System.out.println(pok[3]);
+        // }
         return pokemon_team;
     }
 

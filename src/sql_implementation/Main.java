@@ -48,18 +48,32 @@ import java.util.ArrayList;
 public class Main {
 
     private static User loggedInUser;
-
+    //public static Trainer trainer = new Trainer();
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
 
     }
 
-    private static void showUserAuthenticationWindow() {
+    public static void initializeMainFrame(JFrame thisFrame, String title) {
+        thisFrame.setTitle(title);
+        thisFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        thisFrame.setSize(800, 450);
 
-        JFrame frame = new JFrame("User Authentication");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 450);
+        thisFrame.setLocationRelativeTo(null);
+        // thisFrame.setVisible(true);
+    }
+
+    private static void showUserAuthenticationWindow() {
+        JFrame frame = new JFrame();
+        initializeMainFrame(frame, "User Autentication");
+        // frame = new JFrame("User Authentication");
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setSize(800, 450);
+
+        //
+        // trainer = null;
+
 
         // Adding background image
         ImageIcon background = new ImageIcon(new ImageIcon("background1.jpg").getImage()
@@ -735,7 +749,7 @@ public class Main {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             // System.out.println("Empty slot for new adventure");
-                            handleNewGameOption(adventureFrame, slotNumber);
+                            handleNewGameOption(adventureFrame, save_id);
                         }
 
                         Color hoverColor = Color.GREEN;
@@ -870,9 +884,10 @@ public class Main {
 
     public static void handleNewGameOption(JFrame frame, int save_id) {
         System.out.println("Creating new save in save id: " + save_id);
+        Trainer trainer = new Trainer(save_id);
         frame.dispose();
         try {
-            GamePanel gp = new GamePanel(null);
+            GamePanel gp = new GamePanel(trainer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -885,13 +900,15 @@ public class Main {
         // location
         Location currentLocation = new Location(chosenSave.getCurrent_location());
         //System.out.println(currentLocation.getName());
-        Trainer trainer = new Trainer(chosenSave.getTrainer_name(), currentLocation);
+        Trainer trainer = new Trainer(save_id, chosenSave.getTrainer_name(), currentLocation);
         // pokemon
         Evolution evol = new Evolution();
         for (int i = 0; i < chosenSave.getPokemon_team().size(); i++) {
             String[] pokemon = chosenSave.getPokemon_team().get(i);
+            System.out.println(pokemon[0]);
             trainer.addToList(pokemon[0]);
-            Pokemon thisPokemon = Trainer.getPokemonList().get(i);
+            Pokemon thisPokemon = trainer.getPokemonList().get(i);
+            System.out.println(pokemon[2]);
             // System.out.println("Before: " + thisPokemon.getName() + " - " +
             // thisPokemon.getLevel());
             int level = Integer.parseInt(pokemon[1]);
@@ -924,6 +941,7 @@ public class Main {
         // badges
         trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
         //System.out.println(trainer.showBadges());
+        trainer.setGymLeadersDefeated(new ArrayList<>(chosenSave.getGym_leaders_defeated()));
         try {
             GamePanel gp = new GamePanel(trainer);
         } catch (FileNotFoundException e) {
@@ -935,6 +953,38 @@ public class Main {
     public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
         // if (gsm.deleteSave(save_id))
+    }
+
+    public static void saveGame(Trainer trainer) {
+        GameSaveManager gsm = new GameSaveManager();
+        ArrayList<String[]> pokemonTeam = new ArrayList<String[]>();
+        // System.out.println("in savGame: ");
+        // System.out.println(trainer.showPokemonList());
+        for (Pokemon pokemon : trainer.getPokemonList()) {
+            String[] thisPokemonData = new String[8];
+            thisPokemonData[0] = pokemon.getName();
+            thisPokemonData[1] = String.valueOf(pokemon.getLevel());
+            System.out.println(thisPokemonData[0]);
+            thisPokemonData[2] = String.valueOf(pokemon.getMaxHP());
+            thisPokemonData[3] = String.valueOf(pokemon.getXP());
+            ArrayList<String> moves = pokemon.getMoves();
+            int i = 4;
+            for (String move : moves) {
+                thisPokemonData[i] = move;
+                thisPokemonData[++i] = String.valueOf(pokemon.getMoveDamage(move));
+                i++;
+            }
+            pokemonTeam.add(thisPokemonData);
+        }
+        Save save = new Save(trainer.getSaveID(), trainer.getTrainerName(), trainer.getCurrentLocation().getName(), pokemonTeam, trainer.getGymLeadersDefeated(), trainer.getBadges(), "");
+        gsm.saveGame(save);
+        // SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
+        // trainer = null;
+        trainer.emptyList();
+
+        JFrame newFrame = new JFrame();
+        initializeMainFrame(newFrame, "Game Menu");
+        showGameMenuWindow(newFrame);
     }
 
 }

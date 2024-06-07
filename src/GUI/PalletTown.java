@@ -34,7 +34,8 @@ public class PalletTown extends JPanel {
         this.trainer.setCurrentLocation(location);
         this.location.loadPokemons(trainer);
         setBackground(Color.black);
-        setLayout(new BorderLayout());;
+        setLayout(new BorderLayout());
+        ;
 
         // Adv Label
         label = new JLabel();
@@ -79,8 +80,7 @@ public class PalletTown extends JPanel {
                 + "    [3] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -91,14 +91,13 @@ public class PalletTown extends JPanel {
             switch (input) {
                 case "1a":
                     console.append("    Your choice: " + input
-                            + "\n  +---------------------------------------------------------------------+  \n");
-                     {
-                        try {
-                            moveToViridianCity();
-                        } catch (FileNotFoundException ex) {
-                            Logger.getLogger(PalletTown.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                            + "\n  +---------------------------------------------------------------------+  \n"); {
+                    try {
+                        moveToViridianCity();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(PalletTown.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
                     break;
 
                 case "1b":
@@ -117,6 +116,9 @@ public class PalletTown extends JPanel {
                     break;
                 case "3c":
                     showMyBadges();
+                    break;
+                case "3d":
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     JOptionPane.showMessageDialog(this, "Invalid command!");
@@ -189,8 +191,7 @@ public class PalletTown extends JPanel {
                 + "    will turn out just fine. I'm so proud of you already! Now, go on, your\n"
                 + "    adventure awaits! Oh, and don’t forget to change your underwear every\n"
                 + "    day! Safe travels, my dear!\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMap() {
@@ -213,8 +214,7 @@ public class PalletTown extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -225,8 +225,10 @@ public class PalletTown extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // // Implement save and exit logic here
+    // System.exit(0);
+    // Main.saveGame(trainer);
+
+    // }
 }

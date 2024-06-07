@@ -83,8 +83,7 @@ public class CeladonCity extends JPanel {
                 + "    [4] Player Options \n"
                 + "        a. Show Map        b. Show My Pokémon \n"
                 + "        c. Show My Badges        d. Save and Exit \n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
 
         inputField.addActionListener((ActionEvent e) -> {
             String input = inputField.getText();
@@ -117,7 +116,7 @@ public class CeladonCity extends JPanel {
                     this.showMyBadges();
                     break;
                 case "4d":
-                    this.saveAndExit();
+                    GamePanel.saveAndExit(container, trainer);
                     break;
                 default:
                     inputField.setText("");
@@ -206,8 +205,7 @@ public class CeladonCity extends JPanel {
                 + "     |                      |\n"
                 + "     |                      |\n"
                 + "  [Cinnabar Island]---------|\n"
-                + "  +---------------------------------------------------------------------+  \n"
-        );
+                + "  +---------------------------------------------------------------------+  \n");
     }
 
     private void showMyPokemon() {
@@ -218,8 +216,17 @@ public class CeladonCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    private void saveAndExit() {
-        // Implement save and exit logic here
-        System.exit(0);
-    }
+    // private void saveAndExit() {
+    // // Implement save and exit logic here
+
+    // // Main.saveGame(trainer);
+    // // // System.exit(0);
+    // // // Get the top-level container (e.g., JFrame) and dispose of it
+    // // Window window = SwingUtilities.windowForComponent(this);
+    // // if (window instanceof JFrame) {
+    // // JFrame frame = (JFrame) window;
+    // // frame.dispose();
+    // // }
+    // GamePanel.saveAndExit(container, trainer);
+    // }
 }
