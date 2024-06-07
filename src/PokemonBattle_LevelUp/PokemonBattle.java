@@ -98,6 +98,7 @@ public class PokemonBattle {
 
                     waitForInput();
 
+                    // Clear the battle log
                     battleLog.setLength(0);
                     String input = inputField.getText().toLowerCase();
                     inputField.setText("");
@@ -176,6 +177,7 @@ public class PokemonBattle {
         battleLog.append("\n  +---------------------------------------------------------------------+  \n");
     }
 
+    // Process the move selection input from the user
     private void processMoveSelection(String input, StringBuilder battleLog) {
         int moveIndex = input.charAt(0) - 'a';
         if (moveIndex < 0 || moveIndex >= trainerPokemon.getMoves().size()) {
@@ -214,15 +216,23 @@ public class PokemonBattle {
         StringBuilder battleLog = new StringBuilder();
 
         // Initial battle setup
+        battleLog.append("  +---------------------------------------------------------------------+  \n");
         battleLog.append("    You are about to challenge Gym leader of ").append(location.getName()).append("\n");
         battleLog.append("    Prepare yourself for an insane battle! \n");
-        battleLog.append("    Your pokemon: ").append(trainerPokemon.getName()).append(" [Level ").append(trainerPokemon.getLevel()).append("]\n");
-        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
-        battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Gym Leader of ").append(enemyPokemon.getLocation());
-        battleLog.append("\n    The Gym Leader sends out ").append(enemyPokemon.getName()).append(" [Level ").append(enemyPokemon.getLevel()).append("]\n");
-        battleLog.append("\n");
-        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
-        battleLog.append("\n");
+        battleLog.append("  +---------------------------------------------------------------------+  \n");
+
+        // Check if the trainer's pokemon list contains more than one pokemon
+        if (getPokemonList().size() > 1) {
+            selectPokemonForBattle(battleLog);
+        } else {
+            battleLog.append("    Your pokemon: ").append(trainerPokemon.getName()).append(" [Level ").append(trainerPokemon.getLevel()).append("]\n");
+            battleLog.append("  +---------------------------------------------------------------------+  \n");
+            battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Gym Leader of ").append(enemyPokemon.getLocation());
+            battleLog.append("\n    The Gym Leader sends out ").append(enemyPokemon.getName()).append(" [Level ").append(enemyPokemon.getLevel()).append("]\n");
+            battleLog.append("\n");
+            battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
+            battleLog.append("\n");
+        }
 
         SwingUtilities.invokeLater(() -> {
             console.append(battleLog.toString());
@@ -234,15 +244,23 @@ public class PokemonBattle {
         StringBuilder battleLog = new StringBuilder();
 
         // Initial battle setup
+        battleLog.append("  +---------------------------------------------------------------------+  \n");
         battleLog.append("    You are about to Fight the Wild Pokemon of ").append(location.getName()).append("\n");
         battleLog.append("    Prepare yourself for an insane battle! \n");
-        battleLog.append("    Your pokemon: ").append(trainerPokemon.getName()).append(" [Level ").append(trainerPokemon.getLevel()).append("]\n");
-        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
-        battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Wild Pokemon of ").append(enemyPokemon.getLocation());
-        battleLog.append("\n    ").append(enemyPokemon.getName()).append(" is sent out! [Level ").append(enemyPokemon.getLevel()).append("]\n");
-        battleLog.append("\n");
-        battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
-        battleLog.append("\n");
+        battleLog.append("  +---------------------------------------------------------------------+  \n");
+
+        // Check if the trainer's pokemon list contains more than one pokemon
+        if (getPokemonList().size() > 1) {
+            selectPokemonForBattle(battleLog);
+        } else {
+            battleLog.append("    Your pokemon: ").append(trainerPokemon.getName()).append(" [Level ").append(trainerPokemon.getLevel()).append("]\n");
+            battleLog.append("  +---------------------------------------------------------------------+  \n");
+            battleLog.append("    Battle Start: Trainer ").append(trainer.getTrainerName()).append(" vs. Wild Pokemon of ").append(enemyPokemon.getLocation());
+            battleLog.append("\n    ").append(enemyPokemon.getName()).append(" is sent out! [Level ").append(enemyPokemon.getLevel()).append("]\n");
+            battleLog.append("\n");
+            battleLog.append("    ").append(trainerPokemon.getName()).append(" is sent out! Its ").append(trainerPokemon.getTypes()).append(" type ").append(isStrongWeakAgainst()).append("\n    against ").append(enemyPokemon.getName()).append("'s ").append(enemyPokemon.getTypes()).append(" type!");
+            battleLog.append("\n");
+        }
 
         SwingUtilities.invokeLater(() -> {
             console.append(battleLog.toString());
@@ -250,6 +268,65 @@ public class PokemonBattle {
         });
     }
 
+    // To select the trainer pokemon for battle if there are more than one pokemon in trainer's team
+    public void selectPokemonForBattle(StringBuilder battleLog) {
+
+        //battleLog.setLength(0);
+
+        battleLog.append("    Choose a pokemon for battle: \n");
+        List<String> pokemonNames = trainer.getPokemonNames(); // Retrieve the list of Pokemon names
+        for (String pokemonName : pokemonNames) {
+            battleLog.append("    - ").append(pokemonName).append("\n"); // Append each Pokemon name individually
+        }
+        battleLog.append("\n    Enter the name of the Pokemon you want to select: ");
+        battleLog.append("\n  +---------------------------------------------------------------------+  \n");
+
+        SwingUtilities.invokeLater(() -> {
+            console.append(battleLog.toString());
+            console.setCaretPosition(console.getDocument().getLength());
+        });
+
+        waitForInput();
+
+        // Clear the battle log
+        battleLog.setLength(0);
+        String selectedPokemonName = inputField.getText().trim();
+        inputField.setText("");
+
+        List<String> ignoreCasePokemonNames = new ArrayList<>();
+        for (String name : pokemonNames) {
+            ignoreCasePokemonNames.add(name.toLowerCase());
+        }
+
+        // Validate the user input
+        if (!ignoreCasePokemonNames.contains(selectedPokemonName)) {
+            battleLog.append("    Invalid Pokemon name. Please enter a valid name from the list.\n");
+            SwingUtilities.invokeLater(() -> {
+                console.append(battleLog.toString());
+                console.setCaretPosition(console.getDocument().getLength());
+            });
+            selectPokemonForBattle(battleLog); // Recursively prompt again for valid input
+        } else {
+            List<Pokemon> pokemonList = trainer.getPokemonList();
+            for (Pokemon pokemon : pokemonList) {
+                if (pokemon.getName().equalsIgnoreCase(selectedPokemonName)) {
+                    trainer.setSelectedPokemon(pokemon);
+                    this.trainerPokemon = pokemon;
+                    break;
+                }
+            }
+
+            // Clear the battle log
+            //battleLog.setLength(0);
+
+            SwingUtilities.invokeLater(() -> {
+                console.append(battleLog.toString());
+                console.setCaretPosition(console.getDocument().getLength());
+            });
+        }
+    }
+
+    // Trainer pokemon's attack logic
     public void trainerPokemonAttack(String chosenMove, StringBuilder battleLog) {
         if (!trainerPokemon.getMoves().contains(chosenMove)) {
             throw new IllegalArgumentException("Invalid move: " + chosenMove);
@@ -262,6 +339,7 @@ public class PokemonBattle {
         battleLog.append("    ").append(enemyPokemon.getName()).append(" takes ").append(damage).append(" damage! [HP: ").append(enemyPokemon.getHP()).append("]\n");
     }
 
+    // Enemy pokemon's attack logic
     public void enemyPokemonAttack(StringBuilder battleLog) {
         Random random = new Random();
         int moveIndex = random.nextInt(enemyPokemon.getMoves().size());
@@ -272,6 +350,42 @@ public class PokemonBattle {
         battleLog.append("    ").append(trainerPokemon.getName()).append(" takes ").append(damage).append(" damage! [HP: ").append(trainerPokemon.getHP()).append("]\n");
     }
 
+    // Checks whether the trainer pokemon's type is strong or weak against the enemy pokemon's type
+    public String isStrongWeakAgainst() {
+        String trainerType = trainerPokemon.getTypes().get(0);
+        List<String> enemyTypes = enemyPokemon.getTypes();
+
+        switch (trainerType) {
+            case "Grass":
+                if (enemyTypes.contains("Water") || enemyTypes.contains("Rock") || enemyTypes.contains("Ground")) {
+                    return "is Strong";
+                } else if (enemyTypes.contains("Fire") || enemyTypes.contains("Poison") || enemyTypes.contains("Bug") || enemyTypes.contains("Ice")) {
+                    return "is Weak";
+                } else {
+                    return "has no advantage";
+                }
+            case "Fire":
+                if (enemyTypes.contains("Grass") || enemyTypes.contains("Bug") || enemyTypes.contains("Ice")) {
+                    return "is Strong";
+                } else if (enemyTypes.contains("Water") || enemyTypes.contains("Rock")) {
+                    return "is Weak";
+                } else {
+                    return "has no advantage";
+                }
+            case "Water":
+                if (enemyTypes.contains("Fire") || enemyTypes.contains("Rock")) {
+                    return "is Strong";
+                } else if (enemyTypes.contains("Electric") || enemyTypes.contains("Grass")) {
+                    return "is Weak";
+                } else {
+                    return "has no advantage";
+                }
+            default:
+                return "has no advantage";
+        }
+    }
+
+    // Calculates attack effectiveness according to strenth and weakness
     public double calculateEffectiveness(Pokemon attacker, Pokemon defender) {
         double effectiveness = 1.0;
         for (String type : attacker.getStrengths()) {
@@ -288,13 +402,7 @@ public class PokemonBattle {
         return effectiveness;
     }
 
-    public void setTrainerPokemonList() {
-        trainerPokemonList = new ArrayList<>();
-        trainerPokemonList.add("Bulbasaur");
-        trainerPokemonList.add("Squirtle");
-        trainerPokemonList.add("Charmander");
-    }
-
+    // Method for levelling up using XP
     public void checkLevelUp(StringBuilder battleLog) {
         System.out.println("Level's Not Up Yet");
         int level = trainerPokemon.getLevel();
@@ -335,7 +443,7 @@ public class PokemonBattle {
         if (leveledUp) {
             System.out.println("Levels up");
             trainerPokemon.updateMoveDamages();
-            
+
             initialTrainerPokemonHP = trainerPokemon.getMaxHP();
             if (trainerPokemon.getLevel() >= 5 && trainerPokemon.getLevel() <= 9) {
                 trainerPokemon.setHP(initialTrainerPokemonHP);
@@ -350,6 +458,7 @@ public class PokemonBattle {
             battleLog.append("    ").append(trainerPokemon.getName()).append(" [XP: ").append(trainerPokemon.getXP()).append("]\n");
             battleLog.append("  +---------------------------------------------------------------------+  \n");
 
+            // Check whether the trainer pokemon has obtained the certain level for evolution
             if (evolution.evolve(trainerPokemon)) {
 
                 battleLog.append("    Congratulations! Your Pokemon has evolved to ").append(trainerPokemon.getName()).append("!!!");
@@ -365,6 +474,14 @@ public class PokemonBattle {
         }
     }
 
+    public void setTrainerPokemonList() {
+        trainerPokemonList = new ArrayList<>();
+        trainerPokemonList.add("Bulbasaur");
+        trainerPokemonList.add("Squirtle");
+        trainerPokemonList.add("Charmander");
+    }
+
+    // Unlock and add a new pokemon to the trainer's team after every evolution
     private void addPokemonToTeam(StringBuilder battleLog) {
         setTrainerPokemonList();
         List<String> availablePokemon = new ArrayList<>(trainerPokemonList);
@@ -394,40 +511,6 @@ public class PokemonBattle {
             } else {
                 throw new IllegalStateException("No gym leader Pokémon found in the current location.");
             }
-        }
-    }
-
-    public String isStrongWeakAgainst() {
-        String trainerType = trainerPokemon.getTypes().get(0);
-        List<String> enemyTypes = enemyPokemon.getTypes();
-
-        switch (trainerType) {
-            case "Grass":
-                if (enemyTypes.contains("Water") || enemyTypes.contains("Rock") || enemyTypes.contains("Ground")) {
-                    return "is Strong";
-                } else if (enemyTypes.contains("Fire") || enemyTypes.contains("Poison") || enemyTypes.contains("Bug") || enemyTypes.contains("Ice")) {
-                    return "is Weak";
-                } else {
-                    return "has no advantage";
-                }
-            case "Fire":
-                if (enemyTypes.contains("Grass") || enemyTypes.contains("Bug") || enemyTypes.contains("Ice")) {
-                    return "is Strong";
-                } else if (enemyTypes.contains("Water") || enemyTypes.contains("Rock")) {
-                    return "is Weak";
-                } else {
-                    return "has no advantage";
-                }
-            case "Water":
-                if (enemyTypes.contains("Fire") || enemyTypes.contains("Rock")) {
-                    return "is Strong";
-                } else if (enemyTypes.contains("Electric") || enemyTypes.contains("Grass")) {
-                    return "is Weak";
-                } else {
-                    return "has no advantage";
-                }
-            default:
-                return "has no advantage";
         }
     }
 
