@@ -4,7 +4,6 @@
  */
 package GUI;
 
-import static GUI.GamePanel.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;

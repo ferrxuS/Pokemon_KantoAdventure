@@ -6,7 +6,6 @@ package Trainer;
 
 import java.io.*;
 import java.util.*;
-import javax.swing.JPanel;
 import pokemons.*;
 import PokemonBattle_LevelUp.*;
 
@@ -76,7 +75,6 @@ public class Trainer {
     }
 
     // Method to get the names of the Pokemon from the pokemonList
-
     public List<String> getPokemonNames() {
         List<String> pokemonNames = new ArrayList<>();
         for (Pokemon pokemon : pokemonList) {
@@ -93,22 +91,13 @@ public class Trainer {
         return badges;
     }
 
-    public void addToList(String pokemon) {
-        if (pokemon.equals("Squirtle") || Evolution.getBaseForm(pokemon).equals("Squirtle")) {
-            pokemonList.add(new Squirtle());
-        } else if (pokemon.equals("Charmander") || Evolution.getBaseForm(pokemon).equals("Charmander")) {
-            pokemonList.add(new Charmander());
-        } else if (pokemon.equals("Bulbasaur") || Evolution.getBaseForm(pokemon).equals("Bulbasaur")) {
-            pokemonList.add(new Bulbasaur());
-        }
-    }
-
     public void emptyList() {
 
         pokemonList.clear();
 
     }
 
+    // Adding pokemon to trainer's team
     public void addPokemon() {
         if (!pokemonList.contains(selectedPokemon)) {
             pokemonList.add(selectedPokemon);
@@ -121,6 +110,17 @@ public class Trainer {
         // }
     }
 
+    // Adding pokemon to the list after evolution
+    public void addToList(String pokemon) {
+        if (pokemon.equals("Squirtle") || Evolution.getBaseForm(pokemon).equals("Squirtle")) {
+            pokemonList.add(new Squirtle());
+        } else if (pokemon.equals("Charmander") || Evolution.getBaseForm(pokemon).equals("Charmander")) {
+            pokemonList.add(new Charmander());
+        } else if (pokemon.equals("Bulbasaur") || Evolution.getBaseForm(pokemon).equals("Bulbasaur")) {
+            pokemonList.add(new Bulbasaur());
+        }
+    }
+    
     public String showPokemonList() {
         if (!pokemonList.isEmpty()) {
             StringBuilder result = new StringBuilder();
@@ -157,6 +157,7 @@ public class Trainer {
         }
     }
 
+    // Display all the badges the trainer has collected
     public static String showBadges() {
         StringBuilder result = new StringBuilder();
         result.append("    Your Badges: \n");

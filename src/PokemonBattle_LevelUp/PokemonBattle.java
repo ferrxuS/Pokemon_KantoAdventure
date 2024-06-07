@@ -66,6 +66,7 @@ public class PokemonBattle {
         System.out.println("Enemy Pokemon: " + this.enemyPokemon.getName()); // Debug statement
     }
 
+    // Method for the battle function
     public void battle() {
         System.out.println("Battle started"); // Debug statement
 
@@ -120,14 +121,14 @@ public class PokemonBattle {
                             System.out.println("checking hp2: " + initialTrainerPokemonHP); //debug
 
                             roundCount++;  // Increment roundCount here for new Pokemon
-                            checkLevelUp(battleLog); // 1
+                            checkLevelUp(battleLog); // debug
                             System.out.println("Level up 2");
                             continue;  // Go to the next iteration of the while loop
                         } else {
                             if (!isWildPokemon) {
                                 earnBadges(enemyPokemon.getLocation());
                             }
-                            checkLevelUp(battleLog); //2
+                            checkLevelUp(battleLog); // debug
                             System.out.println("Level up 3");
                             break;
                         }
@@ -142,7 +143,7 @@ public class PokemonBattle {
                     }
 
                     roundCount++;
-                    checkLevelUp(battleLog); // 2
+                    checkLevelUp(battleLog); // debug
                     System.out.println("Level up 4");
                 }
 
@@ -156,7 +157,7 @@ public class PokemonBattle {
                 SwingUtilities.invokeLater(() -> {
                     console.append(battleLog.toString());
                     console.setCaretPosition(console.getDocument().getLength());
-                    checkLevelUp(battleLog); //3
+                    checkLevelUp(battleLog); // debug
                     System.out.println("Level up 5");
                 });
             }
@@ -198,7 +199,7 @@ public class PokemonBattle {
         System.out.println("Level up 5");
     }
 
-    // Input handling logic, made sure it handles waiting and notifying correctly
+    // Input handling logic
     private void waitForInput() {
         synchronized (inputField) {
             while (!inputReceived) {
@@ -271,8 +272,6 @@ public class PokemonBattle {
     // To select the trainer pokemon for battle if there are more than one pokemon in trainer's team
     public void selectPokemonForBattle(StringBuilder battleLog) {
 
-        //battleLog.setLength(0);
-
         battleLog.append("    Choose a pokemon for battle: \n");
         List<String> pokemonNames = trainer.getPokemonNames(); // Retrieve the list of Pokemon names
         for (String pokemonName : pokemonNames) {
@@ -290,7 +289,7 @@ public class PokemonBattle {
 
         // Clear the battle log
         battleLog.setLength(0);
-        String selectedPokemonName = inputField.getText().trim();
+        String selectedPokemonName = inputField.getText().trim().toLowerCase();
         inputField.setText("");
 
         List<String> ignoreCasePokemonNames = new ArrayList<>();
@@ -315,9 +314,6 @@ public class PokemonBattle {
                     break;
                 }
             }
-
-            // Clear the battle log
-            //battleLog.setLength(0);
 
             SwingUtilities.invokeLater(() -> {
                 console.append(battleLog.toString());

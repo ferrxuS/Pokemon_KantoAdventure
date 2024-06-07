@@ -58,6 +58,7 @@ public class Pokemon {
         getMaxHP();
     }
 
+    // Update the damage count of the moves after levelling up
     public void updateMoveDamages() {
         for (String move : moveDamages.keySet()) {
             int baseDamage = moveDamages.get(move);
