@@ -91,12 +91,6 @@ public class Trainer {
         return badges;
     }
 
-    public void emptyList() {
-
-        pokemonList.clear();
-
-    }
-
     // Adding pokemon to trainer's team
     public void addPokemon() {
         if (!pokemonList.contains(selectedPokemon)) {
@@ -189,4 +183,12 @@ public class Trainer {
         badges.clear();
         badges.addAll(savedBadges);
     }
+
+    public void resetTrainer() {
+        currentLocation = null;
+        gymLeadersDefeated.clear();
+        badges.clear();
+        pokemonList.clear();
+    }
+
 }

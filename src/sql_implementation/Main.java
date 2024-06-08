@@ -20,7 +20,10 @@ package sql_implementation;
 // import javax.swing.SwingUtilities;
 
 import java.awt.*;
+
+import javax.sound.sampled.Line;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import java.awt.event.MouseAdapter;
@@ -44,11 +47,13 @@ import pokemons.Pokemon;
 import pokemons.Evolution;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Main {
 
     private static User loggedInUser;
-    //public static Trainer trainer = new Trainer();
+
+    // public static Trainer trainer = new Trainer();
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
@@ -73,7 +78,6 @@ public class Main {
 
         //
         // trainer = null;
-
 
         // Adding background image
         ImageIcon background = new ImageIcon(new ImageIcon("background1.jpg").getImage()
@@ -554,18 +558,21 @@ public class Main {
         mainPanel.add(kantoAdventuresLabel, gbc);
 
         // Button for logout:
-        ImageIcon logout1Icon = new ImageIcon(new ImageIcon("logout1.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
-        ImageIcon logout2Icon = new ImageIcon(new ImageIcon("logout2.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon logout1Icon = new ImageIcon(
+                new ImageIcon("logout1.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon logout2Icon = new ImageIcon(
+                new ImageIcon("logout2.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
         JButton logoutButton = new JButton(logout2Icon);
         logoutButton.setOpaque(false);
         logoutButton.setBorderPainted(false);
         logoutButton.setContentAreaFilled(false);
         logoutButton.setFocusPainted(false);
-        logoutButton.setMinimumSize(new Dimension(45,45));
+        logoutButton.setMinimumSize(new Dimension(45, 45));
         logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 logoutButton.setIcon(logout1Icon);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 logoutButton.setIcon(logout2Icon);
             }
@@ -589,7 +596,7 @@ public class Main {
         // Button colors
         Color hoverColor = Color.YELLOW;
         Color textColor = Color.WHITE;
-        
+
         // Button hover listener
         MouseAdapter hoverListener = new MouseAdapter() {
             @Override
@@ -604,7 +611,7 @@ public class Main {
                 button.setForeground(textColor);
             }
         };
-        
+
         // Creating the buttons
         JButton newAdventureButton = new JButton("New Adventure");
         JButton loadAdventureButton = new JButton("Load Adventure");
@@ -710,8 +717,8 @@ public class Main {
         mainPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(7, -500, 7, 0);
-        gbc.gridwidth = 1;
+        gbc.insets = new Insets(7, 0, 7, 0); // new Insets(7, -500, 7, 0);
+        gbc.gridwidth = 2;
         gbc.gridx = 0;
         // // Panel hover listener
         // MouseAdapter hoverListener = new MouseAdapter() {
@@ -733,18 +740,61 @@ public class Main {
         for (int i = 0; i < saves.length; i++) {
             final int slotNumber = i + 1; // Declare index as final
             final int ACTION = action;
-            JPanel slotPanel = new JPanel();
+            JPanel slotPanel = new JPanel(new BorderLayout());
+            JPanel slotProgressPanel = new JPanel(new GridLayout(4, 1));
             slotPanel.setOpaque(false);
-            slotPanel.setPreferredSize(new Dimension(150, 75));
+            slotPanel.setPreferredSize(new Dimension(200, 75));
+            slotProgressPanel.setPreferredSize(new Dimension(200, 75));
+            slotProgressPanel.setOpaque(false);
             String saveLabel = saves[i];
             JLabel slotLabel = new JLabel(saveLabel);
+            slotLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
             int save_id = calculateSaveId(slotNumber);
+            Image pokeballImage = new ImageIcon("pokeBall.png").getImage();
+            CustomProgressBar progressBar = new CustomProgressBar() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    // g.setColor(Color.BLUE);
+                    // String text = getString();
+                    int width = getWidth();
+                    int height = getHeight();
+                    // FontMetrics fontMetrics = g.getFontMetrics();
+                    // int stringWidth = fontMetrics.stringWidth(text);
+                    // int stringHeight = fontMetrics.getAscent();
+                    // g.drawString(text, (width - stringWidth) / 2, (height + stringHeight) / 2 -
+                    // 2);
+                    int fillWidth = (int) (width * (getPercentComplete()));
+                    int iconSize = height; // Assuming the icon size should match the height of the progress bar
+                    // if (fillWidth >= iconSize) {
+                    // g.drawImage(pokeballImage, fillWidth - iconSize, 0, iconSize, iconSize,
+                    // null);
+                    // } else {
+                    // g.drawImage(pokeballImage, 0, 0, iconSize, iconSize, null);
+                    // }
+                    if (getPercentComplete() > 0 && getPercentComplete() < 1.0) {
+                        g.drawImage(pokeballImage, fillWidth - iconSize + 15, 0, iconSize, iconSize, null);
+                    } else if (getPercentComplete() == 1.0) {
+                        g.setColor(Color.WHITE);
+                        g.setFont(new Font("Monospaced", Font.BOLD, 17));
+                        FontMetrics fontMetrics = g.getFontMetrics();
+                        String text = "Complete";
+                        int stringWidth = fontMetrics.stringWidth(text);
+                        int stringHeight = fontMetrics.getAscent();
+                        g.drawString(text, (width - stringWidth) / 2, (height + stringHeight) / 2 - 2);
+                    }
+                }
+            };
+            progressBar.setVisible(false);
             if (!gsm.saveExists(save_id)) { // if empty slot
                 slotLabel.setText(saveLabel + " does not exist");
                 slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                slotLabel.setForeground(Color.LIGHT_GRAY);
 
                 if (action == 0) { // To add mouse listener to all slots if new game
-                    slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                    // slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                    slotLabel.setForeground(Color.WHITE);
+                    slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
                     slotPanel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
@@ -757,20 +807,62 @@ public class Main {
 
                         @Override
                         public void mouseEntered(MouseEvent e) {
-                            slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
+                            // slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
+                            slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, hoverColor));
                         }
 
                         @Override
                         public void mouseExited(MouseEvent e) {
-                            slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
+                            // slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
+                            slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, defaultColor));
                         }
                     });
                 }
             } else { // if slot not empty
-                slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                slotLabel.setForeground(Color.WHITE);
+                slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
+                // slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 if (action == 0) { // if new game set border to red
-                    slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    // slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
                 }
+                progressBar.setVisible(true);
+                Save progressSave = gsm.loadSave(save_id);
+
+                Font progressLabelsFont = new Font("Comic Sans MS", Font.ITALIC, 11);
+
+                JLabel trainerNameLabel = new JLabel("Trainer Name: " + progressSave.getTrainer_name());
+                JLabel locationLabel = new JLabel("Location: " + progressSave.getCurrent_location());
+                JLabel gymLeadersDefeatedLabel = new JLabel(
+                        "Gym Leaders Defeated: " + progressSave.getBadges().size() + "/8");
+                JLabel lastSavedLabel = new JLabel("Last saved: " + progressSave.getLast_saved());
+                trainerNameLabel.setFont(progressLabelsFont);
+                locationLabel.setFont(progressLabelsFont);
+                gymLeadersDefeatedLabel.setFont(progressLabelsFont);
+                lastSavedLabel.setFont(progressLabelsFont);
+                trainerNameLabel.setForeground(Color.WHITE);
+                locationLabel.setForeground(Color.WHITE);
+                gymLeadersDefeatedLabel.setForeground(Color.WHITE);
+                lastSavedLabel.setForeground(Color.WHITE);
+                slotProgressPanel.add(trainerNameLabel);
+                slotProgressPanel.add(locationLabel);
+                slotProgressPanel.add(gymLeadersDefeatedLabel);
+                slotProgressPanel.add(lastSavedLabel);
+                // System.out.println(progressSave.getBadges().size() / 8 * 100);
+                double progressPercentage = (progressSave.getBadges().size() / 8.0) * 100;
+                progressBar.setValue((int) progressPercentage);
+                progressBar.setStringPainted(false);
+                // progressBar.setSize(new Dimens)
+                // Set the colors
+                progressBar.setBackground(Color.DARK_GRAY); // Background color
+                // progressBar.setForeground(Color.YELLOW); // Fill color
+                progressBar.setPreferredSize(new Dimension(148, 23));
+                // progressBar.setBorderPainted(false);
+                progressBar.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+                // if (progressBar.getPercentComplete() == 1.0) {
+                // progressBar.setForeground(new Color(34, 139, 34));
+                // }
+
                 MouseAdapter slotPanelMouseListener = new MouseAdapter() {
                     boolean saveDeleted = false;
 
@@ -794,8 +886,11 @@ public class Main {
                                 if (gsm.deleteSave(save_id)) {
                                     saveDeleted = true;
                                     slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-                                    slotLabel.setText("Save " + slotNumber + " does not exist");
+                                    // slotLabel.setText("Save " + slotNumber + " does not exist");
                                     slotLabel.setText(saveLabel + " does not exist");
+                                    slotLabel.setForeground(Color.LIGHT_GRAY);
+                                    progressBar.setVisible(false);
+                                    slotProgressPanel.setVisible(false);
                                     handleDeleteGameOption(gsm, save_id);
                                     slotPanel.removeMouseListener(this);
                                 } else {
@@ -810,7 +905,21 @@ public class Main {
 
                     @Override
                     public void mouseEntered(MouseEvent e) {
+                        slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, hoverColor));
                         slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
+                        // JLabel trainerNameLabel = new JLabel("Trainer name: " +
+                        // progressSave.getTrainer_name());
+                        // JLabel gymLeadersDefeatedLabel = new JLabel("Gym Leaders Defeated: " +
+                        // progressSave.getGym_leaders_defeated().size() + " / 8");
+                        // JLabel lastLocationLabel = new JLabel("Location: " +
+                        // progressSave.getCurrent_location());
+                        // JLabel lastSavedLabel = new JLabel("Last saved: " +
+                        // progressSave.getLast_saved());
+                        // slotProgressPanel.add(trainerNameLabel, BorderLayout.PAGE_START);
+                        // slotProgressPanel.add(gymLeadersDefeatedLabel, BorderLayout.LINE_START);
+                        // slotProgressPanel.add(lastSavedLabel, BorderLayout.LINE_END);
+                        // Add labels and corresponding values to slotProgressPanel
+                        slotProgressPanel.setVisible(true);
                     }
 
                     @Override
@@ -822,19 +931,30 @@ public class Main {
                         if (saveDeleted == true) {
                             defaultColor = Color.DARK_GRAY;
                         }
-                        slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
+                        slotProgressPanel.setVisible(false);
+                        // trainerNameLabel.setVisible(false);
+                        // slotPanel.remove(trainerNameLabel);
+                        // slotPanel.revalidate(); // Revalidate the slotPanel to reflect changes
+                        slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, defaultColor));
+                        // slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
                     }
                 };
                 slotPanel.addMouseListener(slotPanelMouseListener);
 
             }
-
-            slotLabel.setForeground(Color.WHITE);
+            slotPanel.add(progressBar);
             slotPanel.add(slotLabel);
+            slotPanel.add(progressBar, BorderLayout.SOUTH);
+            slotLabel.setHorizontalAlignment(SwingConstants.CENTER);
             // slotLabel.setVerticalAlignment(SwingConstants.CENTER);
-
+            slotProgressPanel.setVisible(false);
             gbc.gridy = i;
+            gbc.insets = new Insets(7, -500, 7, 0); // new Insets(7, -500, 7, 0);
             mainPanel.add(slotPanel, gbc);
+            gbc.gridx = 0;
+            gbc.insets = new Insets(7, -60, 7, 0); // new Insets(7, -500, 7, 0);
+            mainPanel.add(slotProgressPanel, gbc);
+            gbc.gridx = 1;
         }
         JButton backButton = new JButton("Back");
         backButton.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -854,6 +974,7 @@ public class Main {
         });
         // Add a hover effect to the button
         backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 backButton.setForeground(Color.RED); // Change text color on hover
             }
@@ -861,6 +982,7 @@ public class Main {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 backButton.setForeground(Color.WHITE); // Reset text color on exit
             }
+
         });
 
         // Add main panel to the frame
@@ -885,21 +1007,22 @@ public class Main {
     public static void handleNewGameOption(JFrame frame, int save_id) {
         System.out.println("Creating new save in save id: " + save_id);
         Trainer trainer = new Trainer(save_id);
-        frame.dispose();
-        try {
-            GamePanel gp = new GamePanel(trainer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        // frame.dispose();
+        // try {
+        // GamePanel gp = new GamePanel(trainer);
+        // } catch (FileNotFoundException e) {
+        // e.printStackTrace();
+        // }
+        showLoadingScreen(frame, trainer, 20000, 30000);
     }
 
     public static void handleLoadGameOption(GameSaveManager gsm, JFrame frame, int save_id) {
         System.out.println("Loading save id: " + save_id);
-        frame.dispose();
+        // frame.dispose();
         Save chosenSave = gsm.loadSave(save_id);
         // location
         Location currentLocation = new Location(chosenSave.getCurrent_location());
-        //System.out.println(currentLocation.getName());
+        // System.out.println(currentLocation.getName());
         Trainer trainer = new Trainer(save_id, chosenSave.getTrainer_name(), currentLocation);
         // pokemon
         Evolution evol = new Evolution();
@@ -913,7 +1036,7 @@ public class Main {
             // thisPokemon.getLevel());
             int level = Integer.parseInt(pokemon[1]);
             if (level < 10) {
-            
+
             } else {
                 int tempLevel;
                 if (level >= 20) {
@@ -940,15 +1063,149 @@ public class Main {
         // }
         // badges
         trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
-        //System.out.println(trainer.showBadges());
+        // System.out.println(trainer.showBadges());
         trainer.setGymLeadersDefeated(new ArrayList<>(chosenSave.getGym_leaders_defeated()));
-        try {
-            GamePanel gp = new GamePanel(trainer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        // try {
+        // GamePanel gp = new GamePanel(trainer);
+        // } catch (FileNotFoundException e) {
+        // e.printStackTrace();
+        // }
+        showLoadingScreen(frame, trainer, 30000, 50000);
     }
+
+    public static void showLoadingScreen(JFrame frame, Trainer trainer, int minLoadingDelay, int maxLoadingDelay) {
+        JFrame loadingScreenFrame = frame;
+        loadingScreenFrame.setLayout(new BorderLayout());
+    
+        JProgressBar loadingProgress = new JProgressBar();
+        loadingProgress.setPreferredSize(new Dimension(600, 30));
+        loadingProgress.setForeground(Color.YELLOW);
+        loadingProgress.setBorderPainted(false);
+    
+        ImageIcon[] pikachuImages = new ImageIcon[3];
+        for (int i = 0; i < 3; i++) {
+            pikachuImages[i] = new ImageIcon(new ImageIcon("pikachu" + (i + 1) + ".png").getImage().getScaledInstance(87, 69, Image.SCALE_SMOOTH));
+        }
+    
+        JLabel pikachuLabel = new JLabel();
+        pikachuLabel.setIcon(pikachuImages[0]);
+    
+        JLabel loadingLabel = new JLabel();
+        loadingLabel.setForeground(Color.WHITE);
+        loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        loadingLabel.setFont(new Font("Monospaced", Font.BOLD, 30));
+        String loadingText = "Loading...";
+        loadingLabel.setText("");
+    
+        JPanel progressPanel = new JPanel();
+        progressPanel.setLayout(new GridBagLayout());
+        progressPanel.setBackground(Color.BLACK);
+    
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(30, 30, 30, 30);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        progressPanel.add(loadingLabel, gbc);
+    
+        gbc.gridy = 1;
+        progressPanel.add(pikachuLabel, gbc);
+    
+        gbc.gridy = 2;
+        progressPanel.add(loadingProgress, gbc);
+    
+        loadingScreenFrame.setContentPane(progressPanel);
+    
+        Random rand = new Random();
+        int loadingDelay = rand.nextInt(minLoadingDelay, maxLoadingDelay);
+        loadingScreenFrame.setVisible(true);
+    
+        int steps = 100;
+        final int[] remainingProgress = {100};
+        final int[] remainingTime = {loadingDelay};
+    
+        Timer textTimer = new Timer(80, new ActionListener() {
+            int index = 0;
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (index < loadingText.length()) {
+                    loadingLabel.setText(loadingLabel.getText() + loadingText.charAt(index));
+                    index++;
+                } else {
+                    Timer fadeTimer = new Timer(40, new ActionListener() {
+                        float alpha = 1.0f;
+                        boolean fadingOut = false;
+    
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (fadingOut) {
+                                alpha -= 0.05f;
+                                if (alpha <= 0.0f) {
+                                    alpha = 0.0f;
+                                    fadingOut = false;
+                                }
+                            } else {
+                                alpha += 0.05f;
+                                if (alpha >= 1.0f) {
+                                    alpha = 1.0f;
+                                    fadingOut = true;
+                                }
+                            }
+                            loadingLabel.setForeground(new Color(1.0f, 1.0f, 1.0f, alpha));
+                        }
+                    });
+                    fadeTimer.start();
+                    ((Timer) e.getSource()).stop();
+                }
+            }
+        });
+        textTimer.start();
+    
+        // Timer for updating progress bar
+        Timer progressBarTimer = new Timer(0, null);
+        progressBarTimer.addActionListener(new ActionListener() {
+            int progress = 0;
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (remainingProgress[0] <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    loadingScreenFrame.dispose();
+                    try {
+                        GamePanel gp = new GamePanel(trainer);
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    int progressIncrement = rand.nextInt(Math.min(remainingProgress[0], 10)) + 1;
+                    progress += progressIncrement;
+                    remainingProgress[0] -= progressIncrement;
+                    loadingProgress.setValue(progress);
+    
+                    int timeIncrement = rand.nextInt(Math.min(remainingTime[0], loadingDelay / steps)) + 1;
+                    remainingTime[0] -= timeIncrement;
+                    ((Timer) e.getSource()).setDelay(timeIncrement);
+                }
+            }
+        });
+        progressBarTimer.setInitialDelay(rand.nextInt(300) + 100);
+        progressBarTimer.start();
+    
+        // Timer for updating Pikachu animation
+        Timer pikachuTimer = new Timer(200, new ActionListener() {
+            int pikachuFrameIndex = 0;
+    
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pikachuLabel.setIcon(pikachuImages[pikachuFrameIndex]);
+                pikachuFrameIndex = (pikachuFrameIndex + 1) % pikachuImages.length;
+            }
+        });
+        pikachuTimer.start();
+    }
+    
+    
+    
 
     public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
@@ -976,15 +1233,37 @@ public class Main {
             }
             pokemonTeam.add(thisPokemonData);
         }
-        Save save = new Save(trainer.getSaveID(), trainer.getTrainerName(), trainer.getCurrentLocation().getName(), pokemonTeam, trainer.getGymLeadersDefeated(), trainer.getBadges(), "");
+        Save save = new Save(trainer.getSaveID(), trainer.getTrainerName(), trainer.getCurrentLocation().getName(),
+                pokemonTeam, trainer.getGymLeadersDefeated(), trainer.getBadges(), "");
         gsm.saveGame(save);
         // SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
         // trainer = null;
-        trainer.emptyList();
+        trainer.resetTrainer();
 
         JFrame newFrame = new JFrame();
         initializeMainFrame(newFrame, "Game Menu");
         showGameMenuWindow(newFrame);
     }
 
+}
+
+class CustomProgressBar extends JProgressBar {
+    public CustomProgressBar() {
+        super(0, 100);
+        setPreferredSize(new Dimension(600, 50));
+        setForeground(Color.RED); // Set initial color
+        setBorderPainted(false);
+    }
+
+    @Override
+    public void setValue(int n) {
+        super.setValue(n);
+        if (n >= 30 && n < 60) {
+            setForeground(Color.BLUE); // Change color at 25%
+        } else if (n >= 60 && n < 100) {
+            setForeground(Color.YELLOW); // Change color at 50%
+        } else if (n == 100) {
+            setForeground(Color.GREEN); // Change color at 75%
+        }
+    }
 }

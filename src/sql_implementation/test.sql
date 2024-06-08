@@ -49,8 +49,9 @@
 -- DELETE FROM Account;
 
 SELECT *
+FROM Account;
+
+SELECT *
 FROM Game_Save;
--- SELECT *
--- FROM Account;
 
 -- SELECT COUNT(*) FROM Account;
