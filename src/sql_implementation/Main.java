@@ -345,6 +345,7 @@ public class Main {
     private static void showWelcomeWindow(JFrame frame) {
         // JFrame welcomeFrame = new JFrame("Welcome Window");
         JFrame welcomeFrame = frame;
+        welcomeFrame.setTitle("Welcome Window");
         // welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // welcomeFrame.setSize(800, 450);
         // welcomeFrame.setLayout(new BorderLayout());
@@ -523,7 +524,7 @@ public class Main {
         // JFrame gameMenuFrame = new JFrame("Game Menu");
         // gameMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // gameMenuFrame.setSize(800, 450);
-
+        gameMenuFrame.setTitle("Game Menu");
         // Background Image
         ImageIcon background = new ImageIcon(new ImageIcon("background10.jpg").getImage()
                 .getScaledInstance(gameMenuFrame.getWidth(), gameMenuFrame.getHeight(), Image.SCALE_SMOOTH));
@@ -685,7 +686,7 @@ public class Main {
         // JFrame adventureFrame = new JFrame(actionString);
         // adventureFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // adventureFrame.setSize(800, 450);
-
+        adventureFrame.setTitle(actionString);
         int action = -1;
         if (actionString.equals("New Adventure")) {
             action = 0; // 0 for new save
@@ -1204,9 +1205,6 @@ public class Main {
         pikachuTimer.start();
     }
     
-    
-    
-
     public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
         // if (gsm.deleteSave(save_id))
