@@ -1,0 +1,8 @@
+Pewter City,Boulder Badge
+Cerulean City,Cascade Badge
+Vermillion City,Thunder Badge
+Celadon City,Rainbow Badge
+Fuchsia City,Soul Badge
+Saffron City,Marsh Badge
+Cinnabar Island,Volcano Badge
+Viridian City,Earth Badge
