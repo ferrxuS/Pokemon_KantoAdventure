@@ -510,6 +510,7 @@ public class PokemonBattle {
         }
     }
 
+    // Method to challenge the gym leader
     public void challengeGymLeader(Trainer trainer, Location location) {
         try {
             List<Pokemon> gymLeaderPokemons = location.getGymLeaderPokemons();
@@ -526,6 +527,7 @@ public class PokemonBattle {
         }
     }
 
+    // Method to initiate battle with the wild pokemon
     public void fightWildPokemon(Trainer trainer, Location location) {
         try {
             List<Pokemon> wildPokemons = location.getWildPokemons();

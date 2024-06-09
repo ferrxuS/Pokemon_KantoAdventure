@@ -221,8 +221,4 @@ public class CinnabarIsland extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    // private void saveAndExit() {
-    // System.exit(0);
-    // Main.saveGame(trainer);
-    // }
 }

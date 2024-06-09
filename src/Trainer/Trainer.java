@@ -97,11 +97,6 @@ public class Trainer {
             pokemonList.add(selectedPokemon);
             System.out.println("adding pokemon");
         }
-        // for (Pokemon p : pokemonList) {
-        // if (!p.getName().equals(selectedPokemon.getName())) {
-        // pokemonList.add(selectedPokemon)
-        // }
-        // }
     }
 
     // Adding pokemon to the list after evolution
