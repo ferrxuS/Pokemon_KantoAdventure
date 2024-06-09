@@ -44,11 +44,13 @@ public class GamePanel {
         titlePanel = new JPanel(new BorderLayout()); // Use BorderLayout for titlePanel
         titlePanel.setBackground(Color.black);
 
+        boolean newAdventure = (trainer.getTrainerName() == null);
+
         screen.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (trainer.getTrainerName() == null) {
+                    if (newAdventure) {
                         startNewAdventure(); // Directly start the adventure on Enter key
                     } else {
                         startSavedAdventure(trainer);
@@ -61,6 +63,9 @@ public class GamePanel {
         titleLabel = new JLabel();
         titleLabel.setForeground(Color.green);
         String titleText = getASCII("GameTitle.txt");
+        if (!newAdventure) {
+            titleText = getASCII("GameTitle2.txt");
+        }
         titleLabel.setText("<html><pre>" + titleText + "</pre></html>"); // wrap text in html for preserve formatting
         titlePanel.add(titleLabel, BorderLayout.CENTER);
 
