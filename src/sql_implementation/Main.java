@@ -1,42 +1,12 @@
 package sql_implementation;
-// import java.awt.BorderLayout;
-
-// import java.awt.Dimension;
-// import java.awt.FlowLayout;
-// import java.awt.GridBagConstraints;
-// import java.awt.GridBagLayout;
-// import java.awt.Insets;
-
-// import javax.swing.BorderFactory;
-// import javax.swing.ImageIcon;
-// import javax.swing.JButton;
-// import javax.swing.JDialog;
-// import javax.swing.JFrame;
-// import javax.swing.JLabel;
-// import javax.swing.JOptionPane;
-// import javax.swing.JPanel;
-// import javax.swing.JPasswordField;
-// import javax.swing.JTextField;
-// import javax.swing.SwingUtilities;
 
 import java.awt.*;
 
-import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileNotFoundException;
-import java.awt.event.FocusListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusAdapter;
-
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -49,11 +19,12 @@ import pokemons.Evolution;
 import java.util.ArrayList;
 import java.util.Random;
 
+import java.io.FileNotFoundException;
+
 public class Main {
 
     private static User loggedInUser;
 
-    // public static Trainer trainer = new Trainer();
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
@@ -66,18 +37,11 @@ public class Main {
         thisFrame.setSize(800, 450);
 
         thisFrame.setLocationRelativeTo(null);
-        // thisFrame.setVisible(true);
     }
 
     private static void showUserAuthenticationWindow() {
         JFrame frame = new JFrame();
         initializeMainFrame(frame, "User Autentication");
-        // frame = new JFrame("User Authentication");
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setSize(800, 450);
-
-        //
-        // trainer = null;
 
         // Adding background image
         ImageIcon background = new ImageIcon(new ImageIcon("background1.jpg").getImage()
@@ -86,6 +50,7 @@ public class Main {
         frame.setContentPane(backgroundLabel);
         frame.setLayout(new BorderLayout());
 
+        // Main panel for this frame
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -93,8 +58,7 @@ public class Main {
         constraints.insets = new Insets(10, 45, 30, 45);
 
         // Add company logo
-        ImageIcon companyLogo = new ImageIcon(
-                new ImageIcon("MewFiveLogo.png").getImage().getScaledInstance(250, 193, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon companyLogo = new ImageIcon(new ImageIcon("MewFiveLogo.png").getImage().getScaledInstance(250, 193, java.awt.Image.SCALE_SMOOTH));
         JLabel logoLabel = new JLabel(companyLogo);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -103,12 +67,9 @@ public class Main {
         panel.add(logoLabel, constraints);
 
         // Add Pokémon-themed graphics to buttons
-        ImageIcon loginIcon = new ImageIcon(
-                new ImageIcon("pokeBall.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        ImageIcon registerIcon = new ImageIcon(
-                new ImageIcon("pokemonTrainer.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        ImageIcon exitIcon = new ImageIcon(
-                new ImageIcon("doorIcon.jpg").getImage().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon loginIcon = new ImageIcon(new ImageIcon("pokeBall.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon registerIcon = new ImageIcon(new ImageIcon("pokemonTrainer.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon exitIcon = new ImageIcon(new ImageIcon("doorIcon.jpg").getImage().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH));
         JButton loginButton = new JButton(" Login", loginIcon);
         JButton registerButton = new JButton(" Register", registerIcon);
         JButton exitButton = new JButton(" Exit Game", exitIcon);
@@ -118,6 +79,7 @@ public class Main {
         loginButton.setFont(buttonFont);
         registerButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
+
         // Button Colours
         loginButton.setBackground(new Color(255, 223, 0)); // Yellow
         loginButton.setForeground(Color.BLUE);
@@ -132,6 +94,7 @@ public class Main {
         registerButton.setMinimumSize(buttonSize);
         exitButton.setMinimumSize(buttonSize);
 
+        // Adjusting constraints and adding components to the main panel
         constraints.insets = new Insets(0, 30, 30, 30);
         constraints.gridwidth = 1;
         constraints.gridy = 1;
@@ -156,11 +119,10 @@ public class Main {
 
         frame.add(panel);
         frame.setLocationRelativeTo(null);
-        // frame.setResizable(false);
         frame.setVisible(true);
     }
 
-    private static void showLoginDialog(JFrame parentFrame) {
+    public static void showLoginDialog(JFrame parentFrame) {
         JDialog loginDialog = new JDialog(parentFrame, "Pokémon Center - Login", true);
         loginDialog.setLayout(new GridBagLayout());
         loginDialog.setSize(400, 230);
@@ -175,10 +137,10 @@ public class Main {
 
         JLabel titleLabel = new JLabel("Welcome to the Pokémon Center!");
         titleLabel.setFont(new Font("DialogInput", Font.BOLD, 20));
-        titleLabel.setBackground(new Color(255, 223, 0)); // new Color(34, 139, 34)
+        titleLabel.setBackground(new Color(255, 223, 0));
         titleLabel.setOpaque(true);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        titleLabel.setForeground(Color.BLUE); // Color.WHITE
+        titleLabel.setForeground(Color.BLUE);
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setBackground(new Color(255, 223, 0));
         titlePanel.add(titleLabel);
@@ -206,7 +168,6 @@ public class Main {
             if (loggedInUser != null) {
                 JOptionPane.showMessageDialog(loginDialog, "Login successful!");
                 loginDialog.dispose();
-                // parentFrame.dispose();
                 showWelcomeWindow(parentFrame);
             } else {
                 JOptionPane.showMessageDialog(loginDialog, "Invalid username or password.", "Error",
@@ -250,7 +211,7 @@ public class Main {
         loginDialog.setVisible(true);
     }
 
-    private static void showRegisterDialog(JFrame parentFrame) {
+    public static void showRegisterDialog(JFrame parentFrame) {
         JDialog registerDialog = new JDialog(parentFrame, "Pokémon Center - Register", true);
         registerDialog.setLayout(new GridBagLayout());
         registerDialog.setSize(400, 230);
@@ -265,10 +226,10 @@ public class Main {
 
         JLabel titleLabel = new JLabel("      Join the Adventure!     ");
         titleLabel.setFont(new Font("DialogInput", Font.BOLD, 20));
-        titleLabel.setBackground(new Color(0, 162, 232)); // new Color(34, 139, 34)
+        titleLabel.setBackground(new Color(0, 162, 232));
         titleLabel.setOpaque(true);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        titleLabel.setForeground(Color.YELLOW); // Color.WHITE
+        titleLabel.setForeground(Color.YELLOW);
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setBackground(new Color(0, 162, 232));
         titlePanel.add(titleLabel);
@@ -343,12 +304,8 @@ public class Main {
     }
 
     private static void showWelcomeWindow(JFrame frame) {
-        // JFrame welcomeFrame = new JFrame("Welcome Window");
         JFrame welcomeFrame = frame;
         welcomeFrame.setTitle("Welcome Window");
-        // welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // welcomeFrame.setSize(800, 450);
-        // welcomeFrame.setLayout(new BorderLayout());
 
         // Background Image
         ImageIcon backgroundIcon = new ImageIcon("background9.jpg");
@@ -356,7 +313,7 @@ public class Main {
                 Image.SCALE_SMOOTH);
         backgroundIcon = new ImageIcon(image);
         JLabel backgroundLabel = new JLabel(backgroundIcon);
-        backgroundLabel.setLayout(new GridBagLayout()); // Use GridBagLayout to center components
+        backgroundLabel.setLayout(new GridBagLayout());
         welcomeFrame.setContentPane(backgroundLabel);
 
         // Welcome Label
@@ -367,12 +324,12 @@ public class Main {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 0, 0); // Initial position at the center
+        gbc.insets = new Insets(0, 0, 0, 0);
         backgroundLabel.add(welcomeLabel, gbc);
 
         // Create a JPanel for the button
         JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.setOpaque(false); // Make the panel transparent
+        buttonPanel.setOpaque(false);
         // Create the "Play Game" button
         JButton playButton = new JButton("Play Game");
         playButton.setFont(new Font("Monospaced", Font.BOLD, 30)); // Set the font of the button text
@@ -515,16 +472,13 @@ public class Main {
 
         // Make the frame visible
         welcomeFrame.setResizable(false);
-        // welcomeFrame.setLocationRelativeTo(null);
         welcomeFrame.setVisible(true);
     }
 
     private static void showGameMenuWindow(JFrame frame) {
         JFrame gameMenuFrame = frame;
-        // JFrame gameMenuFrame = new JFrame("Game Menu");
-        // gameMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // gameMenuFrame.setSize(800, 450);
         gameMenuFrame.setTitle("Game Menu");
+
         // Background Image
         ImageIcon background = new ImageIcon(new ImageIcon("background10.jpg").getImage()
                 .getScaledInstance(gameMenuFrame.getWidth(), gameMenuFrame.getHeight(), Image.SCALE_SMOOTH));
@@ -651,15 +605,12 @@ public class Main {
         loadAdventureButton.setHorizontalAlignment(SwingConstants.LEFT);
 
         newAdventureButton.addActionListener(e -> {
-            // gameMenuFrame.dispose();
             showAdventureWindow("New Adventure", gameMenuFrame);
         });
         loadAdventureButton.addActionListener(e -> {
-            // gameMenuFrame.dispose();
             showAdventureWindow("Load Adventure", gameMenuFrame);
         });
         deleteAdventureButton.addActionListener(e -> {
-            // gameMenuFrame.dispose();
             showAdventureWindow("Delete Adventure", gameMenuFrame);
         });
 
@@ -677,15 +628,11 @@ public class Main {
 
         // Make the frame visible
         gameMenuFrame.setResizable(false);
-        // gameMenuFrame.setLocationRelativeTo(null);
         gameMenuFrame.setVisible(true);
     }
 
     private static void showAdventureWindow(String actionString, JFrame frame) {
         JFrame adventureFrame = frame;
-        // JFrame adventureFrame = new JFrame(actionString);
-        // adventureFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        // adventureFrame.setSize(800, 450);
         adventureFrame.setTitle(actionString);
         int action = -1;
         if (actionString.equals("New Adventure")) {
@@ -721,21 +668,7 @@ public class Main {
         gbc.insets = new Insets(7, 0, 7, 0); // new Insets(7, -500, 7, 0);
         gbc.gridwidth = 2;
         gbc.gridx = 0;
-        // // Panel hover listener
-        // MouseAdapter hoverListener = new MouseAdapter() {
-        // @Override
-        // public void mouseEntered(MouseEvent e) {
-        // JButton button = (JButton) e.getSource();
-        // button.setForeground(hoverColor);
-        // }
 
-        // @Override
-        // public void mouseExited(MouseEvent e) {
-        // JButton button = (JButton) e.getSource();
-        // button.setForeground(textColor);
-        // }
-        // };
-        // Labels for saved adventures
         String[] saves = { "Save 1", "Save 2", "Save 3" };
         GameSaveManager gsm = new GameSaveManager();
         for (int i = 0; i < saves.length; i++) {
@@ -756,23 +689,10 @@ public class Main {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
-                    // g.setColor(Color.BLUE);
-                    // String text = getString();
                     int width = getWidth();
                     int height = getHeight();
-                    // FontMetrics fontMetrics = g.getFontMetrics();
-                    // int stringWidth = fontMetrics.stringWidth(text);
-                    // int stringHeight = fontMetrics.getAscent();
-                    // g.drawString(text, (width - stringWidth) / 2, (height + stringHeight) / 2 -
-                    // 2);
                     int fillWidth = (int) (width * (getPercentComplete()));
                     int iconSize = height; // Assuming the icon size should match the height of the progress bar
-                    // if (fillWidth >= iconSize) {
-                    // g.drawImage(pokeballImage, fillWidth - iconSize, 0, iconSize, iconSize,
-                    // null);
-                    // } else {
-                    // g.drawImage(pokeballImage, 0, 0, iconSize, iconSize, null);
-                    // }
                     if (getPercentComplete() > 0 && getPercentComplete() < 1.0) {
                         g.drawImage(pokeballImage, fillWidth - iconSize + 15, 0, iconSize, iconSize, null);
                     } else if (getPercentComplete() == 1.0) {
@@ -793,13 +713,11 @@ public class Main {
                 slotLabel.setForeground(Color.LIGHT_GRAY);
 
                 if (action == 0) { // To add mouse listener to all slots if new game
-                    // slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                     slotLabel.setForeground(Color.WHITE);
                     slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
                     slotPanel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            // System.out.println("Empty slot for new adventure");
                             handleNewGameOption(adventureFrame, save_id);
                         }
 
@@ -808,13 +726,11 @@ public class Main {
 
                         @Override
                         public void mouseEntered(MouseEvent e) {
-                            // slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
                             slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, hoverColor));
                         }
 
                         @Override
                         public void mouseExited(MouseEvent e) {
-                            // slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
                             slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, defaultColor));
                         }
                     });
@@ -822,9 +738,7 @@ public class Main {
             } else { // if slot not empty
                 slotLabel.setForeground(Color.WHITE);
                 slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
-                // slotPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 if (action == 0) { // if new game set border to red
-                    // slotPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
                     slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
                 }
                 progressBar.setVisible(true);
@@ -849,27 +763,18 @@ public class Main {
                 slotProgressPanel.add(locationLabel);
                 slotProgressPanel.add(gymLeadersDefeatedLabel);
                 slotProgressPanel.add(lastSavedLabel);
-                // System.out.println(progressSave.getBadges().size() / 8 * 100);
                 double progressPercentage = (progressSave.getBadges().size() / 8.0) * 100;
                 progressBar.setValue((int) progressPercentage);
                 progressBar.setStringPainted(false);
-                // progressBar.setSize(new Dimens)
-                // Set the colors
                 progressBar.setBackground(Color.DARK_GRAY); // Background color
-                // progressBar.setForeground(Color.YELLOW); // Fill color
                 progressBar.setPreferredSize(new Dimension(148, 23));
-                // progressBar.setBorderPainted(false);
                 progressBar.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-                // if (progressBar.getPercentComplete() == 1.0) {
-                // progressBar.setForeground(new Color(34, 139, 34));
-                // }
 
                 MouseAdapter slotPanelMouseListener = new MouseAdapter() {
                     boolean saveDeleted = false;
 
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        // System.out.println("nonEmptySlot");
                         if (ACTION == 0) { // Confirm overwrite chosen save
                             int choice = JOptionPane.showConfirmDialog(adventureFrame,
                                     "Are you sure you would like to overwrite the current save?", "Confirm Overwrite",
@@ -887,7 +792,6 @@ public class Main {
                                 if (gsm.deleteSave(save_id)) {
                                     saveDeleted = true;
                                     slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-                                    // slotLabel.setText("Save " + slotNumber + " does not exist");
                                     slotLabel.setText(saveLabel + " does not exist");
                                     slotLabel.setForeground(Color.LIGHT_GRAY);
                                     progressBar.setVisible(false);
@@ -908,18 +812,6 @@ public class Main {
                     public void mouseEntered(MouseEvent e) {
                         slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, hoverColor));
                         slotPanel.setBorder(BorderFactory.createLineBorder(hoverColor));
-                        // JLabel trainerNameLabel = new JLabel("Trainer name: " +
-                        // progressSave.getTrainer_name());
-                        // JLabel gymLeadersDefeatedLabel = new JLabel("Gym Leaders Defeated: " +
-                        // progressSave.getGym_leaders_defeated().size() + " / 8");
-                        // JLabel lastLocationLabel = new JLabel("Location: " +
-                        // progressSave.getCurrent_location());
-                        // JLabel lastSavedLabel = new JLabel("Last saved: " +
-                        // progressSave.getLast_saved());
-                        // slotProgressPanel.add(trainerNameLabel, BorderLayout.PAGE_START);
-                        // slotProgressPanel.add(gymLeadersDefeatedLabel, BorderLayout.LINE_START);
-                        // slotProgressPanel.add(lastSavedLabel, BorderLayout.LINE_END);
-                        // Add labels and corresponding values to slotProgressPanel
                         slotProgressPanel.setVisible(true);
                     }
 
@@ -933,11 +825,7 @@ public class Main {
                             defaultColor = Color.DARK_GRAY;
                         }
                         slotProgressPanel.setVisible(false);
-                        // trainerNameLabel.setVisible(false);
-                        // slotPanel.remove(trainerNameLabel);
-                        // slotPanel.revalidate(); // Revalidate the slotPanel to reflect changes
                         slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, defaultColor));
-                        // slotPanel.setBorder(BorderFactory.createLineBorder(defaultColor));
                     }
                 };
                 slotPanel.addMouseListener(slotPanelMouseListener);
@@ -947,13 +835,12 @@ public class Main {
             slotPanel.add(slotLabel);
             slotPanel.add(progressBar, BorderLayout.SOUTH);
             slotLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            // slotLabel.setVerticalAlignment(SwingConstants.CENTER);
             slotProgressPanel.setVisible(false);
             gbc.gridy = i;
-            gbc.insets = new Insets(7, -500, 7, 0); // new Insets(7, -500, 7, 0);
+            gbc.insets = new Insets(7, -500, 7, 0);
             mainPanel.add(slotPanel, gbc);
             gbc.gridx = 0;
-            gbc.insets = new Insets(7, -60, 7, 0); // new Insets(7, -500, 7, 0);
+            gbc.insets = new Insets(7, -60, 7, 0);
             mainPanel.add(slotProgressPanel, gbc);
             gbc.gridx = 1;
         }
@@ -964,13 +851,11 @@ public class Main {
         backButton.setOpaque(false);
         backButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.WHITE, 1),
                 BorderFactory.createEmptyBorder(7, 10, 7, 10)));
-        // backButton.setBorderPainted(false);
         backButton.setFocusPainted(false);
         gbc.insets = new Insets(40, -500, 0, 0);
         gbc.gridy++;
         mainPanel.add(backButton, gbc);
         backButton.addActionListener(e -> {
-            // adventureFrame.dispose();
             showGameMenuWindow(adventureFrame);
         });
         // Add a hover effect to the button
@@ -995,12 +880,6 @@ public class Main {
         adventureFrame.setVisible(true);
     }
 
-    // private static boolean saveExists(int slotNumber) {
-    // int save_id = (loggedInUser.getAccount_id() - 1) * 3 + (slotNumber);
-    // GameSaveManager gsm = new GameSaveManager();
-    // return gsm.saveExists(save_id);
-    // }
-
     public static int calculateSaveId(int slotNumber) {
         return ((loggedInUser.getAccount_id() - 1) * 3 + (slotNumber));
     }
@@ -1008,22 +887,15 @@ public class Main {
     public static void handleNewGameOption(JFrame frame, int save_id) {
         System.out.println("Creating new save in save id: " + save_id);
         Trainer trainer = new Trainer(save_id);
-        // frame.dispose();
-        // try {
-        // GamePanel gp = new GamePanel(trainer);
-        // } catch (FileNotFoundException e) {
-        // e.printStackTrace();
-        // }
         showLoadingScreen(frame, trainer, 20000, 30000);
     }
 
     public static void handleLoadGameOption(GameSaveManager gsm, JFrame frame, int save_id) {
         System.out.println("Loading save id: " + save_id);
-        // frame.dispose();
+
         Save chosenSave = gsm.loadSave(save_id);
         // location
         Location currentLocation = new Location(chosenSave.getCurrent_location());
-        // System.out.println(currentLocation.getName());
         Trainer trainer = new Trainer(save_id, chosenSave.getTrainer_name(), currentLocation);
         // pokemon
         Evolution evol = new Evolution();
@@ -1033,11 +905,9 @@ public class Main {
             trainer.addToList(pokemon[0]);
             Pokemon thisPokemon = trainer.getPokemonList().get(i);
             System.out.println(pokemon[2]);
-            // System.out.println("Before: " + thisPokemon.getName() + " - " +
-            // thisPokemon.getLevel());
             int level = Integer.parseInt(pokemon[1]);
             if (level < 10) {
-
+                // do nothing
             } else {
                 int tempLevel;
                 if (level >= 20) {
@@ -1047,30 +917,16 @@ public class Main {
                 }
                 thisPokemon.setLevel(tempLevel);
                 evol.evolve(thisPokemon);
-                // System.out.println(evol.evolve(thisPokemon));
             }
             thisPokemon.setLevel(level);
             thisPokemon.setHP(Integer.parseInt(pokemon[2]));
             thisPokemon.setXP(Integer.parseInt(pokemon[3]));
             thisPokemon.getMoveDamages().replace(pokemon[4], (Integer.parseInt(pokemon[5])));
             thisPokemon.getMoveDamages().replace(pokemon[6], (Integer.parseInt(pokemon[7])));
-            // System.out.println("After: " + thisPokemon.getName() + " - " +
-            // thisPokemon.getLevel());
-            // System.out.println();
         }
 
-        // for (Pokemon pokemon : Trainer.getPokemonList()) {
-        // System.out.println(pokemon);
-        // }
-        // badges
         trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
-        // System.out.println(trainer.showBadges());
         trainer.setGymLeadersDefeated(new ArrayList<>(chosenSave.getGym_leaders_defeated()));
-        // try {
-        // GamePanel gp = new GamePanel(trainer);
-        // } catch (FileNotFoundException e) {
-        // e.printStackTrace();
-        // }
         showLoadingScreen(frame, trainer, 30000, 50000);
     }
 
@@ -1207,14 +1063,11 @@ public class Main {
     
     public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
-        // if (gsm.deleteSave(save_id))
     }
 
     public static void saveGame(Trainer trainer) {
         GameSaveManager gsm = new GameSaveManager();
         ArrayList<String[]> pokemonTeam = new ArrayList<String[]>();
-        // System.out.println("in savGame: ");
-        // System.out.println(trainer.showPokemonList());
         for (Pokemon pokemon : trainer.getPokemonList()) {
             String[] thisPokemonData = new String[8];
             thisPokemonData[0] = pokemon.getName();
@@ -1234,8 +1087,6 @@ public class Main {
         Save save = new Save(trainer.getSaveID(), trainer.getTrainerName(), trainer.getCurrentLocation().getName(),
                 pokemonTeam, trainer.getGymLeadersDefeated(), trainer.getBadges(), "");
         gsm.saveGame(save);
-        // SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
-        // trainer = null;
         trainer.resetTrainer();
 
         JFrame newFrame = new JFrame();

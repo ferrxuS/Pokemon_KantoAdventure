@@ -7,7 +7,7 @@ public class Save {
     private int save_id;
     private String trainer_name;
     private String current_location;
-    private List<String[]> pokemon_team; // Each pokemon's data is stored in an Array of type String of length 6:
+    private List<String[]> pokemon_team; // Each pokemon's data is stored in an Array of type String of length 8:
     // 0: name, 1: level, 2: hp, 3: xp, 4: move1Name, 5: move1Damage, 6: move2Name, 7: move2Damage
     private List<String> gym_leaders_defeated;
     private List<String> badges;
@@ -37,13 +37,6 @@ public class Save {
     }
 
     public List<String[]> getPokemon_team() {
-        //System.out.println("number of pokemon: " + pokemon_team.size());
-        // for (String[] pok : pokemon_team) {
-        //     System.out.println(pok[0]);
-        //     System.out.println(pok[1]);
-        //     System.out.println(pok[2]);
-        //     System.out.println(pok[3]);
-        // }
         return pokemon_team;
     }
 
