@@ -22,10 +22,6 @@ public class GamePanel {
     Container container;
     private NewAdventurePanel advPanel;
 
-    // public static void main(String[] args) throws FileNotFoundException {
-    // GamePanel gp = new GamePanel();
-    // }
-
     public GamePanel(Trainer trainer) throws FileNotFoundException {
         // Creating a game screen
         screen = new JFrame();
@@ -97,6 +93,7 @@ public class GamePanel {
         container.repaint();
     }
 
+    // Method for playing the saved game
     public void startSavedAdventure(Trainer trainer) {
         Location savedLocation = trainer.getCurrentLocation();
         JPanel locationPanel = null;
@@ -124,6 +121,7 @@ public class GamePanel {
         }
     }
 
+    // Method to save and exit the game
     public static void saveAndExit(Container container, Trainer trainerToSave) {
         // System.out.println(trainerToSave.showPokemonList());
         Main.saveGame(trainerToSave);

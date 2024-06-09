@@ -12,6 +12,7 @@ import java.util.*;
  */
 public class Graph {
 
+    // Adding a vertex for each city
     public static Vertex v1 = new Vertex(1, "Pallet Town");
     public static Vertex v2 = new Vertex(2, "Viridian City");
     public static Vertex v3 = new Vertex(3, "Cinnabar Island");
@@ -35,11 +36,13 @@ public class Graph {
         adjVertices.putIfAbsent(vertex, new ArrayList<>());
     }
 
+    // Method to add unweighted edge
     public void addEdge(Vertex start, Vertex destination) {
         adjVertices.get(start).add(destination);
         adjVertices.get(destination).add(start);
     }
 
+    // Method to add weighted edge
     public void addEdge(Vertex start, Vertex destination, int weight) {
         Edge edge = new Edge(start, destination, weight);
         adjEdge.putIfAbsent(start, new ArrayList<>());

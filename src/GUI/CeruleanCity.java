@@ -239,9 +239,4 @@ public class CeruleanCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    // private void saveAndExit() {
-    // // Implement save and exit logic here
-    // System.exit(0);
-    // Main.saveGame(trainer);
-    // }
 }

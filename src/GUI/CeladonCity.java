@@ -216,17 +216,4 @@ public class CeladonCity extends JPanel {
         console.append(trainer.showBadges());
     }
 
-    // private void saveAndExit() {
-    // // Implement save and exit logic here
-
-    // // Main.saveGame(trainer);
-    // // // System.exit(0);
-    // // // Get the top-level container (e.g., JFrame) and dispose of it
-    // // Window window = SwingUtilities.windowForComponent(this);
-    // // if (window instanceof JFrame) {
-    // // JFrame frame = (JFrame) window;
-    // // frame.dispose();
-    // // }
-    // GamePanel.saveAndExit(container, trainer);
-    // }
 }

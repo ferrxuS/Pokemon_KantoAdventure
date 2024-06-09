@@ -333,10 +333,4 @@ public class PokeMaze extends JPanel implements KeyListener {
             frame.setVisible(true);
         });
     }
-
-    //tester
-//    public static void main(String[] args) {
-//        PokeMaze maze = new PokeMaze();
-//        maze.initializeGame();
-//    }
 }
