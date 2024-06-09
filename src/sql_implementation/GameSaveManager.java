@@ -15,6 +15,7 @@ public class GameSaveManager {
     // Method to save a game (create new or overwrite)
     public boolean saveGame(Save save) {
 
+        // Query to insert or update a game save
         String query = "INSERT INTO Game_Save (save_id, trainer_name, current_location, pokemon_team, gym_leaders_defeated, badges, last_saved) VALUES (?, ?, ?, ?, ?, ?, datetime('now')) ON CONFLICT(save_id) DO UPDATE SET trainer_name = excluded.trainer_name, current_location = excluded.current_location, pokemon_team = excluded.pokemon_team, gym_leaders_defeated = excluded.gym_leaders_defeated, badges = excluded.badges, last_saved = datetime('now')";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -44,7 +45,7 @@ public class GameSaveManager {
 
     // Method to load a game save
     public Save loadSave(int save_id) {
-
+        // Query to select a game save by save_id
         String query = "SELECT * FROM Game_Save WHERE save_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -55,7 +56,7 @@ public class GameSaveManager {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // Save found
+                // Save found, extract data from the result set
                 String trainer_name = rs.getString("trainer_name");
                 String current_location = rs.getString("current_location");
                 ArrayList<String[]> pokemon_team = jsonObjectToListArray(rs.getString("pokemon_team"));
@@ -79,7 +80,7 @@ public class GameSaveManager {
 
     // Method to delete a game save
     public boolean deleteSave(int save_id) {
-
+        // Query to delete a game save by save_id
         String query = "DELETE FROM Game_Save WHERE save_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -97,8 +98,9 @@ public class GameSaveManager {
         }
     }
 
+    // Method to check if a game save exists
     public boolean saveExists(int save_id) {
-
+        // Query to count the number of game saves with a specific save_id
         String query = "SELECT COUNT(*) as count FROM Game_Save WHERE save_id = ?;";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -120,6 +122,9 @@ public class GameSaveManager {
         }
     }
 
+    // Helper methods:
+
+    // Method to convert JSON string to list of string arrays
     public static ArrayList<String[]> jsonObjectToListArray(String json) {
         ArrayList<String[]> listArray = new ArrayList<>();
         try {
@@ -152,6 +157,7 @@ public class GameSaveManager {
         return listArray;
     }
 
+    // Method to convert JSON string to list of strings
     public static ArrayList<String> jsonArrayToListString(String json) {
         ArrayList<String> listString = new ArrayList<>();
         try {
@@ -165,6 +171,7 @@ public class GameSaveManager {
         return listString;
     }
 
+    // Method to convert list of string arrays to JSON string
     public static String listArrayToJsonObject(ArrayList<String[]> listArray) {
         JSONArray jsonArray = new JSONArray();
 
@@ -202,6 +209,7 @@ public class GameSaveManager {
         return jsonArray.toString();
     }
 
+    // Method to convert list of strings to JSON string
     public static String listStringToJsonArray(ArrayList<String> listString) {
         JSONArray jsonArray = new JSONArray();
 
@@ -211,6 +219,5 @@ public class GameSaveManager {
 
         return jsonArray.toString();
     }
-
 
 }

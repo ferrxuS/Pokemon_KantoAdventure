@@ -9,7 +9,7 @@ public class UserAuthentication {
 
     // Method to log into existing account
     public User loginUser (String username, String password) {
-
+        // Query to select user data from the database based on the username
         String query = "SELECT * FROM Account WHERE username = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -50,9 +50,13 @@ public class UserAuthentication {
     // Method to create a new account
     public boolean registerUser (String username, String password) {
 
+        // Generate a salt for the password hashing
         String salt = PasswordUtils.getSalt();
+
+        // Hash the password using the generated salt
         String hashedPassword = PasswordUtils.hashPassword(password, salt);
 
+        // Query to insert a new user account into the database
         String query = "INSERT INTO Account (username, password_hash, salt) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();

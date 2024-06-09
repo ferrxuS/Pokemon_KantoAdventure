@@ -10,6 +10,7 @@ public class User {
         this.username = username;
     }
 
+    // Getter methods
     public int getAccount_id() {
         return account_id;
     }

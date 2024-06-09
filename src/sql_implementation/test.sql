@@ -5,7 +5,7 @@
 -- FROM Account;
 
 -- INSERT INTO Game_Save (save_id, trainer_name, current_location, pokemon_team, gym_leaders_defeated, badges, last_saved) 
--- VALUES (3, 'trainerFeras', 'Saffron City','[
+-- VALUES (3, 'trainerCat', 'Saffron City','[
 --     {
 --         "name": "Squirtle",
 --         "level": 25,
@@ -39,7 +39,7 @@
 -- ]', '["none","hehe"]','["badge1","badge2"]', CURRENT_TIMESTAMP);
 
 
--- -- INSERT INTO Account (us0ername, password_hash, salt)
+-- -- INSERT INTO Account (username, password_hash, salt)
 -- -- VALUES ("hehe2", "password123", "hehe"); 
 
 -- -- INSERT INTO Account (username, password_hash, email)

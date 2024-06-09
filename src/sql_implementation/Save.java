@@ -24,6 +24,7 @@ public class Save {
         this.last_saved = last_saved;
     }
 
+    // Getter and setters
     public int getSave_id() {
         return save_id;
     }
@@ -52,6 +53,7 @@ public class Save {
         return last_saved;
     }
 
+    // Method to print the pokemon team
     public void printPokemonTeam() {
         for (String[] pokemon : pokemon_team) {
             System.out.println("Pokemon name: " + pokemon[0]);

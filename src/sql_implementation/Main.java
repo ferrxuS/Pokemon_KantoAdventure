@@ -1,24 +1,19 @@
 package sql_implementation;
 
 import java.awt.*;
-
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
 import GUI.GamePanel;
 import Trainer.Trainer;
 import PokemonBattle_LevelUp.Location;
 import pokemons.Pokemon;
 import pokemons.Evolution;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import java.io.FileNotFoundException;
 
 public class Main {
@@ -26,20 +21,20 @@ public class Main {
     private static User loggedInUser;
 
     public static void main(String[] args) {
-
+        // Start the GUI on the Event Dispatch Thread
         SwingUtilities.invokeLater(Main::showUserAuthenticationWindow);
-
     }
 
     public static void initializeMainFrame(JFrame thisFrame, String title) {
+        // Set up the main frame
         thisFrame.setTitle(title);
         thisFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         thisFrame.setSize(800, 450);
-
         thisFrame.setLocationRelativeTo(null);
     }
 
     private static void showUserAuthenticationWindow() {
+        // Create and configure the user authentication window
         JFrame frame = new JFrame();
         initializeMainFrame(frame, "User Autentication");
 
@@ -48,9 +43,9 @@ public class Main {
                 .getScaledInstance(frame.getWidth(), frame.getHeight(), java.awt.Image.SCALE_SMOOTH));
         JLabel backgroundLabel = new JLabel(background);
         frame.setContentPane(backgroundLabel);
-        frame.setLayout(new BorderLayout());
 
-        // Main panel for this frame
+        // Set layout and create main panel
+        frame.setLayout(new BorderLayout());
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -58,7 +53,8 @@ public class Main {
         constraints.insets = new Insets(10, 45, 30, 45);
 
         // Add company logo
-        ImageIcon companyLogo = new ImageIcon(new ImageIcon("MewFiveLogo.png").getImage().getScaledInstance(250, 193, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon companyLogo = new ImageIcon(
+                new ImageIcon("MewFiveLogo.png").getImage().getScaledInstance(250, 193, java.awt.Image.SCALE_SMOOTH));
         JLabel logoLabel = new JLabel(companyLogo);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -67,43 +63,40 @@ public class Main {
         panel.add(logoLabel, constraints);
 
         // Add Pokémon-themed graphics to buttons
-        ImageIcon loginIcon = new ImageIcon(new ImageIcon("pokeBall.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        ImageIcon registerIcon = new ImageIcon(new ImageIcon("pokemonTrainer.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        ImageIcon exitIcon = new ImageIcon(new ImageIcon("doorIcon.jpg").getImage().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon loginIcon = new ImageIcon(
+                new ImageIcon("pokeBall.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon registerIcon = new ImageIcon(
+                new ImageIcon("pokemonTrainer.png").getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        ImageIcon exitIcon = new ImageIcon(
+                new ImageIcon("doorIcon.jpg").getImage().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH));
         JButton loginButton = new JButton(" Login", loginIcon);
         JButton registerButton = new JButton(" Register", registerIcon);
         JButton exitButton = new JButton(" Exit Game", exitIcon);
 
-        // Button Text Fonts
+        // Set button properties
         Font buttonFont = new Font("Monospaced", Font.BOLD, 30);
         loginButton.setFont(buttonFont);
         registerButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
-
-        // Button Colours
         loginButton.setBackground(new Color(255, 223, 0)); // Yellow
         loginButton.setForeground(Color.BLUE);
         registerButton.setBackground(new Color(0, 162, 232)); // Blue
         registerButton.setForeground(Color.YELLOW);
         exitButton.setBackground(new Color(237, 28, 36)); // Red
         exitButton.setForeground(Color.WHITE);
-
-        // Setting button size
         Dimension buttonSize = new Dimension(240, 50);
         loginButton.setMinimumSize(buttonSize);
         registerButton.setMinimumSize(buttonSize);
         exitButton.setMinimumSize(buttonSize);
 
-        // Adjusting constraints and adding components to the main panel
+        // Add buttons to the panel
         constraints.insets = new Insets(0, 30, 30, 30);
         constraints.gridwidth = 1;
         constraints.gridy = 1;
         constraints.gridx = 0;
         panel.add(loginButton, constraints);
-
         constraints.gridx = 1;
         panel.add(registerButton, constraints);
-
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
@@ -113,17 +106,22 @@ public class Main {
         exitPanel.setOpaque(false);
         panel.add(exitPanel, constraints);
 
+        // Add action listeners to the buttons
         loginButton.addActionListener(e -> showLoginDialog(frame));
         registerButton.addActionListener(e -> showRegisterDialog(frame));
         exitButton.addActionListener(e -> frame.dispose());
 
+        // Add panel to the frame and make frame visible
         frame.add(panel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     public static void showLoginDialog(JFrame parentFrame) {
+        // Create and configure the login dialog
         JDialog loginDialog = new JDialog(parentFrame, "Pokémon Center - Login", true);
+
+        // Set up components and layout for the dialog
         loginDialog.setLayout(new GridBagLayout());
         loginDialog.setSize(400, 230);
         loginDialog.getContentPane().setBackground(new Color(255, 223, 0));
@@ -160,6 +158,7 @@ public class Main {
         loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         loginButton.setFont(new Font("DialogInput", Font.BOLD, 20));
 
+        // Add action listener to the login button to authenticate user
         loginButton.addActionListener(e -> {
             String username = userText.getText();
             String password = new String(passText.getPassword());
@@ -175,6 +174,7 @@ public class Main {
             }
         });
 
+        // Add components to the dialog
         gbc.insets = new Insets(0, 0, 15, 0);
         loginDialog.add(titlePanel, gbc);
         gbc.insets = new Insets(5, 25, 5, 0);
@@ -212,7 +212,10 @@ public class Main {
     }
 
     public static void showRegisterDialog(JFrame parentFrame) {
+        // Create and configure the register dialog
         JDialog registerDialog = new JDialog(parentFrame, "Pokémon Center - Register", true);
+
+        // Set up components and layout for the dialog
         registerDialog.setLayout(new GridBagLayout());
         registerDialog.setSize(400, 230);
         registerDialog.getContentPane().setBackground(new Color(0, 162, 232));
@@ -249,6 +252,7 @@ public class Main {
         registerButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         registerButton.setFont(new Font("DialogInput", Font.BOLD, 20));
 
+        // Add action listener to the register button to register user
         registerButton.addActionListener(e -> {
             String username = userText.getText();
             String password = new String(passText.getPassword());
@@ -303,11 +307,12 @@ public class Main {
         registerDialog.setVisible(true);
     }
 
-    private static void showWelcomeWindow(JFrame frame) {
+    public static void showWelcomeWindow(JFrame frame) {
+        // Use the same frame but with a different reference name
         JFrame welcomeFrame = frame;
         welcomeFrame.setTitle("Welcome Window");
 
-        // Background Image
+        // Set the background image
         ImageIcon backgroundIcon = new ImageIcon("background9.jpg");
         Image image = backgroundIcon.getImage().getScaledInstance(welcomeFrame.getWidth(), welcomeFrame.getHeight(),
                 Image.SCALE_SMOOTH);
@@ -316,26 +321,28 @@ public class Main {
         backgroundLabel.setLayout(new GridBagLayout());
         welcomeFrame.setContentPane(backgroundLabel);
 
-        // Welcome Label
+        // Create and configure the welcome label
         JLabel welcomeLabel = new JLabel();
         welcomeLabel.setFont(new Font("DialogInput", Font.BOLD, 50));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        // Set layout constraints for the welcome label
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 0, 0);
         backgroundLabel.add(welcomeLabel, gbc);
 
-        // Create a JPanel for the button
+        // Create a JPanel for the "Play Game" button
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.setOpaque(false);
+
         // Create the "Play Game" button
         JButton playButton = new JButton("Play Game");
-        playButton.setFont(new Font("Monospaced", Font.BOLD, 30)); // Set the font of the button text
-        playButton.setForeground(Color.WHITE); // Set the text color to white
+        playButton.setFont(new Font("Monospaced", Font.BOLD, 30)); 
+        playButton.setForeground(Color.WHITE);
 
-        // Add a hover effect to the button
+        // Add hover and click effects to the button
         playButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 playButton.setForeground(Color.YELLOW); // Change text color on hover
@@ -346,7 +353,6 @@ public class Main {
             }
         });
 
-        // Add a click effect to the button
         playButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 playButton.setForeground(new Color(255, 223, 0)); // Change text color when pressed
@@ -475,11 +481,11 @@ public class Main {
         welcomeFrame.setVisible(true);
     }
 
-    private static void showGameMenuWindow(JFrame frame) {
+    public static void showGameMenuWindow(JFrame frame) {
         JFrame gameMenuFrame = frame;
         gameMenuFrame.setTitle("Game Menu");
 
-        // Background Image
+        // Set the background image
         ImageIcon background = new ImageIcon(new ImageIcon("background10.jpg").getImage()
                 .getScaledInstance(gameMenuFrame.getWidth(), gameMenuFrame.getHeight(), Image.SCALE_SMOOTH));
         JLabel backgroundLabel = new JLabel(background);
@@ -512,7 +518,7 @@ public class Main {
         gbc.gridy++;
         mainPanel.add(kantoAdventuresLabel, gbc);
 
-        // Button for logout:
+        // Create and configure the logout button
         ImageIcon logout1Icon = new ImageIcon(
                 new ImageIcon("logout1.png").getImage().getScaledInstance(45, 45, java.awt.Image.SCALE_SMOOTH));
         ImageIcon logout2Icon = new ImageIcon(
@@ -523,6 +529,8 @@ public class Main {
         logoutButton.setContentAreaFilled(false);
         logoutButton.setFocusPainted(false);
         logoutButton.setMinimumSize(new Dimension(45, 45));
+        
+        // Add hover effect to the logout button
         logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 logoutButton.setIcon(logout1Icon);
@@ -532,6 +540,8 @@ public class Main {
                 logoutButton.setIcon(logout2Icon);
             }
         });
+
+        // Add action listener to the logout button
         logoutButton.addActionListener(e -> {
             int choice = JOptionPane.showConfirmDialog(gameMenuFrame,
                     "Are you sure you would like to logout?", "Confirm logout",
@@ -542,6 +552,7 @@ public class Main {
             }
         });
 
+        // Add buttons to the mainPanel
         gbc.insets = new Insets(0, 0, 0, -630);
         gbc.gridy = 0;
         gbc.gridx++;
@@ -631,10 +642,12 @@ public class Main {
         gameMenuFrame.setVisible(true);
     }
 
-    private static void showAdventureWindow(String actionString, JFrame frame) {
+    public static void showAdventureWindow(String actionString, JFrame frame) {
         JFrame adventureFrame = frame;
         adventureFrame.setTitle(actionString);
         int action = -1;
+
+        // Determine the action based on the action string
         if (actionString.equals("New Adventure")) {
             action = 0; // 0 for new save
         } else if (actionString.equals("Load Adventure")) {
@@ -643,6 +656,7 @@ public class Main {
             action = 2; // 2 for delete save
         }
 
+        // Set the background image based on the action
         String backgroundImage;
         if (action == 0) {
             backgroundImage = "background19.jpg";
@@ -651,7 +665,8 @@ public class Main {
         } else {
             backgroundImage = "background15.jpg";
         }
-        // Background Image
+
+        // Create and set the background image
         ImageIcon background = new ImageIcon(new ImageIcon(backgroundImage).getImage()
                 .getScaledInstance(adventureFrame.getWidth(), adventureFrame.getHeight(), Image.SCALE_SMOOTH));
         JLabel backgroundLabel = new JLabel(background);
@@ -665,25 +680,35 @@ public class Main {
         mainPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(7, 0, 7, 0); // new Insets(7, -500, 7, 0);
+        gbc.insets = new Insets(7, 0, 7, 0);
         gbc.gridwidth = 2;
         gbc.gridx = 0;
 
+        // Array of save slot labels
         String[] saves = { "Save 1", "Save 2", "Save 3" };
         GameSaveManager gsm = new GameSaveManager();
+
         for (int i = 0; i < saves.length; i++) {
             final int slotNumber = i + 1; // Declare index as final
             final int ACTION = action;
+
+            // Create a panel for each save slot
             JPanel slotPanel = new JPanel(new BorderLayout());
             JPanel slotProgressPanel = new JPanel(new GridLayout(4, 1));
             slotPanel.setOpaque(false);
             slotPanel.setPreferredSize(new Dimension(200, 75));
             slotProgressPanel.setPreferredSize(new Dimension(200, 75));
             slotProgressPanel.setOpaque(false);
+
+            // Set the save label for each slot
             String saveLabel = saves[i];
             JLabel slotLabel = new JLabel(saveLabel);
             slotLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+
+            // Calculate the save ID
             int save_id = calculateSaveId(slotNumber);
+
+            // Load the pokeball image for the progress bar
             Image pokeballImage = new ImageIcon("pokeBall.png").getImage();
             CustomProgressBar progressBar = new CustomProgressBar() {
                 @Override
@@ -692,7 +717,7 @@ public class Main {
                     int width = getWidth();
                     int height = getHeight();
                     int fillWidth = (int) (width * (getPercentComplete()));
-                    int iconSize = height; // Assuming the icon size should match the height of the progress bar
+                    int iconSize = height;
                     if (getPercentComplete() > 0 && getPercentComplete() < 1.0) {
                         g.drawImage(pokeballImage, fillWidth - iconSize + 15, 0, iconSize, iconSize, null);
                     } else if (getPercentComplete() == 1.0) {
@@ -707,7 +732,7 @@ public class Main {
                 }
             };
             progressBar.setVisible(false);
-            if (!gsm.saveExists(save_id)) { // if empty slot
+            if (!gsm.saveExists(save_id)) { // If empty slot
                 slotLabel.setText(saveLabel + " does not exist");
                 slotPanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
                 slotLabel.setForeground(Color.LIGHT_GRAY);
@@ -735,17 +760,15 @@ public class Main {
                         }
                     });
                 }
-            } else { // if slot not empty
+            } else { // If slot not empty
                 slotLabel.setForeground(Color.WHITE);
                 slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.WHITE));
-                if (action == 0) { // if new game set border to red
+                if (action == 0) { // If new game set border to red
                     slotPanel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.RED));
                 }
                 progressBar.setVisible(true);
                 Save progressSave = gsm.loadSave(save_id);
-
                 Font progressLabelsFont = new Font("Comic Sans MS", Font.ITALIC, 11);
-
                 JLabel trainerNameLabel = new JLabel("Trainer Name: " + progressSave.getTrainer_name());
                 JLabel locationLabel = new JLabel("Location: " + progressSave.getCurrent_location());
                 JLabel gymLeadersDefeatedLabel = new JLabel(
@@ -763,6 +786,8 @@ public class Main {
                 slotProgressPanel.add(locationLabel);
                 slotProgressPanel.add(gymLeadersDefeatedLabel);
                 slotProgressPanel.add(lastSavedLabel);
+
+                // Set the progress bar value based on the number of badges
                 double progressPercentage = (progressSave.getBadges().size() / 8.0) * 100;
                 progressBar.setValue((int) progressPercentage);
                 progressBar.setStringPainted(false);
@@ -844,6 +869,8 @@ public class Main {
             mainPanel.add(slotProgressPanel, gbc);
             gbc.gridx = 1;
         }
+
+        // Create a back button to return to the previous screen
         JButton backButton = new JButton("Back");
         backButton.setFont(new Font("Monospaced", Font.BOLD, 20));
         backButton.setForeground(Color.WHITE);
@@ -880,6 +907,8 @@ public class Main {
         adventureFrame.setVisible(true);
     }
 
+    // Helper methods
+
     public static int calculateSaveId(int slotNumber) {
         return ((loggedInUser.getAccount_id() - 1) * 3 + (slotNumber));
     }
@@ -887,18 +916,20 @@ public class Main {
     public static void handleNewGameOption(JFrame frame, int save_id) {
         System.out.println("Creating new save in save id: " + save_id);
         Trainer trainer = new Trainer(save_id);
-        showLoadingScreen(frame, trainer, 20000, 30000);
+        showLoadingScreen(frame, trainer, 20000, 30000); // 20000-30000 range for loading delay
     }
 
     public static void handleLoadGameOption(GameSaveManager gsm, JFrame frame, int save_id) {
+        // Method to handle loading a  saved game
         System.out.println("Loading save id: " + save_id);
 
+        // Load the chosen save from the GameSaveManager
         Save chosenSave = gsm.loadSave(save_id);
-        // location
+        // Initialize the trainer's current location and trainer object
         Location currentLocation = new Location(chosenSave.getCurrent_location());
         Trainer trainer = new Trainer(save_id, chosenSave.getTrainer_name(), currentLocation);
-        // pokemon
         Evolution evol = new Evolution();
+        // Load pokemonTeam into trainer
         for (int i = 0; i < chosenSave.getPokemon_team().size(); i++) {
             String[] pokemon = chosenSave.getPokemon_team().get(i);
             System.out.println(pokemon[0]);
@@ -921,68 +952,74 @@ public class Main {
             thisPokemon.setLevel(level);
             thisPokemon.setHP(Integer.parseInt(pokemon[2]));
             thisPokemon.setXP(Integer.parseInt(pokemon[3]));
+            // Update pokemon's move damages by replacing
             thisPokemon.getMoveDamages().replace(pokemon[4], (Integer.parseInt(pokemon[5])));
             thisPokemon.getMoveDamages().replace(pokemon[6], (Integer.parseInt(pokemon[7])));
         }
-
+        // Set Badges and GymLeadersDefeated
         trainer.loadBadges(new ArrayList<>(chosenSave.getBadges()));
         trainer.setGymLeadersDefeated(new ArrayList<>(chosenSave.getGym_leaders_defeated()));
-        showLoadingScreen(frame, trainer, 30000, 50000);
+        showLoadingScreen(frame, trainer, 30000, 50000); // 30000-50000 range for loading delay
     }
 
     public static void showLoadingScreen(JFrame frame, Trainer trainer, int minLoadingDelay, int maxLoadingDelay) {
         JFrame loadingScreenFrame = frame;
         loadingScreenFrame.setLayout(new BorderLayout());
-    
+
+        // Create and configure a progress bar
         JProgressBar loadingProgress = new JProgressBar();
         loadingProgress.setPreferredSize(new Dimension(600, 30));
         loadingProgress.setForeground(Color.YELLOW);
         loadingProgress.setBorderPainted(false);
-    
+
+        // Load Pikachu images for the animation
         ImageIcon[] pikachuImages = new ImageIcon[3];
         for (int i = 0; i < 3; i++) {
-            pikachuImages[i] = new ImageIcon(new ImageIcon("pikachu" + (i + 1) + ".png").getImage().getScaledInstance(87, 69, Image.SCALE_SMOOTH));
+            pikachuImages[i] = new ImageIcon(new ImageIcon("pikachu" + (i + 1) + ".png").getImage()
+                    .getScaledInstance(87, 69, Image.SCALE_SMOOTH));
         }
-    
+
         JLabel pikachuLabel = new JLabel();
         pikachuLabel.setIcon(pikachuImages[0]);
-    
+
+        // Create and configure the loading text label
         JLabel loadingLabel = new JLabel();
         loadingLabel.setForeground(Color.WHITE);
         loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loadingLabel.setFont(new Font("Monospaced", Font.BOLD, 30));
         String loadingText = "Loading...";
         loadingLabel.setText("");
-    
+
         JPanel progressPanel = new JPanel();
         progressPanel.setLayout(new GridBagLayout());
         progressPanel.setBackground(Color.BLACK);
-    
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 30, 30);
         gbc.gridx = 0;
         gbc.gridy = 0;
         progressPanel.add(loadingLabel, gbc);
-    
         gbc.gridy = 1;
         progressPanel.add(pikachuLabel, gbc);
-    
         gbc.gridy = 2;
         progressPanel.add(loadingProgress, gbc);
-    
+
+        // Set the panel as the content pane of the loading screen frame
         loadingScreenFrame.setContentPane(progressPanel);
-    
+
+        // Determine a random loading delay within the specified range
         Random rand = new Random();
         int loadingDelay = rand.nextInt(minLoadingDelay, maxLoadingDelay);
         loadingScreenFrame.setVisible(true);
-    
+
+        // Initialize the remaining progress and time
         int steps = 100;
-        final int[] remainingProgress = {100};
-        final int[] remainingTime = {loadingDelay};
-    
+        final int[] remainingProgress = { 100 };
+        final int[] remainingTime = { loadingDelay };
+
+        // Timer to display loading text incrementally
         Timer textTimer = new Timer(80, new ActionListener() {
             int index = 0;
-    
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (index < loadingText.length()) {
@@ -992,7 +1029,7 @@ public class Main {
                     Timer fadeTimer = new Timer(40, new ActionListener() {
                         float alpha = 1.0f;
                         boolean fadingOut = false;
-    
+
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if (fadingOut) {
@@ -1017,12 +1054,12 @@ public class Main {
             }
         });
         textTimer.start();
-    
+
         // Timer for updating progress bar
         Timer progressBarTimer = new Timer(0, null);
         progressBarTimer.addActionListener(new ActionListener() {
             int progress = 0;
-    
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (remainingProgress[0] <= 0) {
@@ -1038,7 +1075,7 @@ public class Main {
                     progress += progressIncrement;
                     remainingProgress[0] -= progressIncrement;
                     loadingProgress.setValue(progress);
-    
+
                     int timeIncrement = rand.nextInt(Math.min(remainingTime[0], loadingDelay / steps)) + 1;
                     remainingTime[0] -= timeIncrement;
                     ((Timer) e.getSource()).setDelay(timeIncrement);
@@ -1047,11 +1084,11 @@ public class Main {
         });
         progressBarTimer.setInitialDelay(rand.nextInt(300) + 100);
         progressBarTimer.start();
-    
+
         // Timer for updating Pikachu animation
         Timer pikachuTimer = new Timer(200, new ActionListener() {
             int pikachuFrameIndex = 0;
-    
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 pikachuLabel.setIcon(pikachuImages[pikachuFrameIndex]);
@@ -1060,14 +1097,16 @@ public class Main {
         });
         pikachuTimer.start();
     }
-    
+
     public static void handleDeleteGameOption(GameSaveManager gsm, int save_id) {
         System.out.println("Deleting save id: " + save_id);
     }
 
     public static void saveGame(Trainer trainer) {
+        // Method to save the game
         GameSaveManager gsm = new GameSaveManager();
         ArrayList<String[]> pokemonTeam = new ArrayList<String[]>();
+        // Collect data for each Pokemon in the trainer's team
         for (Pokemon pokemon : trainer.getPokemonList()) {
             String[] thisPokemonData = new String[8];
             thisPokemonData[0] = pokemon.getName();
@@ -1084,17 +1123,21 @@ public class Main {
             }
             pokemonTeam.add(thisPokemonData);
         }
+        // Create a new save object and save it using the GameSaveManager
         Save save = new Save(trainer.getSaveID(), trainer.getTrainerName(), trainer.getCurrentLocation().getName(),
                 pokemonTeam, trainer.getGymLeadersDefeated(), trainer.getBadges(), "");
         gsm.saveGame(save);
         trainer.resetTrainer();
 
+        // Display the game menu after saving
         JFrame newFrame = new JFrame();
         initializeMainFrame(newFrame, "Game Menu");
         showGameMenuWindow(newFrame);
     }
 
 }
+
+// Custom progress bar class with dynamic color changes
 
 class CustomProgressBar extends JProgressBar {
     public CustomProgressBar() {
