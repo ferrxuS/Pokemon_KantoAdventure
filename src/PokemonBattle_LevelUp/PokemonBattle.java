@@ -126,7 +126,7 @@ public class PokemonBattle {
                             continue;  // Go to the next iteration of the while loop
                         } else {
                             if (!isWildPokemon) {
-                                earnBadges(enemyPokemon.getLocation());
+                                updateBadgesAndGymLeadersDefeated(enemyPokemon.getLocation());
                             }
                             checkLevelUp(battleLog); // debug
                             System.out.println("Level up 3");

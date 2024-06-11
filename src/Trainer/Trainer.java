@@ -20,21 +20,23 @@ public class Trainer {
     private Location currentLocation; // Updated to use Location instead of JPanel
     private static ArrayList<String> badges = new ArrayList<>();
     private static ArrayList<Pokemon> pokemonList = new ArrayList<>();
-    private static ArrayList<ArrayList<String>> BadgesList = new ArrayList<>();
-    private ArrayList<String> gymLeadersDefeated = new ArrayList<>();
+    private static ArrayList<ArrayList<String>> DataListFromFile = new ArrayList<>();
+    private static ArrayList<String> gymLeadersDefeated = new ArrayList<>();
     private Pokemon selectedPokemon; // Field to store the selected Pokémon
-
-    public Trainer() {
-    }
-
-    public Trainer(int save_id) {
-        this.save_id = save_id;
-    }
 
     public Trainer(int save_id, String trainerName, Location currentLocation) {
         this.save_id = save_id;
         this.trainerName = trainerName;
         this.currentLocation = currentLocation;
+        loadBadgesAndGymLeadersFromFile();
+    }
+
+    public Trainer(int save_id) {
+        this(save_id, null, null);
+    }
+
+    public Trainer() {
+        this(0, null, null);
     }
 
     public static ArrayList<Pokemon> getPokemonList() {
@@ -109,7 +111,7 @@ public class Trainer {
             pokemonList.add(new Bulbasaur());
         }
     }
-    
+
     public String showPokemonList() {
         if (!pokemonList.isEmpty()) {
             StringBuilder result = new StringBuilder();
@@ -122,25 +124,30 @@ public class Trainer {
         }
     }
 
-    public static void earnBadges(String location) {
-        String filepath = "Badges.txt";
+    public static void loadBadgesAndGymLeadersFromFile() {
+        String filepath = "Badges&GymLeaders.txt";
         try (Scanner sc = new Scanner(new File(filepath))) {
             while (sc.hasNextLine()) {
-                ArrayList<String> Badge = new ArrayList<>();
+                ArrayList<String> Data = new ArrayList<>();
                 String line = sc.nextLine();
-                String[] badge = line.split(",");
-                Badge.add(badge[0]);
-                Badge.add(badge[1]);
-                BadgesList.add(Badge);
+                String[] data = line.split(",");
+                Data.add(data[0]);
+                Data.add(data[1]);
+                Data.add(data[2]);
+                DataListFromFile.add(Data);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (ArrayList<String> b : BadgesList) {
+    }
+
+    public static void updateBadgesAndGymLeadersDefeated(String location) {
+        for (ArrayList<String> b : DataListFromFile) {
             if (location.equalsIgnoreCase(b.get(0))) {
                 if (!badges.contains(b.get(1))) {
                     badges.add(b.get(1));
+                    gymLeadersDefeated.add(b.get(2));
                 }
             }
         }

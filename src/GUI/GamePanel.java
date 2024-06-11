@@ -31,24 +31,23 @@ public class GamePanel {
         screen.setTitle("Pokémon - Kanto Adventure");
         screen.getContentPane().setBackground(Color.black);
         screen.setLocationRelativeTo(null);
-
         // Container
         container = screen.getContentPane();
         container.setLayout(new BorderLayout()); // for better layout management
-
+        
         // Title Screen
         titlePanel = new JPanel(new BorderLayout()); // Use BorderLayout for titlePanel
         titlePanel.setBackground(Color.black);
-
+        
         boolean newAdventure = (trainer.getTrainerName() == null);
-
+        
         screen.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (newAdventure) {
                         startNewAdventure(); // Directly start the adventure on Enter key
-                    } else {
+                        } else {
                         startSavedAdventure(trainer);
                     }
                 }
@@ -61,12 +60,13 @@ public class GamePanel {
         String titleText = getASCII("GameTitle.txt");
         if (!newAdventure) {
             titleText = getASCII("GameTitle2.txt");
+        } else {
+            // New Adventure Screen
+            advPanel = new NewAdventurePanel(container, trainer);
         }
         titleLabel.setText("<html><pre>" + titleText + "</pre></html>"); // wrap text in html for preserve formatting
         titlePanel.add(titleLabel, BorderLayout.CENTER);
-
-        // New Adventure Screen
-        advPanel = new NewAdventurePanel(container, trainer);
+        
 
         // Initially, show the title panel
         container.add(titlePanel, BorderLayout.CENTER);

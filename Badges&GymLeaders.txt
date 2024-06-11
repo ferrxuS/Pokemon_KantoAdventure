@@ -1,0 +1,8 @@
+Pewter City,Boulder Badge,Brock
+Cerulean City,Cascade Badge,Misty
+Vermillion City,Thunder Badge,Lt. Surge
+Celadon City,Rainbow Badge,Erika
+Fuchsia City,Soul Badge,Koga
+Saffron City,Marsh Badge,Sabrina
+Cinnabar Island,Volcano Badge,Blaine
+Viridian City,Earth Badge,Giovanni

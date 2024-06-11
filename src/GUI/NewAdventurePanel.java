@@ -28,7 +28,7 @@ public class NewAdventurePanel extends JPanel {
     private Location location;
 
     public NewAdventurePanel(Container container, Trainer trainerForSaveID) throws FileNotFoundException {
-        this.trainer = new Trainer(trainerForSaveID.getSaveID());
+        this.trainer = trainerForSaveID;
         this.container = container;
         setBackground(Color.black);
         setLayout(new BorderLayout());
